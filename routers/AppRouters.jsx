@@ -24,7 +24,7 @@ export default AppRoutes;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "80%",
+    width: "85%",
     marginTop: 0,
     marginLeft: "auto",
     marginBottom: 0,
