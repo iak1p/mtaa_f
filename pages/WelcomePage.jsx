@@ -27,7 +27,8 @@ const WelcomePage = () => {
             paddingBottom: 30,
           }}
         >
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos quod amet voluptatum, odio error doloremque.
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos quod
+          amet voluptatum, odio error doloremque.
         </Text>
         <Link to="/signin">
           <Button
@@ -54,6 +55,9 @@ const WelcomePage = () => {
               backgroundColor: "#012E4A",
               color: "white",
               width: "100%",
+              borderColor: "#012E4A",
+              borderStyle: "solid",
+              borderWidth: 2,
             }}
           />
         </Link>
