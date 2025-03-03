@@ -5,7 +5,7 @@ import { Link } from "react-router-native";
 import Arrow from "./svg/Arrow";
 import { Button } from "@rneui/base";
 
-const AuthScreen = ({ title, subtitle, description, link, inputs }) => {
+const AuthScreen = ({ title, subtitle, description, link, inputs, func }) => {
   return (
     <SafeAreaView
       style={{ display: "flex", justifyContent: "space-between", flex: 1 }}
@@ -18,7 +18,7 @@ const AuthScreen = ({ title, subtitle, description, link, inputs }) => {
         <Text style={styles.header2_text}>{subtitle}</Text>
 
         <View style={{ paddingTop: 50 }}>
-          {inputs.map(({ lable, placeholder }, index) => {
+          {inputs.map(({ lable, placeholder, state }, index) => {
             return (
               <>
                 <Input
@@ -54,7 +54,7 @@ const AuthScreen = ({ title, subtitle, description, link, inputs }) => {
                     marginLeft: 12,
                     marginBottom: 0,
                   }}
-                  // errorMessage="hhehhehe"
+                  onChange={state}
                 />
               </>
             );
@@ -79,6 +79,7 @@ const AuthScreen = ({ title, subtitle, description, link, inputs }) => {
             borderWidth: 1,
           }}
           titleStyle={{ fontSize: 14 }}
+          onPress={() => func()}
         />
       </View>
     </SafeAreaView>
