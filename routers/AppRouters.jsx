@@ -1,9 +1,11 @@
 import React from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, View } from "react-native";
 import { Route, Routes, Navigate, NativeRouter } from "react-router-native";
 import SignUpPage from "../pages/SignUpPage";
 import SignInPage from "../pages/SignInPage";
 import WelcomePage from "../pages/WelcomePage";
+import MainPage from "../pages/MainPage";
+import Menu from "../components/Menu";
 
 const AppRoutes = () => {
   return (
@@ -12,9 +14,12 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/main" element={<MainPage />} />
           <Route path="/" element={<WelcomePage />} />
+          {/* <Route path="/" element={<MainPage />} /> */}
         </Routes>
       </SafeAreaView>
+      {/* <Menu /> */}
     </NativeRouter>
   );
 };
@@ -29,5 +34,6 @@ const styles = StyleSheet.create({
     marginLeft: "auto",
     marginBottom: 0,
     marginRight: "auto",
+    position: "relative",
   },
 });
