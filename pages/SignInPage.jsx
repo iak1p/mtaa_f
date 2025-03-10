@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-native";
 import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
+import useUserStore from "../store/store";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -47,7 +48,7 @@ export default function SignInPage() {
     console.log(username, password);
     if (validate()) {
       try {
-        const res = await fetch("http://172.20.10.4:4001/auth/login", {
+        const res = await fetch("http://147.175.160.119:4001/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
@@ -61,6 +62,9 @@ export default function SignInPage() {
         }
 
         console.log("Response:", data);
+        useUserStore
+          .getState()
+          .setUser({ username: "Sava", token: data.token });
         navigate("/main");
       } catch (error) {
         console.error("Error:", error);
