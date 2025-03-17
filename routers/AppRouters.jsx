@@ -28,7 +28,6 @@ const AppRoutes = () => {
           {/* <Route path="/" element={<MainPage />} /> */}
         </Routes>
       </SafeAreaView>
-      {token ? <Menu /> : null}
     </NativeRouter>
   );
 };
@@ -38,11 +37,11 @@ export default AppRoutes;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "85%",
-    marginTop: 0,
-    marginLeft: "auto",
-    marginBottom: 0,
-    marginRight: "auto",
-    position: "relative",
+    // width: "85%",
+    // marginTop: 0,
+    // marginLeft: "auto",
+    // marginBottom: 0,
+    // marginRight: "auto",
+    // position: "relative",
   },
 });

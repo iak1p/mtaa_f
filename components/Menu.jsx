@@ -16,7 +16,7 @@ export default Menu;
 
 const styles = StyleSheet.create({
   div: {
-    backgroundColor: "red",
+    backgroundColor: "tomato",
     position: "absolute",
     width: "100%",
     display: "flex",

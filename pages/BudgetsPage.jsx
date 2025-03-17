@@ -1,20 +1,41 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  Image,
-  StatusBar,
-} from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import Header from "../components/Header";
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
+import Menu from "../components/Menu";
+import Banka from "../components/Banka";
 
 const BudgetPage = () => {
+  const insets = useSafeAreaInsets();
+  const sharedSavings = [
+    { id: 0, name: "title", money: 1002, curentMoney: 230 },
+    { id: 1, name: "title1", money: 943, curentMoney: 450 },
+    { id: 2, name: "title2", money: 433, curentMoney: 400 },
+  ];
+
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Savings</Text>
-      <Text style={styles.subTitle}>1 000 $</Text>
-    </SafeAreaView>
+    <View style={{ flex: 1 }}>
+      <SafeAreaView
+        style={{ marginTop: -insets.top, backgroundColor: "tomato" }}
+      >
+        <Text style={styles.title}>Shared savings</Text>
+        <Text style={styles.subTitle}>2 954.45 $</Text>
+      </SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.classTitle}>Joint Budgets</Text>
+        <Text s>Savings 2 954.45 $</Text>
+        <FlatList
+          data={sharedSavings}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => {
+            return <Banka item={item} />;
+          }}
+        ></FlatList>
+      </View>
+    </View>
   );
 };
 
@@ -22,19 +43,35 @@ export default BudgetPage;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "red",
     flex: 1,
-    marginTop: -StatusBar.currentHeight,
+    width: "85%",
+    marginTop: 0,
+    marginBottom: 0,
+    marginHorizontal: "auto",
   },
   title: {
     textAlign: "center",
-    fontSize: 20,
-    paddingTop: 40,
+    fontSize: 16,
+    paddingTop: 16,
+    fontWeight: "bold",
+    color: "white",
   },
   subTitle: {
     textAlign: "center",
-    fontSize: 30,
+    fontSize: 32,
     fontWeight: "bold",
     paddingTop: 16,
+    color: "white",
+    fontFamily: "Montserat",
+  },
+  classTitle: {
+    paddingTop: 8,
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  classSubtitle: {
+    paddingTop: 8,
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
