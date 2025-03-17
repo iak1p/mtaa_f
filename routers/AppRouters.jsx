@@ -7,6 +7,7 @@ import WelcomePage from "../pages/WelcomePage";
 import MainPage from "../pages/MainPage";
 import Menu from "../components/Menu";
 import useUserStore from "../store/store";
+import BudgetPage from "../pages/BudgetsPage";
 
 const AppRoutes = () => {
   const { username, token } = useUserStore();
@@ -16,12 +17,13 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          {token ? (
+          {/* {token ? (
             <Route path="/" element={<MainPage />} />
           ) : (
             <Route path="/" element={<WelcomePage />} />
-          )}
-          <Route path="/main" element={<MainPage />} />
+          )} */}
+          {/* <Route path="/main" element={<MainPage />} /> */}
+          <Route path="/" element={<BudgetPage />} />
           {/* <Route path="/" element={<WelcomePage />} /> */}
           {/* <Route path="/" element={<MainPage />} /> */}
         </Routes>
