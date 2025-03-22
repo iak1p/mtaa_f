@@ -15,6 +15,9 @@ import {
 } from "@react-navigation/stack";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import UserPage from "../pages/UserPage";
+
+
 const AppRoutes = () => {
   const Stack = createStackNavigator();
   const insets = useSafeAreaInsets();
@@ -32,7 +35,7 @@ const AppRoutes = () => {
             <Route path="/" element={<WelcomePage />} />
           )} */}
           {/* <Route path="/main" element={<MainPage />} /> */}
-          <Route path="/" element={<BudgetPage />} />
+          <Route path="/" element={<UserPage />} />
           {/* <Route path="/" element={<WelcomePage />} /> */}
           {/* <Route path="/" element={<MainPage />} /> */}
         </Routes>
