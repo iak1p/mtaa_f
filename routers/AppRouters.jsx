@@ -8,6 +8,7 @@ import MainPage from "../pages/MainPage";
 import Menu from "../components/Menu";
 import useUserStore from "../store/store";
 import BudgetPage from "../pages/BudgetsPage";
+import UserPage from "../pages/UserPage";
 
 const AppRoutes = () => {
   const { username, token } = useUserStore();
@@ -23,7 +24,7 @@ const AppRoutes = () => {
             <Route path="/" element={<WelcomePage />} />
           )} */}
           {/* <Route path="/main" element={<MainPage />} /> */}
-          <Route path="/" element={<BudgetPage />} />
+          <Route path="/" element={<UserPage />} />
           {/* <Route path="/" element={<WelcomePage />} /> */}
           {/* <Route path="/" element={<MainPage />} /> */}
         </Routes>
