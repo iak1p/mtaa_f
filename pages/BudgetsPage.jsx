@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, FlatList, ScrollView } from "react-native";
 import Header from "../components/Header";
 import {
@@ -9,8 +9,10 @@ import Menu from "../components/Menu";
 import Banka from "../components/Banka";
 import Button from "../components/Button";
 import List from "../components/svg/List";
+import ButtonComponent from "../components/ButtonComponent";
+import { Link } from "react-router-native";
 
-const BudgetPage = () => {
+const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const sharedSavings = [
     { id: 0, name: "title", money: 1002, curentMoney: 230 },
@@ -21,57 +23,34 @@ const BudgetPage = () => {
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView
-        style={{ marginTop: -insets.top, backgroundColor: "tomato" }}
+        style={{
+          marginTop: -insets.top,
+          backgroundColor: "tomato",
+        }}
       >
         <Text style={styles.title}>Shared savings</Text>
         <Text style={styles.subTitle}>2 954.45 $</Text>
       </SafeAreaView>
-      <View style={styles.container}>
-        <ScrollView
-          style={{
-            position: "absolute",
-            top: "-25",
-            marginRight: 0,
-          }}
-          horizontal={true}
-          
-        >
-          <View style={{ flexDirection: "row" }}>
-            <View
-              style={{
-                flexDirection: "row",
-                height: "50",
-                backgroundColor: "green",
-                marginRight: 50,
-              }}
-            >
-              <List />
-              <Text>Create Joint Budget</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                height: "50",
-                backgroundColor: "green",
-              }}
-            >
-              <List />
-              <Text>Create Joint Budget</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                height: "50",
-                backgroundColor: "green",
-              }}
-            >
-              <List />
-              <Text>Create Joint Budget</Text>
-            </View>
+      <View style={{ top: -25 }}>
+        <ScrollView horizontal={true}>
+          <View
+            style={{
+              flexDirection: "row",
+              gap: 10,
+              marginHorizontal: 20,
+            }}
+          >
+            <ButtonComponent
+              title={"Creater new"}
+              // func={() => navigation.navigate("SignIn")}
+            />
+            <ButtonComponent title={"Creater new"} />
           </View>
         </ScrollView>
+      </View>
+      <View style={styles.container}>
         <Text style={styles.classTitle}>Joint Budgets</Text>
-        <Text s>Savings 2 954.45 $</Text>
+        <Text>Savings 2 954.45 $</Text>
         <FlatList
           data={sharedSavings}
           keyExtractor={(item) => item.id.toString()}
@@ -89,7 +68,7 @@ export default BudgetPage;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "85%",
+    width: "90%",
     marginTop: 0,
     marginBottom: 0,
     marginHorizontal: "auto",
@@ -110,7 +89,6 @@ const styles = StyleSheet.create({
     fontFamily: "Montserat",
   },
   classTitle: {
-    paddingTop: 8,
     fontWeight: "bold",
     fontSize: 16,
   },
