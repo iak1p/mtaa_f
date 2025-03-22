@@ -8,8 +8,17 @@ import MainPage from "../pages/MainPage";
 import Menu from "../components/Menu";
 import useUserStore from "../store/store";
 import BudgetPage from "../pages/BudgetsPage";
+import { NavigationContainer } from "@react-navigation/native";
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from "@react-navigation/stack";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const AppRoutes = () => {
+  const Stack = createStackNavigator();
+  const insets = useSafeAreaInsets();
+
   const { username, token } = useUserStore();
   return (
     <NativeRouter>
@@ -29,6 +38,23 @@ const AppRoutes = () => {
         </Routes>
       </SafeAreaView>
     </NativeRouter>
+    // <NavigationContainer>
+    //   <SafeAreaView style={styles.container}>
+    //     <Stack.Navigator
+    //       initialRouteName="Budget"
+    //       screenOptions={{
+    //         ...TransitionPresets.SlideFromRightIOS,
+    //         headerShown: false,
+    //         headerStyle: {
+    //           backgroundColor: "tomato",
+    //         },
+    //       }}
+    //     >
+    //       <Stack.Screen name="Budget" component={BudgetPage} />
+    //       <Stack.Screen name="SignIn" component={MainPage} />
+    //     </Stack.Navigator>
+    //   </SafeAreaView>
+    // </NavigationContainer>
   );
 };
 
