@@ -12,6 +12,7 @@ import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
+import { LOCAL_HOST, PORT } from "../env";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -48,7 +49,7 @@ export default function SignInPage() {
     console.log(username, password);
     if (validate()) {
       try {
-        const res = await fetch("http://147.175.160.119:4001/auth/login", {
+        const res = await fetch(`http://${LOCAL_HOST}:${PORT}/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
@@ -150,5 +151,14 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
+  },
+  container: {
+    flex: 1,
+    width: "85%",
+    marginTop: 0,
+    marginLeft: "auto",
+    marginBottom: 0,
+    marginRight: "auto",
+    position: "relative",
   },
 });

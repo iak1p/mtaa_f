@@ -7,6 +7,7 @@ import WelcomePage from "../pages/WelcomePage";
 import MainPage from "../pages/MainPage";
 import Menu from "../components/Menu";
 import useUserStore from "../store/store";
+import BudgetPage from "../pages/BudgetsPage";
 
 const AppRoutes = () => {
   const { username, token } = useUserStore();
@@ -16,17 +17,17 @@ const AppRoutes = () => {
         <Routes>
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/signup" element={<SignUpPage />} />
-          {token ? (
+          {/* {token ? (
             <Route path="/" element={<MainPage />} />
           ) : (
             <Route path="/" element={<WelcomePage />} />
-          )}
-          <Route path="/main" element={<MainPage />} />
+          )} */}
+          {/* <Route path="/main" element={<MainPage />} /> */}
+          <Route path="/" element={<BudgetPage />} />
           {/* <Route path="/" element={<WelcomePage />} /> */}
           {/* <Route path="/" element={<MainPage />} /> */}
         </Routes>
       </SafeAreaView>
-      {token ? <Menu /> : null}
     </NativeRouter>
   );
 };
@@ -36,11 +37,11 @@ export default AppRoutes;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: "85%",
-    marginTop: 0,
-    marginLeft: "auto",
-    marginBottom: 0,
-    marginRight: "auto",
-    position: "relative",
+    // width: "85%",
+    // marginTop: 0,
+    // marginLeft: "auto",
+    // marginBottom: 0,
+    // marginRight: "auto",
+    // position: "relative",
   },
 });

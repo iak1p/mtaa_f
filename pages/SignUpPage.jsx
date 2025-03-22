@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-native";
 import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
+import { LOCAL_HOST, PORT } from "../env";
 
 export default function SignInPage() {
   const [username, setUsername] = useState("");
@@ -55,7 +56,7 @@ export default function SignInPage() {
     console.log(username, password, password_repeat);
     if (validate()) {
       try {
-        const res = await fetch("http://147.175.160.119:4001/auth/register", {
+        const res = await fetch(`http://${LOCAL_HOST}:${PORT}/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),

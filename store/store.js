@@ -10,7 +10,15 @@ const useUserStore = create(
       setUser: (user) => set((state) => ({ ...state, ...user })),
       logout: () => set({ username: "", token: "" }),
     }),
-    { name: "user-storage", getStorage: () => AsyncStorage }
+    {
+      name: "user-storage",
+      getStorage: () => AsyncStorage,
+      onRehydrateStorage: (state) => {
+        if (state) {
+          console.log("Rehydration complete:", state);
+        }
+      },
+    }
   )
 );
 
