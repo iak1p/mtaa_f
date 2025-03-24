@@ -16,6 +16,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import UserPage from "../pages/UserPage";
+import CreatePoolyPage from "../pages/CreatePoolyPage";
 
 
 const AppRoutes = () => {
@@ -24,40 +25,37 @@ const AppRoutes = () => {
 
   const { username, token } = useUserStore();
   return (
-    <NativeRouter>
-      <SafeAreaView style={styles.container}>
-        <Routes>
-          <Route path="/signin" element={<SignInPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          {/* {token ? (
-            <Route path="/" element={<MainPage />} />
-          ) : (
-            <Route path="/" element={<WelcomePage />} />
-          )} */}
-          {/* <Route path="/main" element={<MainPage />} /> */}
-          <Route path="/" element={<UserPage />} />
-          {/* <Route path="/" element={<WelcomePage />} /> */}
-          {/* <Route path="/" element={<MainPage />} /> */}
-        </Routes>
-      </SafeAreaView>
-    </NativeRouter>
-    // <NavigationContainer>
+    // <NativeRouter>
     //   <SafeAreaView style={styles.container}>
-    //     <Stack.Navigator
-    //       initialRouteName="Budget"
-    //       screenOptions={{
-    //         ...TransitionPresets.SlideFromRightIOS,
-    //         headerShown: false,
-    //         headerStyle: {
-    //           backgroundColor: "tomato",
-    //         },
-    //       }}
-    //     >
-    //       <Stack.Screen name="Budget" component={BudgetPage} />
-    //       <Stack.Screen name="SignIn" component={MainPage} />
-    //     </Stack.Navigator>
+    //     <Routes>
+    //       <Route path="/signin" element={<SignInPage />} />
+    //       <Route path="/signup" element={<SignUpPage />} />
+    //       {/* {token ? (
+    //         <Route path="/" element={<MainPage />} />
+    //       ) : (
+    //         <Route path="/" element={<WelcomePage />} />
+    //       )} */}
+    //       {/* <Route path="/main" element={<MainPage />} /> */}
+    //       <Route path="/" element={<BudgetPage />} />
+    //       {/* <Route path="/" element={<WelcomePage />} /> */}
+    //       {/* <Route path="/" element={<MainPage />} /> */}
+    //     </Routes>
     //   </SafeAreaView>
-    // </NavigationContainer>
+    // </NativeRouter>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <Stack.Navigator
+          initialRouteName="Budget"
+          screenOptions={{
+            ...TransitionPresets.SlideFromRightIOS,
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Budget" component={BudgetPage} />
+          <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
+        </Stack.Navigator>
+      </View>
+    </NavigationContainer>
   );
 };
 
@@ -66,11 +64,5 @@ export default AppRoutes;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // width: "85%",
-    // marginTop: 0,
-    // marginLeft: "auto",
-    // marginBottom: 0,
-    // marginRight: "auto",
-    // position: "relative",
   },
 });
