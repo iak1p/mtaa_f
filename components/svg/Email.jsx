@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg"
 function Email(props) {
   return (
     <Svg
-      width={40}
+      width={27}
       height={32}
       viewBox="0 0 40 32"
       fill="none"

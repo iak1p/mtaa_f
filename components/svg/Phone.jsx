@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg";
 function Phone(props) {
   return (
     <Svg
-      width={40}
+      width={27}
       height={40}
       viewBox="0 0 40 40"
       fill="none"
