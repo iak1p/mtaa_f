@@ -13,51 +13,82 @@ import {
   createStackNavigator,
   TransitionPresets,
 } from "@react-navigation/stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import UserPage from "../pages/UserPage";
+import CreatePoolyPage from "../pages/CreatePoolyPage";
+import PoolyInfoPage from "../pages/PoolyInfoPage";
+import List from "../components/svg/List";
 
+const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
+
+const BottomTabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          if (route.name === "Budget") iconName = "wallet";
+          else if (route.name === "Home") iconName = "home";
+          else if (route.name === "CreatePooly") iconName = "add-circle";
+
+          return <List />;
+        },
+        tabBarActiveTintColor: "#007AFF",
+        tabBarInactiveTintColor: "gray",
+        tabBarStyle: { height: 70, paddingBottom: 0 },
+        headerShown: false,
+        // ...TransitionPresets.SlideFromRightIOS,
+      })}
+    >
+      <Tab.Screen name="Budget" component={BudgetPage} />
+      <Tab.Screen name="Home" component={MainPage} />
+      <Tab.Screen name="UserPage" component={UserPage} />
+    </Tab.Navigator>
+  );
+};
 
 const AppRoutes = () => {
-  const Stack = createStackNavigator();
   const insets = useSafeAreaInsets();
 
   const { username, token } = useUserStore();
   return (
-    <NativeRouter>
-      <SafeAreaView style={styles.container}>
-        <Routes>
-          <Route path="/signin" element={<SignInPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
-          {/* {token ? (
-            <Route path="/" element={<MainPage />} />
-          ) : (
-            <Route path="/" element={<WelcomePage />} />
-          )} */}
-          {/* <Route path="/main" element={<MainPage />} /> */}
-          <Route path="/" element={<UserPage />} />
-          {/* <Route path="/" element={<WelcomePage />} /> */}
-          {/* <Route path="/" element={<MainPage />} /> */}
-        </Routes>
-      </SafeAreaView>
-    </NativeRouter>
-    // <NavigationContainer>
+    // <NativeRouter>
     //   <SafeAreaView style={styles.container}>
-    //     <Stack.Navigator
-    //       initialRouteName="Budget"
-    //       screenOptions={{
-    //         ...TransitionPresets.SlideFromRightIOS,
-    //         headerShown: false,
-    //         headerStyle: {
-    //           backgroundColor: "tomato",
-    //         },
-    //       }}
-    //     >
-    //       <Stack.Screen name="Budget" component={BudgetPage} />
-    //       <Stack.Screen name="SignIn" component={MainPage} />
-    //     </Stack.Navigator>
+    //     <Routes>
+    //       <Route path="/signin" element={<SignInPage />} />
+    //       <Route path="/signup" element={<SignUpPage />} />
+    //       {/* {token ? (
+    //         <Route path="/" element={<MainPage />} />
+    //       ) : (
+    //         <Route path="/" element={<WelcomePage />} />
+    //       )} */}
+    //       {/* <Route path="/main" element={<MainPage />} /> */}
+    //       <Route path="/" element={<BudgetPage />} />
+    //       {/* <Route path="/" element={<WelcomePage />} /> */}
+    //       {/* <Route path="/" element={<MainPage />} /> */}
+    //     </Routes>
     //   </SafeAreaView>
-    // </NavigationContainer>
+    // </NativeRouter>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <Stack.Navigator
+          initialRouteName="Main"
+          screenOptions={{
+            ...TransitionPresets.SlideFromRightIOS,
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Main" component={BottomTabs} />
+          <Stack.Screen name="Budget" component={BudgetPage} />
+          <Stack.Screen name="Home" component={MainPage} />
+          <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
+          <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} />
+        </Stack.Navigator>
+      </View>
+    </NavigationContainer>
   );
 };
 
@@ -66,11 +97,5 @@ export default AppRoutes;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // width: "85%",
-    // marginTop: 0,
-    // marginLeft: "auto",
-    // marginBottom: 0,
-    // marginRight: "auto",
-    // position: "relative",
   },
 });

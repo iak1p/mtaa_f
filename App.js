@@ -5,9 +5,9 @@ import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 export default function App() {
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}>
+      {/* <SafeAreaView style={{ backgroundColor: "#fff", flex: 1 }}> */}
         <AppRoutes></AppRoutes>
-      </SafeAreaView>
+      {/* </SafeAreaView> */}
     </SafeAreaProvider>
   );
 }
