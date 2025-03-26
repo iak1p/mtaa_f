@@ -1,10 +1,14 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 
 const Menu = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.div}>
-      <Text>Home</Text>
+      <TouchableWithoutFeedback onPress={() => navigation.navigate("Home")}>
+        <Text>Home</Text>
+      </TouchableWithoutFeedback>
       <Text>Transactions</Text>
       <Text>Settings</Text>
       <Text>dddd</Text>

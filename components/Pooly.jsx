@@ -22,7 +22,7 @@ const Pooly = ({ item: { name, max_money, current_money } }) => {
           }}
         >
           <Text style={style.title}>{name}</Text>
-          <Text>{max_money}</Text>
+          <Text>{new Intl.NumberFormat('en-US').format(max_money)} $</Text>
         </View>
         <Progress.Bar
           progress={current_money / max_money}

@@ -7,7 +7,7 @@ import WelcomePage from "../pages/WelcomePage";
 import MainPage from "../pages/MainPage";
 import Menu from "../components/Menu";
 import useUserStore from "../store/store";
-import BudgetPage from "../pages/BudgetsPage";
+import BudgetPage from "../pages/BudgetPage/BudgetsPage";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createStackNavigator,
@@ -17,7 +17,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import UserPage from "../pages/UserPage";
 import CreatePoolyPage from "../pages/CreatePoolyPage";
-
 
 const AppRoutes = () => {
   const Stack = createStackNavigator();
@@ -52,6 +51,7 @@ const AppRoutes = () => {
           }}
         >
           <Stack.Screen name="Budget" component={BudgetPage} />
+          <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
         </Stack.Navigator>
       </View>

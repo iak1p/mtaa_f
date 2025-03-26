@@ -1,17 +1,11 @@
 import { Text, TouchableWithoutFeedback, View } from "react-native";
-import List from "./svg/List";
 
-const ButtonComponent = ({ btnStyle, title, func }) => {
+const ButtonComponent = ({ btnStyle, title, func, icon, textStyle }) => {
   return (
     <TouchableWithoutFeedback onPress={func}>
       <View style={btnStyle}>
-        <List />
-        <Text
-          numberOfLines={2}
-          style={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
-        >
-          {title}
-        </Text>
+        {icon}
+        <Text style={textStyle}>{title}</Text>
       </View>
     </TouchableWithoutFeedback>
   );

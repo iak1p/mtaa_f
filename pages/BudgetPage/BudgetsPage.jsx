@@ -8,33 +8,39 @@ import {
   StatusBar,
   ActivityIndicator,
 } from "react-native";
-import Header from "../components/Header";
+import Header from "../../components/Header";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import Menu from "../components/Menu";
-import Pooly from "../components/Pooly";
-import Button from "../components/Button";
-import List from "../components/svg/List";
-import ButtonComponent from "../components/ButtonComponent";
+import Menu from "../../components/Menu";
+import Pooly from "../../components/Pooly";
+import Button from "../../components/Button";
+import List from "../../components/svg/List";
+import ButtonComponent from "../../components/ButtonComponent";
 import { Link } from "react-router-native";
-import { LOCAL_HOST, PORT } from "../env";
+import { LOCAL_HOST, PORT } from "../../env";
+import styles from "./BudgetPageStyles";
 
 const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const sharedSavings = [
-    { id: 0, name: "Some ttitle", money: 1002, curentMoney: 230.43 },
-    { id: 1, name: "Some ttitle", money: 943, curentMoney: 450.32 },
-    { id: 2, name: "Some ttitle", money: 433, curentMoney: 400.22 },
+  const pooly = [
+    {
+      budget_id: 0,
+      name: "Some ttitle",
+      max_money: 1002,
+      current_money: 230.43,
+    },
+    { budget_id: 1, name: "Some ttitle", max_money: 943, current_money: 450.32 },
+    { budget_id: 2, name: "Some ttitle", max_money: 433, current_money: 400.22 },
   ];
-  const [pooly, setPooly] = useState();
+  // const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://147.175.160.79:${PORT}/users/budgets/all`, {
+    fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -50,7 +56,9 @@ const BudgetPage = ({ navigation }) => {
           console.log(item.current_money);
           new_money += item.current_money;
         });
-        const formattedNumberUS = new Intl.NumberFormat('en-US').format(new_money);
+        const formattedNumberUS = new Intl.NumberFormat("en-US").format(
+          new_money
+        );
         setMoneyRemain(formattedNumberUS);
       })
       .catch((err) => console.log(err))
@@ -68,8 +76,8 @@ const BudgetPage = ({ navigation }) => {
         <Text style={styles.title}>Pooly Fund</Text>
         <Text style={styles.subTitle}>{moneyRemain} $</Text>
       </SafeAreaView>
-      <View style={{ top: -25 }}>
-        <ScrollView horizontal={true}>
+      <View style={{ top: -50 }}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View
             style={{
               flexDirection: "row",
@@ -80,32 +88,16 @@ const BudgetPage = ({ navigation }) => {
             <ButtonComponent
               title={"Start a Pooly"}
               func={() => navigation.navigate("CreatePolly")}
-              btnStyle={{
-                flexDirection: "row",
-                backgroundColor: "#FCF7F8",
-                paddingHorizontal: 10,
-                paddingVertical: 15,
-                borderRadius: 5,
-                width: 200,
-                height: 60,
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
+              btnStyle={[styles.btnStyle, styles.shadowBox]}
+              textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
+              icon={<List />}
             />
             <ButtonComponent
               title={"Creater new"}
               func={() => navigation.navigate("SignIn")}
-              btnStyle={{
-                flexDirection: "row",
-                backgroundColor: "#FCF7F8",
-                paddingHorizontal: 10,
-                paddingVertical: 15,
-                borderRadius: 5,
-                width: 200,
-                height: 60,
-                justifyContent: "flex-start",
-                alignItems: "center",
-              }}
+              btnStyle={[styles.btnStyle, styles.shadowBox]}
+              textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
+              icon={<List />}
             />
           </View>
         </ScrollView>
@@ -122,7 +114,7 @@ const BudgetPage = ({ navigation }) => {
             renderItem={({ item }) => {
               return <Pooly item={item} />;
             }}
-            style={{ paddingTop: 20 }}
+            style={{ paddingTop: 10 }}
           ></FlatList>
         )}
       </View>
@@ -131,37 +123,3 @@ const BudgetPage = ({ navigation }) => {
 };
 
 export default BudgetPage;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: "90%",
-    marginTop: 0,
-    marginBottom: 0,
-    marginHorizontal: "auto",
-  },
-  title: {
-    textAlign: "center",
-    fontSize: 16,
-    paddingTop: 40,
-    fontWeight: "bold",
-    color: "white",
-  },
-  subTitle: {
-    textAlign: "center",
-    fontSize: 45,
-    fontWeight: "bold",
-    paddingTop: 16,
-    color: "white",
-    fontFamily: "Montserat",
-  },
-  classTitle: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-  classSubtitle: {
-    paddingTop: 8,
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-});
