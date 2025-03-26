@@ -8,33 +8,32 @@ import {
   StatusBar,
   ActivityIndicator,
 } from "react-native";
-import Header from "../../components/Header";
+import Header from "../components/Header";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import Menu from "../../components/Menu";
-import Pooly from "../../components/Pooly";
-import Button from "../../components/Button";
-import List from "../../components/svg/List";
-import ButtonComponent from "../../components/ButtonComponent";
+import Menu from "../components/Menu";
+import Pooly from "../components/Pooly";
+import Button from "../components/Button";
+import List from "../components/svg/List";
+import ButtonComponent from "../components/ButtonComponent";
 import { Link } from "react-router-native";
-import { LOCAL_HOST, PORT } from "../../env";
-import styles from "./BudgetPageStyles";
+import { LOCAL_HOST, PORT } from "../env";
 
 const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const pooly = [
-    {
-      budget_id: 0,
-      name: "Some ttitle",
-      max_money: 1002,
-      current_money: 230.43,
-    },
-    { budget_id: 1, name: "Some ttitle", max_money: 943, current_money: 450.32 },
-    { budget_id: 2, name: "Some ttitle", max_money: 433, current_money: 400.22 },
-  ];
-  // const [pooly, setPooly] = useState();
+  // const pooly = [
+  //   {
+  //     budget_id: 0,
+  //     name: "Some ttitle",
+  //     max_money: 1002,
+  //     current_money: 230.43,
+  //   },
+  //   { budget_id: 1, name: "Some ttitle", max_money: 943, current_money: 450.32 },
+  //   { budget_id: 2, name: "Some ttitle", max_money: 433, current_money: 400.22 },
+  // ];
+  const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
 
@@ -123,3 +122,63 @@ const BudgetPage = ({ navigation }) => {
 };
 
 export default BudgetPage;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: "90%",
+    marginTop: 0,
+    marginBottom: 0,
+    marginHorizontal: "auto",
+  },
+  title: {
+    textAlign: "center",
+    fontSize: 16,
+    paddingTop: 40,
+    fontWeight: "bold",
+    color: "white",
+  },
+  subTitle: {
+    textAlign: "center",
+    fontSize: 45,
+    fontWeight: "bold",
+    paddingTop: 16,
+    paddingBottom: 30,
+    color: "white",
+    fontFamily: "Montserat",
+  },
+  classTitle: {
+    fontWeight: "bold",
+    fontSize: 16,
+    marginTop: -45,
+  },
+  classSubtitle: {
+    paddingTop: 8,
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  btnStyle: {
+    flexDirection: "row",
+    backgroundColor: "#FCF7F8",
+    paddingHorizontal: 10,
+    paddingVertical: 25,
+    borderRadius: 5,
+    width: 200,
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  shadowBox: {
+    backgroundColor: "white",
+    marginBottom: 20,
+    borderRadius: 10,
+
+    // iOS Shadow
+    shadowColor: "#000",
+    shadowOffset: { width: 5, height: 5 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+
+    // Android Shadow
+    elevation: 5,
+  },
+});
