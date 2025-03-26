@@ -24,7 +24,7 @@ const PoolyInfoPage = ({
       <View style={{ alignItems: "center" }}>
         <BankaIcon />
         <Text style={{ textDecorationLine: "underline" }}>{name}</Text>
-        <Text>{new Intl.NumberFormat("en-US").format(current_money)} $</Text>
+        <Text>{new Intl.NumberFormat("en-US").format(current_money)}$</Text>
       </View>
     </SafeAreaView>
   );
