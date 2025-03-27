@@ -7,6 +7,8 @@ import {
   ScrollView,
   StatusBar,
   ActivityIndicator,
+  TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import Header from "../components/Header";
 import {
@@ -23,17 +25,27 @@ import { LOCAL_HOST, PORT } from "../env";
 
 const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  // const pooly = [
-  //   {
-  //     budget_id: 0,
-  //     name: "Some ttitle",
-  //     max_money: 1002,
-  //     current_money: 230.43,
-  //   },
-  //   { budget_id: 1, name: "Some ttitle", max_money: 943, current_money: 450.32 },
-  //   { budget_id: 2, name: "Some ttitle", max_money: 433, current_money: 400.22 },
-  // ];
-  const [pooly, setPooly] = useState();
+  const pooly = [
+    {
+      budget_id: 0,
+      name: "Some ttitle",
+      max_money: 1002,
+      current_money: 230.43,
+    },
+    {
+      budget_id: 1,
+      name: "Some ttitle",
+      max_money: 943,
+      current_money: 450.32,
+    },
+    {
+      budget_id: 2,
+      name: "Some ttitle",
+      max_money: 433,
+      current_money: 400.22,
+    },
+  ];
+  //   const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
 
@@ -68,12 +80,21 @@ const BudgetPage = ({ navigation }) => {
     <View style={{ flex: 1 }}>
       <SafeAreaView
         style={{
-          marginTop: -insets.top + 40,
+          //   marginTop: -insets.top,
           backgroundColor: "#13293D",
         }}
       >
-        <Text style={styles.title}>Pooly Fund</Text>
-        <Text style={styles.subTitle}>{moneyRemain} $</Text>
+        <View style={{ alignItems: "flex-end" }}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("UserPage")}
+          >
+            <Image source={require("../assets/123.jpg")} style={styles.image} />
+          </TouchableWithoutFeedback>
+        </View>
+        <View>
+          <Text style={styles.title}>Pooly Fund</Text>
+          <Text style={styles.subTitle}>{moneyRemain} $</Text>
+        </View>
       </SafeAreaView>
       <View style={{ top: -50 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -134,7 +155,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontSize: 16,
-    paddingTop: 40,
+    paddingTop: 0,
     fontWeight: "bold",
     color: "white",
   },
@@ -180,5 +201,13 @@ const styles = StyleSheet.create({
 
     // Android Shadow
     elevation: 5,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: "100%",
+    overflow: "hidden",
+    resizeMode: "cover",
+    marginHorizontal: 20,
   },
 });

@@ -45,7 +45,7 @@ const BottomTabs = () => {
     >
       <Tab.Screen name="Budget" component={BudgetPage} />
       <Tab.Screen name="Home" component={MainPage} />
-      <Tab.Screen name="UserPage" component={UserPage} />
+      
     </Tab.Navigator>
   );
 };
@@ -77,7 +77,7 @@ const AppRoutes = () => {
         <Stack.Navigator
           initialRouteName="Main"
           screenOptions={{
-            ...TransitionPresets.SlideFromRightIOS,
+            // ...TransitionPresets.SlideFromRightIOS,
             headerShown: false,
           }}
         >
@@ -86,6 +86,7 @@ const AppRoutes = () => {
           <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
           <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} />
+          <Stack.Screen name="UserPage" component={UserPage} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>

@@ -19,7 +19,7 @@ const PoolyInfoPage = ({
   return (
     <SafeAreaView style={styles.container}>
       <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-        <Arrow />
+        <Arrow stroke="#000" />
       </TouchableWithoutFeedback>
       <View style={{ alignItems: "center" }}>
         <BankaIcon />

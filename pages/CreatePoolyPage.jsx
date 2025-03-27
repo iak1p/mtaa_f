@@ -25,7 +25,7 @@ const CreatePoolyPage = ({ navigation }) => {
     >
       <SafeAreaView style={styles.container}>
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <Arrow />
+          <Arrow stroke="#000" />
         </TouchableWithoutFeedback>
         <View
           style={{
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   btnStyle: {
-    backgroundColor: "#A1869E",
+    backgroundColor: "#13293D",
     paddingHorizontal: 10,
     paddingVertical: 20,
     borderRadius: 10,
