@@ -20,6 +20,9 @@ import UserPage from "../pages/UserPage";
 import CreatePoolyPage from "../pages/CreatePoolyPage";
 import PoolyInfoPage from "../pages/PoolyInfoPage";
 import List from "../components/svg/List";
+import NewTransactionPage from "../pages/NewTransactionPage";
+import UserListPage from "../pages/UserListPage";
+import AddNewUserPage from "../pages/AddNewUserPage";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -45,7 +48,6 @@ const BottomTabs = () => {
     >
       <Tab.Screen name="Budget" component={BudgetPage} />
       <Tab.Screen name="Home" component={MainPage} />
-      <Tab.Screen name="UserPage" component={UserPage} />
     </Tab.Navigator>
   );
 };
@@ -77,15 +79,19 @@ const AppRoutes = () => {
         <Stack.Navigator
           initialRouteName="Main"
           screenOptions={{
-            ...TransitionPresets.SlideFromRightIOS,
+            // ...TransitionPresets.SlideFromRightIOS,
             headerShown: false,
           }}
         >
           <Stack.Screen name="Main" component={BottomTabs} />
+          <Stack.Screen name="NewTransaction" component={NewTransactionPage} />
+          <Stack.Screen name="NewUser" component={AddNewUserPage} />
+          <Stack.Screen name="UserList" component={UserListPage} />
           <Stack.Screen name="Budget" component={BudgetPage} />
           <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
           <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} />
+          <Stack.Screen name="UserPage" component={UserPage} />
         </Stack.Navigator>
       </View>
     </NavigationContainer>

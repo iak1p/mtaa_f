@@ -1,12 +1,13 @@
 import { Input } from "@rneui/base";
 import React from "react";
+import Arrow from "./svg/Arrow";
 
 export default function BaseForm({ inputs }) {
   return (
     <>
       {inputs.map(
         (
-          { lable, placeholder, state, error: { hasError, message } },
+          { lable, placeholder, state, error: { hasError, message }, type },
           index
         ) => {
           return (
@@ -20,6 +21,7 @@ export default function BaseForm({ inputs }) {
                 paddingBottom: 0,
                 paddingRight: 0,
               }}
+              keyboardType={type == "numeric" ? "numeric" : "default"}
               label={lable}
               inputContainerStyle={
                 hasError
@@ -73,9 +75,7 @@ export default function BaseForm({ inputs }) {
                     }
               }
               onChangeText={state}
-              rightIcon={
-                hasError ? { type: "font-awesome", name: "xmark" } : undefined
-              }
+              rightIcon={hasError ? <Arrow stroke="#000" /> : undefined}
               errorMessage={hasError ? message : null}
             />
           );

@@ -7,6 +7,9 @@ import {
   ScrollView,
   StatusBar,
   ActivityIndicator,
+  TouchableWithoutFeedback,
+  Image,
+  Vibration,
 } from "react-native";
 import Header from "../components/Header";
 import {
@@ -20,9 +23,12 @@ import List from "../components/svg/List";
 import ButtonComponent from "../components/ButtonComponent";
 import { Link } from "react-router-native";
 import { LOCAL_HOST, PORT } from "../env";
+import * as Haptics from "expo-haptics";
+import useUserStore from "../store/store";
 
 const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
+  const { token } = useUserStore();
   // const pooly = [
   //   {
   //     budget_id: 0,
@@ -30,21 +36,30 @@ const BudgetPage = ({ navigation }) => {
   //     max_money: 1002,
   //     current_money: 230.43,
   //   },
-  //   { budget_id: 1, name: "Some ttitle", max_money: 943, current_money: 450.32 },
-  //   { budget_id: 2, name: "Some ttitle", max_money: 433, current_money: 400.22 },
+  //   {
+  //     budget_id: 1,
+  //     name: "Some ttitle",
+  //     max_money: 943,
+  //     current_money: 450.32,
+  //   },
+  //   {
+  //     budget_id: 2,
+  //     name: "Some ttitle",
+  //     max_money: 433,
+  //     current_money: 400.22,
+  //   },
   // ];
   const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
 
-  useEffect(() => {
+  const fetchPoolys = () => {
     setLoading(true);
     fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE4IiwidXNlcm5hbWUiOiJpYWtwIn0.sN-MoknrxG8YV0mjNhJbKkazT-m_U_iWhTPF_bQVv5c",
+        Authorization: token,
       },
     })
       .then((res) => res.json())
@@ -62,18 +77,31 @@ const BudgetPage = ({ navigation }) => {
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    fetchPoolys();
   }, []);
 
   return (
     <View style={{ flex: 1 }}>
       <SafeAreaView
         style={{
-          marginTop: -insets.top + 40,
+          //   marginTop: -insets.top,
           backgroundColor: "#13293D",
         }}
       >
-        <Text style={styles.title}>Pooly Fund</Text>
-        <Text style={styles.subTitle}>{moneyRemain} $</Text>
+        <View style={{ alignItems: "flex-end" }}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("UserPage")}
+          >
+            <Image source={require("../assets/123.jpg")} style={styles.image} />
+          </TouchableWithoutFeedback>
+        </View>
+        <View>
+          <Text style={styles.title}>Pooly Fund</Text>
+          <Text style={styles.subTitle}>{moneyRemain} $</Text>
+        </View>
       </SafeAreaView>
       <View style={{ top: -50 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
@@ -113,6 +141,14 @@ const BudgetPage = ({ navigation }) => {
             renderItem={({ item }) => {
               return <Pooly item={item} />;
             }}
+            onEndReachedThreshold={1}
+            refreshing={loading}
+            onRefresh={() => {
+              fetchPoolys();
+              Haptics.notificationAsync(
+                Haptics.NotificationFeedbackType.Succes
+              );
+            }}
             style={{ paddingTop: 10 }}
           ></FlatList>
         )}
@@ -134,7 +170,7 @@ const styles = StyleSheet.create({
   title: {
     textAlign: "center",
     fontSize: 16,
-    paddingTop: 40,
+    paddingTop: 0,
     fontWeight: "bold",
     color: "white",
   },
@@ -180,5 +216,13 @@ const styles = StyleSheet.create({
 
     // Android Shadow
     elevation: 5,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: "100%",
+    overflow: "hidden",
+    resizeMode: "cover",
+    marginHorizontal: 20,
   },
 });

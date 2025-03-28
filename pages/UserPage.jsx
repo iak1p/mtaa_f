@@ -1,5 +1,5 @@
 import { Button } from "@rneui/base";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Sms from "../components/svg/Sms";
 import Phone from "../components/svg/Phone";
@@ -7,7 +7,7 @@ import Email from "../components/svg/Email";
 import Info from "../components/svg/Info";
 import Arrow from "../components/svg/Arrow";
 import { ScrollView } from "react-native";
-const UserPage = () => {
+const UserPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
 
   return (
@@ -18,10 +18,12 @@ const UserPage = () => {
           backgroundColor: "#13293D",
         }}
       >
-        <Arrow
-          stroke="#FCF7F8"
-          style={{ paddingLeft: "20%", marginTop: "15%" }}
-        ></Arrow>
+        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <Arrow
+            stroke="#FCF7F8"
+            style={{ paddingLeft: "20%", marginTop: "15%" }}
+          ></Arrow>
+        </TouchableWithoutFeedback>
         <View style={styles.circleContainer}>
           <Image source={require("../assets/123.jpg")} style={styles.image} />
           <Button
@@ -98,11 +100,12 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   image: {
-    width: 140,
-    height: 140,
+    width: 100,
+    height: 100,
     borderRadius: 75,
     overflow: "hidden",
     resizeMode: "cover",
+    marginTop: 24
   },
   circleContainer: {
     alignItems: "center",
