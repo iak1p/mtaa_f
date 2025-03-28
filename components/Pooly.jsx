@@ -5,12 +5,19 @@ import BankaIcon from "./svg/BankaIcon";
 import { Touchable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const Pooly = ({ item: { name, max_money, current_money } }) => {
+const Pooly = ({ item: { name, max_money, current_money, budget_id } }) => {
   const navigation = useNavigation();
 
   return (
     <TouchableWithoutFeedback
-      onPress={() => navigation.navigate("PoolyInfo", { name, max_money, current_money })}
+      onPress={() =>
+        navigation.navigate("PoolyInfo", {
+          name,
+          max_money,
+          current_money,
+          budget_id,
+        })
+      }
     >
       <View
         style={[
