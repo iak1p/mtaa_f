@@ -76,7 +76,10 @@ const BudgetPage = ({ navigation }) => {
         setMoneyRemain(formattedNumberUS);
       })
       .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+      .finally(() => {
+        console.log(pooly);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {

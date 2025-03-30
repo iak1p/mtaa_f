@@ -23,6 +23,7 @@ import List from "../components/svg/List";
 import NewTransactionPage from "../pages/NewTransactionPage";
 import UserListPage from "../pages/UserListPage";
 import AddNewUserPage from "../pages/AddNewUserPage";
+import SettingsPage from "../pages/SettingsPage";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,6 +47,7 @@ const BottomTabs = () => {
         // ...TransitionPresets.SlideFromRightIOS,
       })}
     >
+      <Tab.Screen name="Settings" component={SettingsPage} />
       <Tab.Screen name="Home" component={MainPage} />
       <Tab.Screen name="Budget" component={BudgetPage} />
     </Tab.Navigator>

@@ -7,11 +7,6 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import Menu from "../components/Menu";
-import useUserStore from "../store/store";
-import Header from "../components/Header";
-import ButtonComponent from "../components/ButtonComponent";
-import List from "../components/svg/List";
 import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Plus from "../components/svg/Plus";
@@ -236,11 +231,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 16,
     marginTop: -20,
-  },
-  classSubtitle: {
-    paddingTop: 8,
-    fontWeight: "bold",
-    fontSize: 16,
   },
   btnStyle: {
     flexDirection: "row",
