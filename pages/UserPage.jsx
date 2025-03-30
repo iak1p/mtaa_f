@@ -1,5 +1,13 @@
 import { Button } from "@rneui/base";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Sms from "../components/svg/Sms";
 import Phone from "../components/svg/Phone";
@@ -7,8 +15,112 @@ import Email from "../components/svg/Email";
 import Info from "../components/svg/Info";
 import Arrow from "../components/svg/Arrow";
 import { ScrollView } from "react-native";
+import useUserStore from "../store/store";
+import { useState } from "react";
+import * as ImagePicker from "expo-image-picker";
+import { supabase } from "../utils/supabase";
+import * as FileSystem from "expo-file-system";
+import { LOCAL_HOST, PORT } from "../env";
+import {
+  ImageManipulator,
+  manipulateAsync,
+  SaveFormat,
+} from "expo-image-manipulator";
+// import * as ImageManipulator from "expo-image-manipulator";
+
 const UserPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
+  const { token, img, setImg, username } = useUserStore();
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const pickImage = async () => {
+    setLoading(true);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== "granted") {
+      alert("Разрешите доступ к фото!");
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      await uploadFile(result.assets[0].uri);
+    }
+  };
+
+  const compressImage = async (uri) => {
+    try {
+      console.log("Original URI: ", uri);
+      const manipResult = await manipulateAsync(
+        uri,
+        [{ resize: { width: 100, height: 100 } }],
+        {
+          compress: 0.9,
+          format: SaveFormat.JPEG,
+        }
+      );
+
+      console.log("Compressed URI: ", manipResult.uri);
+      return manipResult.uri;
+    } catch (error) {
+      console.error("Error compressing image: ", error);
+    }
+  };
+
+  const uploadFile = async (uri) => {
+    try {
+      uri = await compressImage(uri);
+      console.log("new " + uri);
+
+      const formData = new FormData();
+      formData.append("file", {
+        uri,
+        name: `${Date.now()}.jpg`,
+        type: "image/jpeg",
+      });
+
+      const fileName = `${Date.now()}.jpg`;
+
+      const { data, error } = await supabase.storage
+        .from("img")
+        .upload(fileName, formData);
+
+      const { data: urlData } = supabase.storage
+        .from("img")
+        .getPublicUrl(fileName);
+
+      setImg(urlData.publicUrl);
+
+      const res = await fetch(
+        `http://${LOCAL_HOST}:${PORT}/users/change/image`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            url: urlData.publicUrl,
+          }),
+        }
+      );
+
+      const res_data = await res.json();
+
+      if (!res.ok) {
+        return;
+      }
+    } catch (err) {
+      console.error("Ошибка загрузки:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -25,7 +137,11 @@ const UserPage = ({ navigation }) => {
           ></Arrow>
         </TouchableWithoutFeedback>
         <View style={styles.circleContainer}>
-          <Image source={require("../assets/123.jpg")} style={styles.image} />
+          {loading ? (
+            <ActivityIndicator size="small" style={styles.image} />
+          ) : (
+            <Image source={{ uri: img }} style={styles.image} />
+          )}
           <Button
             title={"Upload new photo"}
             type="clear"
@@ -40,6 +156,7 @@ const UserPage = ({ navigation }) => {
               color: "#FCF7F8",
               letterSpacing: 1.5,
             }}
+            onPress={() => pickImage()}
           />
         </View>
       </SafeAreaView>
@@ -48,8 +165,8 @@ const UserPage = ({ navigation }) => {
           <View style={styles.textContainer}>
             <Sms />
             <View style={styles.textContainer2}>
-              <Text style={styles.header}>Full name</Text>
-              <Text style={styles.text}>Sava Neger</Text>
+              <Text style={styles.header}>Username</Text>
+              <Text style={styles.text}>{username}</Text>
             </View>
           </View>
           <View style={styles.textContainer}>
@@ -105,7 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     overflow: "hidden",
     resizeMode: "cover",
-    marginTop: 24
+    marginTop: 24,
   },
   circleContainer: {
     alignItems: "center",
