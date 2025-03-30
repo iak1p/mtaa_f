@@ -1,5 +1,12 @@
 import { Button } from "@rneui/base";
-import { Image, SafeAreaView, StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Sms from "../components/svg/Sms";
 import Phone from "../components/svg/Phone";
@@ -7,6 +14,7 @@ import Email from "../components/svg/Email";
 import Info from "../components/svg/Info";
 import Arrow from "../components/svg/Arrow";
 import { ScrollView } from "react-native";
+
 const UserPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
 
@@ -105,7 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     overflow: "hidden",
     resizeMode: "cover",
-    marginTop: 24
+    marginTop: 2,
   },
   circleContainer: {
     alignItems: "center",

@@ -46,8 +46,8 @@ const BottomTabs = () => {
         // ...TransitionPresets.SlideFromRightIOS,
       })}
     >
-      <Tab.Screen name="Budget" component={BudgetPage} />
       <Tab.Screen name="Home" component={MainPage} />
+      <Tab.Screen name="Budget" component={BudgetPage} />
     </Tab.Navigator>
   );
 };
