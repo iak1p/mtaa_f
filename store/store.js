@@ -1,22 +1,55 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { persist } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
+import { LOCAL_HOST, PORT } from "../env";
 
 const useUserStore = create(
   persist(
     (set) => ({
-      username: "",
-      token:
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE5IiwidXNlcm5hbWUiOiJpYWsxcCJ9.FUBGj3kbtcuAmeX3HI2T2EwpkuP0rSq_aDnfMd1tAqY",
+      username: null,
+      token: null,
+      img: null,
       setUser: (user) => set((state) => ({ ...state, ...user })),
-      logout: () => set({ username: "", token: "" }),
+      setImg: (newImg) => set((state) => ({ ...state, img: newImg })),
+      fetchUserData: async () => {
+        try {
+          const res = await fetch(
+            `http://${LOCAL_HOST}:${PORT}/users/info/all`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJ1c2VybmFtZSI6InRlc3QifQ.Px0Wxr6e_rRxi_QuOHEYEom_fKM5A6LSro9HoXHmmEI",
+              },
+            }
+          );
+          const data = await res.json();
+          if (data) {
+            set((state) => ({
+              ...state,
+              img: data.img_uri,
+              token: data.token,
+              username: data.username,
+            }));
+          }
+        } catch (err) {
+          console.error("Error fetching user data:", err);
+        }
+      },
     }),
     {
-      name: "user-storage",
-      getStorage: () => AsyncStorage,
+      name: "position-storage",
+      partialize: (state) => ({ context: state.context }),
+      storage: createJSONStorage(() => AsyncStorage),
+      skipHydration: false,
       onRehydrateStorage: (state) => {
         if (state) {
-          console.log("Rehydration complete:", state);
+          if (state.fetchUserData) {
+            state.fetchUserData();
+          } else {
+            console.error("fetchUserData not available in state");
+          }
         }
       },
     }

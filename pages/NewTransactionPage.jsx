@@ -3,6 +3,7 @@ import {
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  StyleSheet,
 } from "react-native";
 import BaseForm from "../components/BaseForm";
 import { useEffect, useState } from "react";
@@ -10,10 +11,11 @@ import * as Haptics from "expo-haptics";
 import { LOCAL_HOST, PORT } from "../env";
 import useUserStore from "../store/store";
 import { useNavigation } from "@react-navigation/native";
+import Arrow from "../components/svg/Arrow";
 
 function NewTransactionPage({
   route: {
-    params: { budget_id },
+    params: { budget_id, current_money },
   },
 }) {
   const { token } = useUserStore();
@@ -26,23 +28,38 @@ function NewTransactionPage({
   });
 
   const validate = () => {
-    if (transactionAmount.length == 0) {
+    if (transactionAmount.length == 0 || parseFloat(transactionAmount) == 0) {
       setAmountError({
         hasError: true,
-        message: "Too short",
+        message: "Please enter amount",
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       return false;
+    } else if (current_money < parseFloat(transactionAmount.replace(",", "."))) {
+      setAmountError({
+        hasError: true,
+        message: "You don't have money",
+      });
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     } else {
       return true;
     }
   };
 
   useEffect(() => {
-    setAmountError({
-      hasError: false,
-      message: "",
-    });
+    console.log(current_money, parseFloat(transactionAmount.replace(",", ".")));
+
+    if (current_money < parseFloat(transactionAmount.replace(",", "."))) {
+      setAmountError({
+        hasError: true,
+        message: "You don't have money",
+      });
+    } else {
+      setAmountError({
+        hasError: false,
+        message: "",
+      });
+    }
   }, [transactionAmount]);
 
   const addNewTransaction = async () => {
@@ -59,6 +76,7 @@ function NewTransactionPage({
             },
             body: JSON.stringify({
               amount: transactionAmount.replace(",", "."),
+              date: new Date().toISOString(),
             }),
           }
         );
@@ -80,7 +98,17 @@ function NewTransactionPage({
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
+      <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <Arrow stroke="#000" />
+      </TouchableWithoutFeedback>
+      <Text>
+        In Pooly
+        {new Intl.NumberFormat("de-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(current_money)}
+      </Text>
       <BaseForm
         inputs={[
           {
@@ -101,3 +129,13 @@ function NewTransactionPage({
 }
 
 export default NewTransactionPage;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: "90%",
+    marginTop: 0,
+    marginBottom: 0,
+    marginHorizontal: "auto",
+  },
+});
