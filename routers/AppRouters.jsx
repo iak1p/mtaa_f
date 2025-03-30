@@ -42,7 +42,10 @@ const BottomTabs = () => {
         },
         tabBarActiveTintColor: "#007AFF",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { height: 70, paddingBottom: 0 },
+        tabBarStyle: {
+          height: 70,
+          paddingBottom: 0,
+        },
         headerShown: false,
         // ...TransitionPresets.SlideFromRightIOS,
       })}
@@ -54,28 +57,35 @@ const BottomTabs = () => {
   );
 };
 
+const BottomWelcomeTabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          if (route.name === "Budget") iconName = "wallet";
+          else if (route.name === "Home") iconName = "home";
+          else if (route.name === "CreatePooly") iconName = "add-circle";
+
+          return <List />;
+        },
+        tabBarActiveTintColor: "#007AFF",
+        tabBarInactiveTintColor: "gray",
+        tabBarStyle: { height: 70, paddingBottom: 0 },
+        headerShown: false,
+        // ...TransitionPresets.SlideFromRightIOS,
+      })}
+    >
+      <Tab.Screen name="Welcome" component={WelcomePage} />
+    </Tab.Navigator>
+  );
+};
+
 const AppRoutes = () => {
   const insets = useSafeAreaInsets();
 
   const { username, token } = useUserStore();
   return (
-    // <NativeRouter>
-    //   <SafeAreaView style={styles.container}>
-    //     <Routes>
-    //       <Route path="/signin" element={<SignInPage />} />
-    //       <Route path="/signup" element={<SignUpPage />} />
-    //       {/* {token ? (
-    //         <Route path="/" element={<MainPage />} />
-    //       ) : (
-    //         <Route path="/" element={<WelcomePage />} />
-    //       )} */}
-    //       {/* <Route path="/main" element={<MainPage />} /> */}
-    //       <Route path="/" element={<BudgetPage />} />
-    //       {/* <Route path="/" element={<WelcomePage />} /> */}
-    //       {/* <Route path="/" element={<MainPage />} /> */}
-    //     </Routes>
-    //   </SafeAreaView>
-    // </NativeRouter>
     <NavigationContainer>
       <View style={styles.container}>
         <Stack.Navigator
@@ -85,6 +95,7 @@ const AppRoutes = () => {
             headerShown: false,
           }}
         >
+          {/* <Stack.Screen name="Welcome" component={WelcomePage} /> */}
           <Stack.Screen name="Main" component={BottomTabs} />
           <Stack.Screen name="NewTransaction" component={NewTransactionPage} />
           <Stack.Screen name="NewUser" component={AddNewUserPage} />

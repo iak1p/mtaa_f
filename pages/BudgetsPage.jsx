@@ -5,53 +5,51 @@ import {
   View,
   FlatList,
   ScrollView,
-  StatusBar,
   ActivityIndicator,
   TouchableWithoutFeedback,
   Image,
-  Vibration,
+  Appearance,
+  useColorScheme,
 } from "react-native";
-import Header from "../components/Header";
 import {
   SafeAreaView,
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
-import Menu from "../components/Menu";
 import Pooly from "../components/Pooly";
-import Button from "../components/Button";
 import List from "../components/svg/List";
 import ButtonComponent from "../components/ButtonComponent";
-import { Link } from "react-router-native";
 import { LOCAL_HOST, PORT } from "../env";
 import * as Haptics from "expo-haptics";
 import useUserStore from "../store/store";
 
 const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const { token } = useUserStore();
+  const colorScheme = useColorScheme();
+  const { token, img } = useUserStore();
   // const pooly = [
   //   {
   //     budget_id: 0,
-  //     name: "Some ttitle",
-  //     max_money: 1002,
+  //     name: "Research and Development",
+  //     max_money: 1000.45,
   //     current_money: 230.43,
   //   },
   //   {
   //     budget_id: 1,
-  //     name: "Some ttitle",
-  //     max_money: 943,
+  //     name: "IT Budget",
+  //     max_money: 950,
   //     current_money: 450.32,
   //   },
   //   {
   //     budget_id: 2,
-  //     name: "Some ttitle",
-  //     max_money: 433,
+  //     name: "Marketing Budget",
+  //     max_money: 443.54,
   //     current_money: 400.22,
   //   },
   // ];
   const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
+  const [darkMode, setDarkMode] = useState(false);
 
   const fetchPoolys = () => {
     setLoading(true);
@@ -67,13 +65,9 @@ const BudgetPage = ({ navigation }) => {
         setPooly(data);
         let new_money = 0;
         data.map((item) => {
-          console.log(item.current_money);
           new_money += item.current_money;
         });
-        const formattedNumberUS = new Intl.NumberFormat("en-US").format(
-          new_money
-        );
-        setMoneyRemain(formattedNumberUS);
+        setMoneyRemain(new_money);
       })
       .catch((err) => console.log(err))
       .finally(() => {
@@ -82,12 +76,25 @@ const BudgetPage = ({ navigation }) => {
       });
   };
 
+  // useEffect(() => {
+  //   console.log(token);
+
+  //   if (colorScheme === "dark") setDarkMode(true);
+  //   fetchPoolys();
+  // }, []);
+
   useEffect(() => {
+    setLoading(true);
+    if (!token) return;
+    
+    if (colorScheme === "dark") setDarkMode(true);
     fetchPoolys();
-  }, []);
+  }, [token]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View
+      style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
+    >
       <SafeAreaView
         style={{
           //   marginTop: -insets.top,
@@ -98,14 +105,20 @@ const BudgetPage = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("UserPage")}
           >
-            <Image source={require("../assets/123.jpg")} style={styles.image} />
+            <Image source={{ uri: img }} style={styles.image} />
           </TouchableWithoutFeedback>
         </View>
         <View>
           <Text style={styles.title}>Pooly Fund</Text>
-          <Text style={styles.subTitle}>{moneyRemain} $</Text>
+          <Text style={styles.subTitle}>
+            {new Intl.NumberFormat("de-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(moneyRemain)}
+          </Text>
         </View>
       </SafeAreaView>
+
       <View style={{ top: -50 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View
@@ -118,7 +131,11 @@ const BudgetPage = ({ navigation }) => {
             <ButtonComponent
               title={"Start a Pooly"}
               func={() => navigation.navigate("CreatePolly")}
-              btnStyle={[styles.btnStyle, styles.shadowBox]}
+              btnStyle={[
+                styles.btnStyle,
+                styles.shadowBox,
+                // darkMode ? { backgroundColor: "#000" } : null,
+              ]}
               textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
               icon={<List />}
             />
@@ -132,9 +149,18 @@ const BudgetPage = ({ navigation }) => {
           </View>
         </ScrollView>
       </View>
+
       <View style={styles.container}>
-        <Text style={styles.classTitle}>Pooly's</Text>
-        <Text>{moneyRemain} $</Text>
+        <Text style={[styles.classTitle, darkMode ? { color: "#fff" } : null]}>
+          Pooly's
+        </Text>
+        <Text style={[darkMode ? { color: "#fff" } : null]}>
+          {new Intl.NumberFormat("de-US", {
+            style: "currency",
+            currency: "USD",
+          }).format(moneyRemain)}
+        </Text>
+
         {loading ? (
           <ActivityIndicator size="small" />
         ) : (
@@ -142,7 +168,7 @@ const BudgetPage = ({ navigation }) => {
             data={pooly}
             keyExtractor={(item) => item.budget_id.toString()}
             renderItem={({ item }) => {
-              return <Pooly item={item} />;
+              return <Pooly item={item} darkMode={darkMode} />;
             }}
             onEndReachedThreshold={1}
             refreshing={loading}
@@ -153,7 +179,7 @@ const BudgetPage = ({ navigation }) => {
               );
             }}
             style={{ paddingTop: 10 }}
-          ></FlatList>
+          />
         )}
       </View>
     </View>
@@ -211,13 +237,11 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     borderRadius: 10,
 
-    // iOS Shadow
     shadowColor: "#000",
     shadowOffset: { width: 5, height: 5 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
 
-    // Android Shadow
     elevation: 5,
   },
   image: {

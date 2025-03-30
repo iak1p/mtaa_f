@@ -1,10 +1,14 @@
 import React from "react";
-import { Text, SafeAreaView, StyleSheet, View } from "react-native";
-import { Link } from "react-router-native";
-import Button from "../components/Button";
+import {
+  Text,
+  SafeAreaView,
+  StyleSheet,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 import WelcomeScreenSVG from "../components/svg/WelcomeScreenSVG";
 
-const WelcomePage = () => {
+const WelcomePage = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.div}>
       <View style={{ alignItems: "center", paddingTop: 100 }}>
@@ -30,9 +34,8 @@ const WelcomePage = () => {
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos quod
           amet voluptatum, odio error doloremque.
         </Text>
-        <Link to="/signin">
-          <Button
-            text="Sign In"
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("Main")}>
+          <Text
             style={{
               textAlign: "center",
               padding: 15,
@@ -41,11 +44,12 @@ const WelcomePage = () => {
               borderStyle: "solid",
               borderWidth: 2,
             }}
-          />
-        </Link>
-        <Link to="/signup">
-          <Button
-            text="Create account"
+          >
+            Sign In
+          </Text>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback>
+          <Text
             style={{
               marginTop: 5,
               marginBottom: 15,
@@ -59,8 +63,10 @@ const WelcomePage = () => {
               borderStyle: "solid",
               borderWidth: 2,
             }}
-          />
-        </Link>
+          >
+            Create account
+          </Text>
+        </TouchableWithoutFeedback>
       </View>
     </SafeAreaView>
   );
@@ -72,6 +78,11 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     height: "100%",
+    flex: 1,
+    width: "90%",
+    marginTop: 0,
+    marginBottom: 0,
+    marginHorizontal: "auto",
   },
 });
 

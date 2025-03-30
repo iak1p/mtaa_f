@@ -5,7 +5,10 @@ import BankaIcon from "./svg/BankaIcon";
 import { Touchable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const Pooly = ({ item: { name, max_money, current_money, budget_id } }) => {
+const Pooly = ({
+  item: { name, max_money, current_money, budget_id },
+  darkMode,
+}) => {
   const navigation = useNavigation();
 
   return (
@@ -25,18 +28,24 @@ const Pooly = ({ item: { name, max_money, current_money, budget_id } }) => {
           { flexDirection: "row", alignItems: "center", marginTop: 8 },
         ]}
       >
-        <BankaIcon />
+        <BankaIcon stroke={darkMode ? "#fff" : "#000"} />
         <View style={{ flex: 1, paddingLeft: 20 }}>
           <View
             style={{
               flexDirection: "row",
               justifyContent: "space-between",
               paddingBottom: 4,
-              // paddingHorizontal: 2,
             }}
           >
-            <Text style={style.title}>{name}</Text>
-            <Text>{new Intl.NumberFormat("en-US").format(max_money)} $</Text>
+            <Text style={[style.title, darkMode ? { color: "#fff" } : null]}>
+              {name}
+            </Text>
+            <Text style={darkMode ? { color: "#fff" } : null}>
+              {new Intl.NumberFormat("de-US", {
+                style: "currency",
+                currency: "USD",
+              }).format(max_money)}
+            </Text>
           </View>
           <Progress.Bar
             progress={current_money / max_money}
@@ -47,11 +56,14 @@ const Pooly = ({ item: { name, max_money, current_money, budget_id } }) => {
           <Text
             style={{
               paddingTop: 4,
-              // paddingHorizontal: 2,
               color: "#A1869E",
             }}
           >
-            Remain {new Intl.NumberFormat("en-US").format(current_money)} $
+            Remain{" "}
+            {new Intl.NumberFormat("de-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(current_money)}
           </Text>
         </View>
       </View>
