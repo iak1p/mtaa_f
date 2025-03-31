@@ -23,6 +23,7 @@ import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import AddUserIcon from "../components/svg/AddUserIcon";
 import UsersIcon from "../components/svg/UsersIcon";
 import { color } from "@rneui/base";
+import Phone from "../components/svg/Phone";
 
 const PoolyInfoPage = ({
   route: {
@@ -232,14 +233,6 @@ const PoolyInfoPage = ({
                 icon={<BankaIcon stroke="#fff" />}
                 darkMode={darkMode}
               />
-              {/* <PoolyInfoComponent
-              btnFunc={() =>
-                navigation.navigate("NewTransaction", { budget_id })
-              }
-              style={styles.iconStyle}
-              text={`Top-up transaction`}
-              icon={<BankaIcon stroke="#fff" />}
-            /> */}
               <PoolyInfoComponent
                 btnFunc={() =>
                   navigation.navigate("UserList", { budget_id, transactions })
@@ -247,6 +240,15 @@ const PoolyInfoPage = ({
                 style={darkMode ? styles.iconStyleBlack : styles.iconStyle}
                 text={`Show \n User list`}
                 icon={<UsersIcon stroke="#fff" />}
+                darkMode={darkMode}
+              />
+              <PoolyInfoComponent
+                btnFunc={() =>
+                  navigation.navigate("ChatPage", { budget_id })
+                }
+                style={darkMode ? styles.iconStyleBlack : styles.iconStyle}
+                text={`Open \n Pooly chat`}
+                icon={<Phone stroke="#fff" />}
                 darkMode={darkMode}
               />
               <PoolyInfoComponent

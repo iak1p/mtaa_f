@@ -86,7 +86,7 @@ const BudgetPage = ({ navigation }) => {
   useEffect(() => {
     setLoading(true);
     if (!token) return;
-    
+
     if (colorScheme === "dark") setDarkMode(true);
     fetchPoolys();
   }, [token]);
@@ -96,10 +96,15 @@ const BudgetPage = ({ navigation }) => {
       style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
     >
       <SafeAreaView
-        style={{
-          //   marginTop: -insets.top,
-          backgroundColor: "#13293D",
-        }}
+        style={[
+          // darkMode
+          //   ? { backgroundColor: "#912F40" }
+          //   : 
+            {
+                //   marginTop: -insets.top,
+                backgroundColor: "#13293D",
+              },
+        ]}
       >
         <View style={{ alignItems: "flex-end" }}>
           <TouchableWithoutFeedback
