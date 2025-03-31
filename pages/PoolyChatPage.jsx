@@ -80,11 +80,11 @@ function PoolyChatPage({
     }
   };
 
-  useEffect(() => {
-    if (flatListRef.current) {
-      flatListRef.current.scrollToEnd({ animated: true });
-    }
-  }, [messages]);
+//   useEffect(() => {
+//     if (flatListRef.current) {
+//       flatListRef.current.scrollTo({ animated: true });
+//     }
+//   }, [messages]);
 
   return (
     <KeyboardAvoidingView
@@ -100,7 +100,8 @@ function PoolyChatPage({
         ) : (
           <FlatList
             ref={flatListRef}
-            data={messages}
+            data={[...messages].reverse()}
+            inverted={true}
             keyExtractor={(item) => item.id.toString()}
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
@@ -113,7 +114,10 @@ function PoolyChatPage({
                   }}
                 >
                   {item.user_id !== id ? (
-                    <Image source={{ uri: img }} style={styles.image} />
+                    <Image
+                      source={{ uri: item.img_uri }}
+                      style={styles.image}
+                    />
                   ) : null}
                   <View
                     style={{
@@ -133,15 +137,15 @@ function PoolyChatPage({
             style={{
               paddingTop: 10,
               flexDirection: "column",
-              marginBottom: 10,
+            //   marginBottom: 10,
             }}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            onContentSizeChange={() =>
-              flatListRef.current?.scrollToEnd({ animated: true })
-            }
-            onLayout={() =>
-              flatListRef.current?.scrollToEnd({ animated: true })
-            }
+            // onContentSizeChange={() =>
+            //   flatListRef.current?.scrollToEnd({ animated: true })
+            // }
+            // onLayout={() =>
+            //   flatListRef.current?.scrollToEnd({ animated: true })
+            // }
           />
         )}
 
@@ -189,6 +193,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "100%",
+    marginLeft: 5,
   },
   image: {
     width: 30,
