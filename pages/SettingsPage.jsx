@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
 import { FlatList, Switch } from "react-native-gesture-handler";
-import { TouchableWithoutFeedback } from "react-native-web";
+import { TouchableWithoutFeedback } from "react-native";
+import useUserStore from "../store/store";
 
-const SettingsPage = () => {
+const SettingsPage = ({ navigation }) => {
   const [isOn, setIsOn] = useState(false);
+  const { token, img } = useUserStore();
 
   return (
     <View style={{ flex: 1 }}>
@@ -26,13 +28,15 @@ const SettingsPage = () => {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("UserPage")}
           >
-            <Image source={require("../assets/123.jpg")} style={styles.image} />
+            <Image source={{ uri: img }} style={styles.image} />
           </TouchableWithoutFeedback>
         </View>
       </SafeAreaView>
       <View style={styles.container}>
         <View style={[styles.btnStyle, styles.shadowBox]}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("#")}>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("UserPage")}
+          >
             <View
               style={{
                 display: "flex",
@@ -49,7 +53,7 @@ const SettingsPage = () => {
                   fontSize: 20,
                 }}
               >
-                Change password
+                Change password1
               </Text>
               <Text style={{ fontWeight: "bold", fontSize: 20 }}>{"❯"}</Text>
             </View>
@@ -116,30 +120,6 @@ const SettingsPage = () => {
         </View>
       </View>
     </View>
-
-    // <SafeAreaView style={styles.container}>
-    //   <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-    //     <Arrow stroke="#000" />
-    //   </TouchableWithoutFeedback>
-    //   <View style={{ alignItems: "center" }}>
-    //     <BankaIcon />
-    //     <Text style={{ textDecorationLine: "underline" }}>1</Text>
-    //     <Text> $</Text>
-    //     <TouchableWithoutFeedback
-    //       onPress={() => navigation.navigate("NewTransaction", { budget_id })}
-    //     >
-    //       <Text>Add new</Text>
-    //     </TouchableWithoutFeedback>
-    //     <TouchableWithoutFeedback
-    //       onPress={() => navigation.navigate("UserList", { budget_id })}
-    //     >
-    //       <Text>User list</Text>
-    //     </TouchableWithoutFeedback>
-    //     <TouchableWithoutFeedback onPress={() => dropPooly()}>
-    //       <Text>Drop this Pooly</Text>
-    //     </TouchableWithoutFeedback>
-    //   </View>
-    // </SafeAreaView>
   );
 };
 

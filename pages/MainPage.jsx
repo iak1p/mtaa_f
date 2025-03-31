@@ -15,6 +15,7 @@ import ShoppingCart from "../components/svg/ShoppingCart";
 import EntertaimentSmile from "../components/svg/EntertaimentSmile";
 import OtherIcon from "../components/svg/OtherIcon";
 import Coffee from "../components/svg/Coffee";
+import useUserStore from "../store/store";
 
 const MainPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
@@ -22,6 +23,7 @@ const MainPage = ({ navigation }) => {
   const [incomeMoney, setIncomeMoney] = useState(1500);
   const [expenseMoney, setExponseMoney] = useState(0);
   const [percentExpenses, setPercentExpenses] = useState(15);
+  const { token, img } = useUserStore();
 
   return (
     <View style={{ flex: 1 }}>
@@ -35,7 +37,7 @@ const MainPage = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("UserPage")}
           >
-            <Image source={require("../assets/123.jpg")} style={styles.image} />
+            <Image source={{ uri: img }} style={styles.image} />
           </TouchableWithoutFeedback>
         </View>
         <View>
