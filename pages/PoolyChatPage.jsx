@@ -80,11 +80,11 @@ function PoolyChatPage({
     }
   };
 
-//   useEffect(() => {
-//     if (flatListRef.current) {
-//       flatListRef.current.scrollTo({ animated: true });
-//     }
-//   }, [messages]);
+  //   useEffect(() => {
+  //     if (flatListRef.current) {
+  //       flatListRef.current.scrollTo({ animated: true });
+  //     }
+  //   }, [messages]);
 
   return (
     <KeyboardAvoidingView
@@ -125,11 +125,37 @@ function PoolyChatPage({
                         item.user_id === id ? "flex-end" : "flex-start",
                       backgroundColor: item.user_id === id ? "#13293D" : "grey",
                       maxWidth: "75%",
+                      minWidth: "30%",
                       padding: 10,
                       borderRadius: 10,
                     }}
                   >
+                    {item.user_id !== id ? (
+                      <Text
+                        style={{
+                          color: "white",
+                          fontSize: 10,
+                          marginBottom: 2,
+                        }}
+                      >
+                        {item.username}
+                      </Text>
+                    ) : null}
+
                     <Text style={{ color: "white" }}>{item.content}</Text>
+                    <Text
+                      style={{
+                        color: "white",
+                        alignSelf: "flex-end",
+                        fontSize: 8,
+                        marginTop: 2,
+                      }}
+                    >
+                      {new Date(item.created_at).toLocaleTimeString("de", {
+                        hour: "numeric",
+                        minute: "numeric",
+                      })}
+                    </Text>
                   </View>
                 </View>
               );
@@ -137,7 +163,7 @@ function PoolyChatPage({
             style={{
               paddingTop: 10,
               flexDirection: "column",
-            //   marginBottom: 10,
+              //   marginBottom: 10,
             }}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             // onContentSizeChange={() =>
