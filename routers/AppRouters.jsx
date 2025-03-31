@@ -23,6 +23,7 @@ import List from "../components/svg/List";
 import NewTransactionPage from "../pages/NewTransactionPage";
 import UserListPage from "../pages/UserListPage";
 import AddNewUserPage from "../pages/AddNewUserPage";
+import PoolyChatPage from "../pages/PoolyChatPage";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -96,6 +97,7 @@ const AppRoutes = () => {
           {/* <Stack.Screen name="Welcome" component={WelcomePage} /> */}
           <Stack.Screen name="Main" component={BottomTabs} />
           <Stack.Screen name="NewTransaction" component={NewTransactionPage} />
+          <Stack.Screen name="ChatPage" component={PoolyChatPage} />
           <Stack.Screen name="NewUser" component={AddNewUserPage} />
           <Stack.Screen name="UserList" component={UserListPage} />
           <Stack.Screen name="Budget" component={BudgetPage} />
