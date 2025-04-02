@@ -222,8 +222,7 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     overflow: "hidden",
     resizeMode: "cover",
-    marginTop: 2,
-    marginTop: 24,
+    marginTop: 0,
   },
   circleContainer: {
     alignItems: "center",
