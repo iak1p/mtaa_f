@@ -50,7 +50,10 @@ const BudgetPage = ({ navigation }) => {
         setMoneyRemain(new_money);
       })
       .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+      .finally(() => {
+        console.log(pooly);
+        setLoading(false);
+      });
   };
 
   // useEffect(() => {

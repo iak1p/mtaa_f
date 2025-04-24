@@ -255,7 +255,8 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     overflow: "hidden",
     resizeMode: "cover",
-    // marginTop: 0,
+    marginTop: 2,
+    marginTop: 24,
   },
   circleContainer: {
     alignItems: "center",
