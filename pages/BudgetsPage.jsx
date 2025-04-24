@@ -26,26 +26,6 @@ const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const { token, img } = useUserStore();
-  // const pooly = [
-  //   {
-  //     budget_id: 0,
-  //     name: "Research and Development",
-  //     max_money: 1000.45,
-  //     current_money: 230.43,
-  //   },
-  //   {
-  //     budget_id: 1,
-  //     name: "IT Budget",
-  //     max_money: 950,
-  //     current_money: 450.32,
-  //   },
-  //   {
-  //     budget_id: 2,
-  //     name: "Marketing Budget",
-  //     max_money: 443.54,
-  //     current_money: 400.22,
-  //   },
-  // ];
   const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
@@ -61,10 +41,10 @@ const BudgetPage = ({ navigation }) => {
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        setPooly(data);
+      .then(({ pooly }) => {
+        setPooly(pooly);
         let new_money = 0;
-        data.map((item) => {
+        pooly.map((item) => {
           new_money += item.current_money;
         });
         setMoneyRemain(new_money);
@@ -84,6 +64,8 @@ const BudgetPage = ({ navigation }) => {
     setLoading(true);
     if (!token) return;
 
+    console.log(img);
+
     if (colorScheme === "dark") setDarkMode(true);
     fetchPoolys();
   }, [token]);
@@ -96,11 +78,11 @@ const BudgetPage = ({ navigation }) => {
         style={[
           // darkMode
           //   ? { backgroundColor: "#912F40" }
-          //   : 
-            {
-                //   marginTop: -insets.top,
-                backgroundColor: "#13293D",
-              },
+          //   :
+          {
+            //   marginTop: -insets.top,
+            backgroundColor: "#13293D",
+          },
         ]}
       >
         <View style={{ alignItems: "flex-end" }}>
