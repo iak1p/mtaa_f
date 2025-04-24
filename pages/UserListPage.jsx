@@ -71,8 +71,8 @@ function UserListPage({
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        setUsers(data);
+      .then(({ users }) => {
+        setUsers(users);
       })
       .catch((err) => console.log(err))
       .finally(() => {

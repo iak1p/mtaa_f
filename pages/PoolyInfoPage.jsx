@@ -22,7 +22,7 @@ import List from "../components/svg/List";
 import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import AddUserIcon from "../components/svg/AddUserIcon";
 import UsersIcon from "../components/svg/UsersIcon";
-import { color } from "@rneui/base";
+import Phone from "../components/svg/Phone";
 
 const PoolyInfoPage = ({
   route: {
@@ -32,95 +32,12 @@ const PoolyInfoPage = ({
   const { token } = useUserStore();
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
-  // const transactions = [
-  //   {
-  //     transaction_id: "0",
-  //     budget_id: "1",
-  //     user_id: "",
-  //     amount: 150.5,
-  //     username: "iak1p",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266365468.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "1",
-  //     budget_id: "1",
-  //     user_id: "18",
-  //     amount: 500,
-  //     username: "test",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//user.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "2",
-  //     budget_id: "1",
-  //     user_id: "19",
-  //     amount: 15.42,
-  //     username: "qqqq",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266175575.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "3",
-  //     budget_id: "1",
-  //     user_id: "20",
-  //     amount: 500,
-  //     username: "iak1p",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266365468.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "6",
-  //     budget_id: "1",
-  //     user_id: "18",
-  //     amount: 1542.15,
-  //     username: "test",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//user.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "8",
-  //     budget_id: "1",
-  //     user_id: "19",
-  //     amount: 100,
-  //     username: "qqqq",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266175575.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "9",
-  //     budget_id: "1",
-  //     user_id: "18",
-  //     amount: 200,
-  //     username: "test",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//user.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "17",
-  //     budget_id: "1",
-  //     user_id: "19",
-  //     amount: 100,
-  //     username: "qqqq",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266175575.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  //   {
-  //     transaction_id: "18",
-  //     budget_id: "1",
-  //     user_id: "20",
-  //     amount: 3000,
-  //     username: "iak1p",
-  //     img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266365468.jpg",
-  //     date: "2025-03-29T00:00:00.000Z",
-  //   },
-  // ];
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
   const dropPooly = () => {
-    Alert.alert("This Pooly will never be the same without you :(", "", [
+    Alert.alert("This Pooly will never be the same without you...", "", [
       {
         text: "Yes",
         onPress: () => {
@@ -163,8 +80,8 @@ const PoolyInfoPage = ({
       },
     })
       .then((res) => res.json())
-      .then((data) => {
-        setTransactions(data);
+      .then(({transaction}) => {
+        setTransactions(transaction);
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
@@ -232,14 +149,6 @@ const PoolyInfoPage = ({
                 icon={<BankaIcon stroke="#fff" />}
                 darkMode={darkMode}
               />
-              {/* <PoolyInfoComponent
-              btnFunc={() =>
-                navigation.navigate("NewTransaction", { budget_id })
-              }
-              style={styles.iconStyle}
-              text={`Top-up transaction`}
-              icon={<BankaIcon stroke="#fff" />}
-            /> */}
               <PoolyInfoComponent
                 btnFunc={() =>
                   navigation.navigate("UserList", { budget_id, transactions })
@@ -247,6 +156,13 @@ const PoolyInfoPage = ({
                 style={darkMode ? styles.iconStyleBlack : styles.iconStyle}
                 text={`Show \n User list`}
                 icon={<UsersIcon stroke="#fff" />}
+                darkMode={darkMode}
+              />
+              <PoolyInfoComponent
+                btnFunc={() => navigation.navigate("ChatPage", { budget_id })}
+                style={darkMode ? styles.iconStyleBlack : styles.iconStyle}
+                text={`Open \n Pooly chat`}
+                icon={<Phone stroke="#fff" />}
                 darkMode={darkMode}
               />
               <PoolyInfoComponent

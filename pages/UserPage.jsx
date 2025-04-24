@@ -50,6 +50,8 @@ const UserPage = ({ navigation }) => {
 
     if (!result.canceled) {
       await uploadFile(result.assets[0].uri);
+    } else {
+      setLoading(false);
     }
   };
 
@@ -72,53 +74,84 @@ const UserPage = ({ navigation }) => {
     }
   };
 
+  // const uploadFile = async (uri) => {
+  //   try {
+  //     uri = await compressImage(uri);
+  //     console.log("new " + uri);
+
+  //     const formData = new FormData();
+  //     formData.append("file", {
+  //       uri,
+  //       name: `${Date.now()}.jpg`,
+  //       type: "image/jpeg",
+  //     });
+
+  //     const fileName = `${Date.now()}.jpg`;
+
+  //     const { data, error } = await supabase.storage
+  //       .from("img")
+  //       .upload(fileName, formData);
+
+  //     const { data: urlData } = supabase.storage
+  //       .from("img")
+  //       .getPublicUrl(fileName);
+
+  //     setImg(urlData.publicUrl);
+
+  //     const res = await fetch(
+  //       `http://${LOCAL_HOST}:${PORT}/users/change/image`,
+  //       {
+  //         method: "PATCH",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: token,
+  //         },
+  //         body: JSON.stringify({
+  //           url: urlData.publicUrl,
+  //         }),
+  //       }
+  //     );
+
+  //     const res_data = await res.json();
+
+  //     if (!res.ok) {
+  //       return;
+  //     }
+  //   } catch (err) {
+  //     console.error("Ошибка загрузки:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const uploadFile = async (uri) => {
     try {
-      uri = await compressImage(uri);
-      console.log("new " + uri);
-
       const formData = new FormData();
+
       formData.append("file", {
         uri,
         name: `${Date.now()}.jpg`,
         type: "image/jpeg",
       });
 
-      const fileName = `${Date.now()}.jpg`;
-
-      const { data, error } = await supabase.storage
-        .from("img")
-        .upload(fileName, formData);
-
-      const { data: urlData } = supabase.storage
-        .from("img")
-        .getPublicUrl(fileName);
-
-      setImg(urlData.publicUrl);
-
       const res = await fetch(
         `http://${LOCAL_HOST}:${PORT}/users/change/image`,
         {
           method: "PATCH",
           headers: {
-            "Content-Type": "application/json",
             Authorization: token,
+            "Content-Type": "multipart/form-data",
           },
-          body: JSON.stringify({
-            url: urlData.publicUrl,
-          }),
+          body: formData,
         }
       );
 
-      const res_data = await res.json();
+      const data = await res.json();
+      console.log(data);
 
-      if (!res.ok) {
-        return;
-      }
+      setImg(data.url);
     } catch (err) {
-      console.error("Ошибка загрузки:", error);
-    } finally {
-      setLoading(false);
+      console.error("Upload error:", err);
     }
   };
 

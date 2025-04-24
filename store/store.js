@@ -9,6 +9,7 @@ const useUserStore = create(
       username: null,
       token: null,
       img: null,
+      id: null,
       setUser: (user) => set((state) => ({ ...state, ...user })),
       setImg: (newImg) => set((state) => ({ ...state, img: newImg })),
       fetchUserData: async () => {
@@ -31,6 +32,7 @@ const useUserStore = create(
               img: data.img_uri,
               token: data.token,
               username: data.username,
+              id: data.id
             }));
           }
         } catch (err) {
