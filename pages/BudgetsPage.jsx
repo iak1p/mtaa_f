@@ -22,6 +22,8 @@ import ButtonComponent from "../components/ButtonComponent";
 import { LOCAL_HOST, PORT } from "../env";
 import * as Haptics from "expo-haptics";
 import useUserStore from "../store/store";
+import { Accelerometer } from "expo-sensors";
+import { Alert } from "react-native";
 import useBudgetNotifications from "../utils/useBudgetNotifications";
 
 const BudgetPage = ({ navigation }) => {
@@ -33,6 +35,9 @@ const BudgetPage = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
+
+  const [data, setData] = useState({});
+  const [lastShakeTime, setLastShakeTime] = useState(0);
 
   const fetchPoolys = () => {
     setLoading(true);
@@ -46,7 +51,7 @@ const BudgetPage = ({ navigation }) => {
       .then((res) => res.json())
       .then(({ pooly }) => {
         setPooly(pooly);
-        setBudgetIds(pooly.map(p => p.budget_id));
+        setBudgetIds(pooly.map((p) => p.budget_id));
         let new_money = 0;
         pooly.map((item) => {
           new_money += item.current_money;
@@ -58,6 +63,34 @@ const BudgetPage = ({ navigation }) => {
         console.log(pooly);
         setLoading(false);
       });
+  };
+
+  useBudgetNotifications(budgetIds);
+
+  useEffect(() => {
+    Accelerometer.setUpdateInterval(300); // каждые 300мс
+
+    const subscription = Accelerometer.addListener((accelerometerData) => {
+      setData(accelerometerData);
+
+      const totalForce =
+        Math.abs(accelerometerData.x) +
+        Math.abs(accelerometerData.y) +
+        Math.abs(accelerometerData.z);
+
+      const now = Date.now();
+
+      if (totalForce > 2.5 && now - lastShakeTime > 1500) {
+        setLastShakeTime(now);
+        onShake();
+      }
+    });
+
+    return () => subscription && subscription.remove();
+  }, [lastShakeTime]);
+
+  const onShake = async () => {
+    Alert.alert("📱 Тряска!", "Ты потряс телефон!");
   };
 
   // useEffect(() => {
@@ -77,7 +110,6 @@ const BudgetPage = ({ navigation }) => {
     fetchPoolys();
   }, [token]);
 
-  useBudgetNotifications(budgetIds);
   return (
     <View
       style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
@@ -110,7 +142,7 @@ const BudgetPage = ({ navigation }) => {
           </Text>
         </View>
       </SafeAreaView>
-
+      {/* <Toast></Toast> */}
       <View style={{ top: -50 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View
@@ -134,17 +166,16 @@ const BudgetPage = ({ navigation }) => {
             <ButtonComponent
               title={"Creater new"}
               func={() => {
-                Toast.show({
-                  type: "info", // 'success', 'error', 'info'
-                  text1: "Успех!",
-                  text2: "Данные сохранены успешно 👋",
-                });
+                // Toast.show({
+                //   type: "info", // 'success', 'error', 'info'
+                //   text1: "Успех!",
+                //   text2: "Данные сохранены успешно 👋",
+                // });
               }}
               btnStyle={[styles.btnStyle, styles.shadowBox]}
               textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
               icon={<List />}
             />
-            <Toast></Toast>
           </View>
         </ScrollView>
       </View>
