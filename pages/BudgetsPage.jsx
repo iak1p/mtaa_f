@@ -11,6 +11,7 @@ import {
   Appearance,
   useColorScheme,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -21,8 +22,10 @@ import ButtonComponent from "../components/ButtonComponent";
 import { LOCAL_HOST, PORT } from "../env";
 import * as Haptics from "expo-haptics";
 import useUserStore from "../store/store";
+import useBudgetNotifications from "../utils/useBudgetNotifications";
 
 const BudgetPage = ({ navigation }) => {
+  const [budgetIds, setBudgetIds] = useState([]);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
   const { token, img } = useUserStore();
@@ -43,6 +46,7 @@ const BudgetPage = ({ navigation }) => {
       .then((res) => res.json())
       .then(({ pooly }) => {
         setPooly(pooly);
+        setBudgetIds(pooly.map(p => p.budget_id));
         let new_money = 0;
         pooly.map((item) => {
           new_money += item.current_money;
@@ -73,6 +77,7 @@ const BudgetPage = ({ navigation }) => {
     fetchPoolys();
   }, [token]);
 
+  useBudgetNotifications(budgetIds);
   return (
     <View
       style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
@@ -128,11 +133,18 @@ const BudgetPage = ({ navigation }) => {
             />
             <ButtonComponent
               title={"Creater new"}
-              func={() => navigation.navigate("SignIn")}
+              func={() => {
+                Toast.show({
+                  type: "info", // 'success', 'error', 'info'
+                  text1: "Успех!",
+                  text2: "Данные сохранены успешно 👋",
+                });
+              }}
               btnStyle={[styles.btnStyle, styles.shadowBox]}
               textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
               icon={<List />}
             />
+            <Toast></Toast>
           </View>
         </ScrollView>
       </View>
