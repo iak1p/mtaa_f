@@ -25,6 +25,7 @@ import UserListPage from "../pages/UserListPage";
 import AddNewUserPage from "../pages/AddNewUserPage";
 import SettingsPage from "../pages/SettingsPage";
 import PoolyChatPage from "../pages/PoolyChatPage";
+import CreatePoolyAmountPage from "../pages/CreatePoolyAmountPage";
 
 
 const Stack = createStackNavigator();
@@ -103,6 +104,7 @@ const AppRoutes = () => {
           <Stack.Screen name="ChatPage" component={PoolyChatPage} />
           <Stack.Screen name="NewUser" component={AddNewUserPage} />
           <Stack.Screen name="UserList" component={UserListPage} />
+          <Stack.Screen name="CreatePoolyAmount" component={CreatePoolyAmountPage} />
           <Stack.Screen name="Budget" component={BudgetPage} />
           <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />

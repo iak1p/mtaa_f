@@ -126,6 +126,9 @@ const UserPage = ({ navigation }) => {
 
   const uploadFile = async (uri) => {
     try {
+      uri = await compressImage(uri);
+      console.log("new " + uri);
+
       const formData = new FormData();
 
       formData.append("file", {
@@ -152,6 +155,8 @@ const UserPage = ({ navigation }) => {
       setImg(data.url);
     } catch (err) {
       console.error("Upload error:", err);
+    } finally {
+      setLoading(false); 
     }
   };
 
