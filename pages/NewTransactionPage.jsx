@@ -12,13 +12,15 @@ import { LOCAL_HOST, PORT } from "../env";
 import useUserStore from "../store/store";
 import { useNavigation } from "@react-navigation/native";
 import Arrow from "../components/svg/Arrow";
+import { supabase } from "../utils/supabase"; // добавь свой путь к supabase клиенту
+import Toast from "react-native-toast-message";
 
 function NewTransactionPage({
   route: {
     params: { budget_id, current_money },
   },
 }) {
-  const { token } = useUserStore();
+  const { token, user } = useUserStore(); // предположим, что в store есть user
   const navigation = useNavigation();
   const [transactionAmount, setTransactionAmount] = useState("");
   const [error, setError] = useState("");
@@ -41,14 +43,13 @@ function NewTransactionPage({
         message: "You don't have money",
       });
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      return false;
     } else {
       return true;
     }
   };
 
   useEffect(() => {
-    console.log(current_money, parseFloat(transactionAmount.replace(",", ".")));
-
     if (current_money < parseFloat(transactionAmount.replace(",", "."))) {
       setAmountError({
         hasError: true,
@@ -64,8 +65,9 @@ function NewTransactionPage({
 
   const addNewTransaction = async () => {
     if (validate()) {
-      console.log(transactionAmount);
       try {
+        const amount = transactionAmount.replace(",", ".");
+
         const res = await fetch(
           `http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/transactions`,
           {
@@ -75,24 +77,39 @@ function NewTransactionPage({
               Authorization: token,
             },
             body: JSON.stringify({
-              amount: transactionAmount.replace(",", "."),
+              amount,
               date: new Date().toISOString(),
             }),
           }
         );
+
         const data = await res.json();
-        console.log(res.status);
 
         if (!res.ok) {
           setError(data.message);
           return;
         }
 
-        console.log("Response:", data);
+        await supabase.from("transactions").insert([
+          {
+            budget_id,
+            user_name: user?.name || "Unknown",
+            amount: parseFloat(amount),
+            created_at: new Date().toISOString(),
+          },
+        ]);
+
+        Toast.show({
+          type: "success",
+          text1: "Success",
+          text2: `You withdrew ${amount}₽`,
+        });
+
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         navigation.goBack();
       } catch (error) {
         console.error("Error:", error);
+        setError("Something went wrong.");
       }
     }
   };
@@ -120,7 +137,7 @@ function NewTransactionPage({
           },
         ]}
       />
-      <TouchableWithoutFeedback onPress={() => addNewTransaction()}>
+      <TouchableWithoutFeedback onPress={addNewTransaction}>
         <Text>Add</Text>
       </TouchableWithoutFeedback>
       <Text>{error}</Text>
