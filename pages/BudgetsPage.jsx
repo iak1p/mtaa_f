@@ -51,7 +51,7 @@ const BudgetPage = ({ navigation }) => {
       .then((res) => res.json())
       .then(({ pooly }) => {
         setPooly(pooly);
-        setBudgetIds(pooly.map(p => p.budget_id));
+        setBudgetIds(pooly.map((p) => p.budget_id));
         let new_money = 0;
         pooly.map((item) => {
           new_money += item.current_money;
@@ -64,6 +64,8 @@ const BudgetPage = ({ navigation }) => {
         setLoading(false);
       });
   };
+
+  useBudgetNotifications(budgetIds);
 
   useEffect(() => {
     Accelerometer.setUpdateInterval(300); // каждые 300мс
@@ -108,7 +110,6 @@ const BudgetPage = ({ navigation }) => {
     fetchPoolys();
   }, [token]);
 
-  useBudgetNotifications(budgetIds);
   return (
     <View
       style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
@@ -141,7 +142,7 @@ const BudgetPage = ({ navigation }) => {
           </Text>
         </View>
       </SafeAreaView>
-
+      {/* <Toast></Toast> */}
       <View style={{ top: -50 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View
@@ -165,17 +166,16 @@ const BudgetPage = ({ navigation }) => {
             <ButtonComponent
               title={"Creater new"}
               func={() => {
-                Toast.show({
-                  type: "info", // 'success', 'error', 'info'
-                  text1: "Успех!",
-                  text2: "Данные сохранены успешно 👋",
-                });
+                // Toast.show({
+                //   type: "info", // 'success', 'error', 'info'
+                //   text1: "Успех!",
+                //   text2: "Данные сохранены успешно 👋",
+                // });
               }}
               btnStyle={[styles.btnStyle, styles.shadowBox]}
               textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
               icon={<List />}
             />
-            <Toast></Toast>
           </View>
         </ScrollView>
       </View>

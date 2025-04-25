@@ -12,7 +12,7 @@ import { LOCAL_HOST, PORT } from "../env";
 import useUserStore from "../store/store";
 import { useNavigation } from "@react-navigation/native";
 import Arrow from "../components/svg/Arrow";
-import { supabase } from "../utils/supabase"; // добавь свой путь к supabase клиенту
+import { supabase } from "../utils/supabase1"; // добавь свой путь к supabase клиенту
 import Toast from "react-native-toast-message";
 
 function NewTransactionPage({
@@ -20,7 +20,7 @@ function NewTransactionPage({
     params: { budget_id, current_money },
   },
 }) {
-  const { token, user } = useUserStore(); // предположим, что в store есть user
+  const { token, username } = useUserStore(); // предположим, что в store есть user
   const navigation = useNavigation();
   const [transactionAmount, setTransactionAmount] = useState("");
   const [error, setError] = useState("");
@@ -93,18 +93,12 @@ function NewTransactionPage({
         await supabase.from("transactions").insert([
           {
             budget_id,
-            user_name: user?.name || "Unknown",
+            user_name: username || "Unknown",
             amount: parseFloat(amount),
             created_at: new Date().toISOString(),
           },
         ]);
-
-        Toast.show({
-          type: "success",
-          text1: "Success",
-          text2: `You withdrew ${amount}₽`,
-        });
-
+        
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         navigation.goBack();
       } catch (error) {

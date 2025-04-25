@@ -21,7 +21,7 @@ const useUserStore = create(
               headers: {
                 "Content-Type": "application/json",
                 Authorization:
-                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJ1c2VybmFtZSI6InRlc3QifQ.Px0Wxr6e_rRxi_QuOHEYEom_fKM5A6LSro9HoXHmmEI",
+                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJ1c2VybmFtZSI6ImF1cm9yYSJ9.0DNS6FF6kD1QrIy52Sg_QI8K9lt-CFbOP5fUmGn1hcI",
               },
             }
           );
