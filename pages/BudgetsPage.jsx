@@ -157,12 +157,13 @@ const BudgetPage = ({ navigation }) => {
             renderItem={({ item }) => {
               return <Pooly item={item} darkMode={darkMode} />;
             }}
+            showsVerticalScrollIndicator={false}
             onEndReachedThreshold={1}
             refreshing={loading}
             onRefresh={() => {
               fetchPoolys();
               Haptics.notificationAsync(
-                Haptics.NotificationFeedbackType.Succes
+                Haptics.NotificationFeedbackType.Success
               );
             }}
             style={{ paddingTop: 10 }}

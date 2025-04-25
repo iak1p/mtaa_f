@@ -14,9 +14,54 @@ import BankaIcon from "../components/svg/BankaIcon";
 import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useRef, useState } from "react";
 import ButtonComponent from "../components/ButtonComponent";
+import { LOCAL_HOST, PORT } from "../env";
+import useUserStore from "../store/store";
+import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
 
-const CreatePoolyPage = ({ navigation }) => {
-  const [poolyName, setPoolyName] = useState("On ");
+const CreatePoolyAmountPage = ({
+  route: {
+    params: { poolyName },
+  },
+}) => {
+  const [poolyAmount, setPoolyAmount] = useState();
+  const { token } = useUserStore();
+  const navigation = useNavigation();
+
+  const addNewPooly = async () => {
+    // if (validate()) {
+    console.log(poolyName + poolyAmount);
+    try {
+      const res = await fetch(`http://${LOCAL_HOST}:${PORT}/budgets/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+        body: JSON.stringify({
+          amount: poolyAmount.replace(",", "."),
+          name: poolyName,
+        }),
+      });
+      const data = await res.json();
+      console.log(res.status);
+
+      if (!res.ok) {
+        setError(data.message);
+        return;
+      }
+
+      console.log("Response:", data);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Budget" }],
+      });
+    } catch (error) {
+      console.error("Error:", error);
+    }
+    // }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -39,6 +84,7 @@ const CreatePoolyPage = ({ navigation }) => {
             }}
           >
             <WelcomeScreenSVG />
+            <Text>{poolyName}</Text>
             <TextInput
               style={{
                 fontSize: 28,
@@ -47,18 +93,18 @@ const CreatePoolyPage = ({ navigation }) => {
                 width: 200,
                 textAlign: "center",
               }}
-              onChangeText={setPoolyName}
-              value={poolyName}
+              onChangeText={setPoolyAmount}
+              value={poolyAmount}
               autoCorrect={false}
               autoFocus={true}
               maxLength={10}
             />
           </View>
           <ButtonComponent
-            title={"Set name"}
+            title={"Create Pooly"}
             btnStyle={styles.btnStyle}
             textStyle={styles.btnTextStyle}
-            func={() => navigation.navigate("CreatePoolyAmount", { poolyName })}
+            func={() => addNewPooly()}
           />
         </View>
       </SafeAreaView>
@@ -66,7 +112,7 @@ const CreatePoolyPage = ({ navigation }) => {
   );
 };
 
-export default CreatePoolyPage;
+export default CreatePoolyAmountPage;
 
 const styles = StyleSheet.create({
   container: {
