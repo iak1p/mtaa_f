@@ -21,6 +21,8 @@ import ButtonComponent from "../components/ButtonComponent";
 import { LOCAL_HOST, PORT } from "../env";
 import * as Haptics from "expo-haptics";
 import useUserStore from "../store/store";
+import { Accelerometer } from "expo-sensors";
+import { Alert } from "react-native";
 
 const BudgetPage = ({ navigation }) => {
   const insets = useSafeAreaInsets();
@@ -30,6 +32,9 @@ const BudgetPage = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
+
+  const [data, setData] = useState({});
+  const [lastShakeTime, setLastShakeTime] = useState(0);
 
   const fetchPoolys = () => {
     setLoading(true);
@@ -54,6 +59,32 @@ const BudgetPage = ({ navigation }) => {
         console.log(pooly);
         setLoading(false);
       });
+  };
+
+  useEffect(() => {
+    Accelerometer.setUpdateInterval(300); // каждые 300мс
+
+    const subscription = Accelerometer.addListener((accelerometerData) => {
+      setData(accelerometerData);
+
+      const totalForce =
+        Math.abs(accelerometerData.x) +
+        Math.abs(accelerometerData.y) +
+        Math.abs(accelerometerData.z);
+
+      const now = Date.now();
+
+      if (totalForce > 2.5 && now - lastShakeTime > 1500) {
+        setLastShakeTime(now);
+        onShake();
+      }
+    });
+
+    return () => subscription && subscription.remove();
+  }, [lastShakeTime]);
+
+  const onShake = async () => {
+    Alert.alert("📱 Тряска!", "Ты потряс телефон!");
   };
 
   // useEffect(() => {
