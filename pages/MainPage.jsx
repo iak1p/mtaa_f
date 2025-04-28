@@ -46,6 +46,7 @@ const MainPage = ({ navigation }) => {
   const screenWidth = Dimensions.get("window").width;
   const [data, setData] = useState({});
   const [dataChart, setDataChart] = useState({});
+  const [darkMode, setDarkMode] = useState(false);
 
   // const [currentPage, setCurrentPage] = useState(0);
 
@@ -56,6 +57,14 @@ const MainPage = ({ navigation }) => {
   // };
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchTransactions(); 
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const fetchTransactions = () => {
     if (colorScheme === "dark") setDarkMode(true);
     setLoading(true);
     setGrafLoading(true);
@@ -78,7 +87,7 @@ const MainPage = ({ navigation }) => {
             },
           ],
         };
-        
+
         const monthTransaction = {};
 
         transaction.forEach((item) => {
@@ -139,7 +148,93 @@ const MainPage = ({ navigation }) => {
         setLoading(false);
         setGrafLoading(false);
       });
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   if (colorScheme === "dark") setDarkMode(true);
+  //   setLoading(true);
+  //   setGrafLoading(true);
+
+  //   fetch(`http://${LOCAL_HOST}:${PORT}/users/transactions`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: token,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then(({ transaction }) => {
+  //       const expensesByMonth = {};
+  //       const chartData = {
+  //         labels: [],
+  //         datasets: [
+  //           {
+  //             data: [],
+  //           },
+  //         ],
+  //       };
+
+  //       const monthTransaction = {};
+
+  //       transaction.forEach((item) => {
+  //         const dateNow = new Date().toISOString().slice(0, 7);
+  //         const month = new Date(item.date).toISOString().slice(0, 7);
+
+  //         if (dateNow == month) {
+  //           if (!monthTransaction[item.category]) {
+  //             monthTransaction[item.category] = 0;
+  //           }
+
+  //           monthTransaction[item.category] += item.amount;
+  //         }
+
+  //         if (!expensesByMonth[month]) {
+  //           expensesByMonth[month] = 0;
+  //         }
+  //         expensesByMonth[month] += item.amount;
+  //       });
+
+  //       console.log(monthTransaction);
+
+  //       const dateNow = new Date().toISOString().slice(0, 7);
+
+  //       const previousMonthDate = new Date();
+  //       previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+
+  //       const previousMonth = previousMonthDate.toISOString().slice(0, 7);
+
+  //       setPercentExpenses(
+  //         ((expensesByMonth[dateNow] - expensesByMonth[previousMonth]) /
+  //           expensesByMonth[previousMonth]) *
+  //           100
+  //       );
+  //       setMoneyRemain(expensesByMonth[dateNow]);
+
+  //       Object.keys(expensesByMonth)
+  //         .sort()
+  //         .forEach((monthKey) => {
+  //           const label = new Date(monthKey).toLocaleDateString("en", {
+  //             month: "long",
+  //           });
+  //           chartData.labels.push(label);
+  //           chartData.datasets[0].data.push(expensesByMonth[monthKey]);
+  //         });
+
+  //       const monthtData = {
+  //         labels: Object.keys(monthTransaction),
+  //         datasets: [{ data: Object.values(monthTransaction) }],
+  //       };
+
+  //       setDataChart(monthtData);
+  //       setData(chartData);
+  //       setTransactions(transaction);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     .finally(() => {
+  //       setLoading(false);
+  //       setGrafLoading(false);
+  //     });
+  // }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -200,7 +295,7 @@ const MainPage = ({ navigation }) => {
               // formatYLabel={(value) => parseInt(value)}
               segments={4}
               yLabelsOffset={3}
-              // fromZero={true}
+              fromZero={true}
               withInnerLines={true}
               withOuterLines={true}
               bezier
@@ -210,6 +305,7 @@ const MainPage = ({ navigation }) => {
               data={dataChart}
               width={screenWidth}
               height={200}
+              fromZero={true}
               yLabelsOffset={3}
               // formatYLabel={(value) => parseInt(value)}
               yAxisSuffix="$"

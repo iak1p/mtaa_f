@@ -6,7 +6,7 @@ import { Touchable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const Pooly = ({
-  item: { name, max_money, current_money, budget_id },
+  item: { name, max_money, current_money, budget_id, creator },
   darkMode,
 }) => {
   const navigation = useNavigation();
@@ -19,6 +19,7 @@ const Pooly = ({
           max_money,
           current_money,
           budget_id,
+          creator
         })
       }
     >
