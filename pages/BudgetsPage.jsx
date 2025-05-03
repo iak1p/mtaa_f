@@ -25,19 +25,18 @@ import useUserStore from "../store/store";
 import { Accelerometer } from "expo-sensors";
 import { Alert } from "react-native";
 import useBudgetNotifications from "../utils/useBudgetNotifications";
+import PoolyInfoComponent from "../components/PoolyInfoComponent";
+import BankaIcon from "../components/svg/BankaIcon";
 
 const BudgetPage = ({ navigation }) => {
   const [budgetIds, setBudgetIds] = useState([]);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
-  const { token, img } = useUserStore();
+  const { token, img, transactions } = useUserStore();
   const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
-
-  const [data, setData] = useState({});
-  const [lastShakeTime, setLastShakeTime] = useState(0);
 
   const fetchPoolys = () => {
     setLoading(true);
@@ -60,7 +59,6 @@ const BudgetPage = ({ navigation }) => {
       })
       .catch((err) => console.log(err))
       .finally(() => {
-        console.log(pooly);
         setLoading(false);
       });
   };
@@ -68,45 +66,16 @@ const BudgetPage = ({ navigation }) => {
   useBudgetNotifications(budgetIds);
 
   useEffect(() => {
-    Accelerometer.setUpdateInterval(300); // каждые 300мс
-
-    const subscription = Accelerometer.addListener((accelerometerData) => {
-      setData(accelerometerData);
-
-      const totalForce =
-        Math.abs(accelerometerData.x) +
-        Math.abs(accelerometerData.y) +
-        Math.abs(accelerometerData.z);
-
-      const now = Date.now();
-
-      if (totalForce > 2.5 && now - lastShakeTime > 1500) {
-        setLastShakeTime(now);
-        onShake();
-      }
-    });
-
-    return () => subscription && subscription.remove();
-  }, [lastShakeTime]);
-
-  const onShake = async () => {
-    Alert.alert("📱 Тряска!", "Ты потряс телефон!");
-  };
-
-  // useEffect(() => {
-  //   console.log(token);
-
-  //   if (colorScheme === "dark") setDarkMode(true);
-  //   fetchPoolys();
-  // }, []);
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   useEffect(() => {
     setLoading(true);
     if (!token) return;
-
-    console.log(img);
-
-    if (colorScheme === "dark") setDarkMode(true);
     fetchPoolys();
   }, [token]);
 
@@ -142,7 +111,7 @@ const BudgetPage = ({ navigation }) => {
           </Text>
         </View>
       </SafeAreaView>
-      {/* <Toast></Toast> */}
+
       <View style={{ top: -50 }}>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
           <View
@@ -158,21 +127,7 @@ const BudgetPage = ({ navigation }) => {
               btnStyle={[
                 styles.btnStyle,
                 styles.shadowBox,
-                // darkMode ? { backgroundColor: "#000" } : null,
               ]}
-              textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
-              icon={<List />}
-            />
-            <ButtonComponent
-              title={"Creater new"}
-              func={() => {
-                // Toast.show({
-                //   type: "info", // 'success', 'error', 'info'
-                //   text1: "Успех!",
-                //   text2: "Данные сохранены успешно 👋",
-                // });
-              }}
-              btnStyle={[styles.btnStyle, styles.shadowBox]}
               textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
               icon={<List />}
             />

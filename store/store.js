@@ -10,8 +10,13 @@ const useUserStore = create(
       token: null,
       img: null,
       id: null,
+      transactions: [],
       setUser: (user) => set((state) => ({ ...state, ...user })),
       setImg: (newImg) => set((state) => ({ ...state, img: newImg })),
+      addTransaction: (transaction) =>
+        set((state) => ({
+          transactions: [...state.transactions, transaction],
+        })),
       fetchUserData: async () => {
         try {
           const res = await fetch(
@@ -32,7 +37,7 @@ const useUserStore = create(
               img: data.img_uri,
               token: data.token,
               username: data.username,
-              id: data.id
+              id: data.id,
             }));
           }
         } catch (err) {

@@ -23,10 +23,11 @@ import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import AddUserIcon from "../components/svg/AddUserIcon";
 import UsersIcon from "../components/svg/UsersIcon";
 import Phone from "../components/svg/Phone";
+import { Accelerometer } from "expo-sensors";
 
 const PoolyInfoPage = ({
   route: {
-    params: { name, max_money, current_money, budget_id },
+    params: { name, max_money, current_money, budget_id, creator },
   },
 }) => {
   const { token } = useUserStore();
@@ -35,6 +36,17 @@ const PoolyInfoPage = ({
   const [transactions, setTransactions] = useState();
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+
+  const [data, setData] = useState({});
+  const [lastShakeTime, setLastShakeTime] = useState(0);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   const dropPooly = () => {
     Alert.alert("This Pooly will never be the same without you...", "", [
@@ -70,7 +82,61 @@ const PoolyInfoPage = ({
   };
 
   useEffect(() => {
-    if (colorScheme === "dark") setDarkMode(true);
+    Accelerometer.setUpdateInterval(300);
+
+    const subscription = Accelerometer.addListener((accelerometerData) => {
+      setData(accelerometerData);
+
+      const totalForce =
+        Math.abs(accelerometerData.x) +
+        Math.abs(accelerometerData.y) +
+        Math.abs(accelerometerData.z);
+
+      const now = Date.now();
+
+      if (totalForce > 2.5 && now - lastShakeTime > 1500) {
+        setLastShakeTime(now);
+        onShake();
+      }
+    });
+
+    return () => subscription && subscription.remove();
+  }, [lastShakeTime]);
+
+  const onShake = async () => {
+    navigation.navigate("NewTransaction", {
+      budget_id,
+      current_money,
+    });
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchTransactions();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  // useEffect(() => {
+  //   if (colorScheme === "dark") setDarkMode(true);
+  //   setLoading(true);
+  //   fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/transactions`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: token,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then(({transaction}) => {
+  //       setTransactions(transaction);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     .finally(() => setLoading(false));
+  // }, []);
+
+  const fetchTransactions = () => {
     setLoading(true);
     fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/transactions`, {
       method: "GET",
@@ -80,12 +146,12 @@ const PoolyInfoPage = ({
       },
     })
       .then((res) => res.json())
-      .then(({transaction}) => {
+      .then(({ transaction }) => {
         setTransactions(transaction);
       })
       .catch((err) => console.log(err))
       .finally(() => setLoading(false));
-  }, []);
+  };
 
   return (
     <View style={darkMode ? styles.backBack : styles.back}>
@@ -151,7 +217,11 @@ const PoolyInfoPage = ({
               />
               <PoolyInfoComponent
                 btnFunc={() =>
-                  navigation.navigate("UserList", { budget_id, transactions })
+                  navigation.navigate("UserList", {
+                    budget_id,
+                    transactions,
+                    creator,
+                  })
                 }
                 style={darkMode ? styles.iconStyleBlack : styles.iconStyle}
                 text={`Show \n User list`}

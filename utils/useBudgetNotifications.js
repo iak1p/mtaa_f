@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { supabase } from "../utils/supabase1";
+import { supabase_noti } from "../utils/supabase";
 import Toast from "react-native-toast-message";
 import useUserStore from "../store/store";
 import * as Notifications from "expo-notifications";
@@ -42,7 +42,7 @@ export default function useBudgetNotifications(budgetIds = []) {
     if (!budgetIds.length) return;
 
     const channels = budgetIds.map((id) =>
-      supabase
+      supabase_noti
         .channel(`transactions-${id}`)
         .on(
           "postgres_changes",
@@ -57,18 +57,18 @@ export default function useBudgetNotifications(budgetIds = []) {
             // handleSendNotification();
 
             if (username != tx.user_name) {
-              // Toast.show({
-              //   type: "info",
-              //   text1: "",
-              //   text2: `${tx.user_name} снял(а) ${tx.amount}₽`,
-              // });
-
               Notifications.scheduleNotificationAsync({
                 content: {
-                  title: "💸 Новая транзакция",
-                  body: `${tx.user_name} снял(а) ${tx.amount}₽`,
+                  title: "💸 New transaction",
+                  body: `${tx.user_name} withdrew ${new Intl.NumberFormat(
+                    "de-US",
+                    {
+                      style: "currency",
+                      currency: "USD",
+                    }
+                  ).format(tx.amount)}`,
                 },
-                trigger: null, // Сработает сразу
+                trigger: null,
               });
             } else {
               // Toast.show({
@@ -79,9 +79,12 @@ export default function useBudgetNotifications(budgetIds = []) {
               Notifications.scheduleNotificationAsync({
                 content: {
                   title: "Success",
-                  body: `You withdrew ${tx.amount}₽`,
+                  body: `You withdrew ${new Intl.NumberFormat("de-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(tx.amount)}`,
                 },
-                trigger: null, // Сработает сразу
+                trigger: null,
               });
             }
           }
@@ -90,7 +93,7 @@ export default function useBudgetNotifications(budgetIds = []) {
     );
 
     return () => {
-      channels.forEach((channel) => supabase.removeChannel(channel));
+      channels.forEach((channel) => supabase_noti.removeChannel(channel));
     };
   }, [budgetIds]);
 }
