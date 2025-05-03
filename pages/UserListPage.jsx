@@ -26,26 +26,6 @@ function UserListPage({
     params: { budget_id, transactions, creator },
   },
 }) {
-  //   const users = [
-  //     {
-  //       id: "1",
-  //       user_id: "18",
-  //       username: "test",
-  //       img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//user.jpg",
-  //     },
-  //     {
-  //       id: "2",
-  //       user_id: "19",
-  //       username: "qqqq",
-  //       img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266175575.jpg",
-  //     },
-  //     {
-  //       id: "3",
-  //       user_id: "20",
-  //       username: "iak1p",
-  //       img: "https://churijlloevkfgiwttgy.supabase.co/storage/v1/object/public/img//1743266365468.jpg",
-  //     },
-  //   ];
   const { token, id } = useUserStore();
   const [users, setUsers] = useState();
   const [loading, setLoading] = useState(false);

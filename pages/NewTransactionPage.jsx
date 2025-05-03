@@ -5,6 +5,8 @@ import {
   TouchableWithoutFeedback,
   StyleSheet,
   View,
+  useColorScheme,
+  Keyboard,
 } from "react-native";
 import BaseForm from "../components/BaseForm";
 import { useEffect, useState } from "react";
@@ -37,6 +39,17 @@ function NewTransactionPage({
   const [openType, setOpenType] = useState(false);
   const [value, setValue] = useState("food");
   const [valueType, setValueType] = useState("card");
+
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   const validate = () => {
     if (transactionAmount.length == 0 || parseFloat(transactionAmount) == 0) {
@@ -137,76 +150,154 @@ function NewTransactionPage({
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-        <Arrow stroke="#000" />
-      </TouchableWithoutFeedback>
-      <Text>
-        In Pooly
-        {new Intl.NumberFormat("de-US", {
-          style: "currency",
-          currency: "USD",
-        }).format(current_money)}
-      </Text>
-      <BaseForm
-        inputs={[
-          {
-            lable: null,
-            placeholder: "Enter amount",
-            state: setTransactionAmount,
-            error: amountError,
-            type: "numeric",
-          },
-        ]}
-      />
-      <View style={{ zIndex: 1000 }}>
-        <DropDownPicker
-          open={open}
-          value={value}
-          items={[
-            { label: "Food", value: "food" },
-            { label: "Education", value: "education" },
-            { label: "Clothing", value: "clothing" },
-            { label: "Travel", value: "travel" },
-          ]}
-          setOpen={(callback) => {
-            setOpen(callback);
-            setOpenType(false);
-          }}
-          setValue={setValue}
-          style={{
-            backgroundColor: "transparent",
-          }}
-          dropDownContainerStyle={{}}
-        />
-      </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View
+        style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+      >
+        <SafeAreaView style={styles.container}>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <Arrow stroke={darkMode ? "#fff" : "#000"} />
+          </TouchableWithoutFeedback>
+          <Text
+            style={[
+              { textAlign: "center", fontSize: 16, marginTop: 15 },
+              darkMode ? { color: "#fff" } : null,
+            ]}
+          >
+            In Pooly
+          </Text>
+          <Text
+            style={[
+              {
+                textAlign: "center",
+                fontSize: 25,
+                marginTop: 5,
+                marginBottom: 15,
+                fontWeight: "bold",
+              },
+              darkMode ? { color: "#fff" } : null,
+            ]}
+          >
+            {new Intl.NumberFormat("de-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(current_money)}
+          </Text>
+          <BaseForm
+            inputs={[
+              {
+                lable: null,
+                placeholder: "Enter amount",
+                state: setTransactionAmount,
+                error: amountError,
+                type: "numeric",
+              },
+            ]}
+          />
+          <View style={{ zIndex: 1000 }}>
+            <DropDownPicker
+              open={open}
+              value={value}
+              items={[
+                { label: "Food", value: "food" },
+                { label: "Education", value: "education" },
+                { label: "Clothing", value: "clothing" },
+                { label: "Travel", value: "travel" },
+              ]}
+              setOpen={(callback) => {
+                setOpen(callback);
+                setOpenType(false);
+              }}
+              setValue={setValue}
+              style={{
+                backgroundColor: "transparent",
+                borderColor: "#86939e",
+              }}
+              textStyle={{
+                color: "#fff", // ← для текста выбранного элемента
+              }}
+              dropDownContainerStyle={{
+                backgroundColor: "#912F40", // например, тёмный фон выпадающего списка
+              }}
+              listItemLabelStyle={{
+                color: "#fff", // ← для пунктов выпадающего списка
+              }}
+            />
+          </View>
 
-      <View style={{ zIndex: 500, marginTop: 15 }}>
-        <DropDownPicker
-          open={openType}
-          value={valueType}
-          items={[
-            { label: "Card", value: "card" },
-            { label: "Cash", value: "cash" },
-          ]}
-          setOpen={(callback) => {
-            setOpenType(callback);
-            setOpen(false);
-          }}
-          // placeholder={"dddd"}
-          setValue={setValueType}
-          style={{
-            backgroundColor: "transparent",
-          }}
-          dropDownContainerStyle={{}}
-        />
+          <View style={{ zIndex: 500, marginTop: 15 }}>
+            <DropDownPicker
+              open={openType}
+              value={valueType}
+              items={[
+                { label: "Card", value: "card" },
+                { label: "Cash", value: "cash" },
+              ]}
+              setOpen={(callback) => {
+                setOpenType(callback);
+                setOpen(false);
+              }}
+              // placeholder={"dddd"}
+              setValue={setValueType}
+              style={[
+                {
+                  backgroundColor: "transparent",
+                  borderColor: "#86939e",
+                },
+                {},
+              ]}
+              textStyle={{
+                color: "#fff", // ← для текста выбранного элемента
+              }}
+              dropDownContainerStyle={{
+                backgroundColor: "#912F40", // например, тёмный фон выпадающего списка
+              }}
+              listItemLabelStyle={{
+                color: "#fff", // ← для пунктов выпадающего списка
+              }}
+            />
+          </View>
+          {/* iconStyle: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#13293D",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "100%",
+  },
+  iconStyleBlack: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#912F40",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "100%",
+  }, */}
+          <TouchableWithoutFeedback onPress={addNewTransaction}>
+            <View
+              style={[
+                { marginTop: 15, borderRadius: 5 },
+                darkMode
+                  ? { backgroundColor: "#912F40" }
+                  : { backgroundColor: "#13293D" },
+              ]}
+            >
+              <Text
+                style={{
+                  textAlign: "center",
+                  paddingVertical: 15,
+                  paddingHorizontal: 15,
+                  color: "#fff",
+                }}
+              >
+                Withdraw
+              </Text>
+            </View>
+          </TouchableWithoutFeedback>
+          <Text>{error}</Text>
+        </SafeAreaView>
       </View>
-
-      <TouchableWithoutFeedback onPress={addNewTransaction}>
-        <Text>Add</Text>
-      </TouchableWithoutFeedback>
-      <Text>{error}</Text>
-    </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
