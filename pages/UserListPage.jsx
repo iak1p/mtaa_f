@@ -53,7 +53,7 @@ function UserListPage({
     }, {});
   };
 
-  useEffect(() => {
+  const fetchUsers = () => {
     setLoading(true);
     fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/users`, {
       method: "GET",
@@ -71,7 +71,27 @@ function UserListPage({
         setLoading(false);
         setUserSpent(calculateTotalSpent());
       });
-  }, []);
+  };
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/users`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: token,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then(({ users }) => {
+  //       setUsers(users);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     .finally(() => {
+  //       setLoading(false);
+  //       setUserSpent(calculateTotalSpent());
+  //     });
+  // }, []);
 
   const dropUser = (item) => {
     console.log("userDroed");
@@ -109,6 +129,14 @@ function UserListPage({
       },
     ]);
   };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchUsers();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View

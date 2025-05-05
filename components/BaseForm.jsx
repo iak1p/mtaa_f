@@ -1,8 +1,20 @@
-import { Input } from "@rneui/base";
-import React from "react";
+import { color, Input } from "@rneui/base";
+import React, { useEffect, useState } from "react";
 import Arrow from "./svg/Arrow";
+import { useColorScheme } from "react-native";
 
 export default function BaseForm({ inputs }) {
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
+
   return (
     <>
       {inputs.map(
@@ -42,11 +54,14 @@ export default function BaseForm({ inputs }) {
                       paddingLeft: 10,
                     }
               }
-              inputStyle={{
-                fontSize: 14,
-                paddingTop: 15,
-                paddingBottom: 15,
-              }}
+              inputStyle={[
+                {
+                  fontSize: 14,
+                  paddingTop: 15,
+                  paddingBottom: 15,
+                },
+                darkMode ? { color: "#fff" } : { color: "#000" },
+              ]}
               labelStyle={
                 hasError
                   ? {

@@ -257,22 +257,6 @@ function NewTransactionPage({
               }}
             />
           </View>
-          {/* iconStyle: {
-    width: 50,
-    height: 50,
-    backgroundColor: "#13293D",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "100%",
-  },
-  iconStyleBlack: {
-    width: 50,
-    height: 50,
-    backgroundColor: "#912F40",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "100%",
-  }, */}
           <TouchableWithoutFeedback onPress={addNewTransaction}>
             <View
               style={[
