@@ -28,6 +28,8 @@ import useBudgetNotifications from "../utils/useBudgetNotifications";
 import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import BankaIcon from "../components/svg/BankaIcon";
 
+import NetInfo from "@react-native-community/netinfo";
+
 const BudgetPage = ({ navigation }) => {
   const [budgetIds, setBudgetIds] = useState([]);
   const insets = useSafeAreaInsets();
@@ -39,31 +41,67 @@ const BudgetPage = ({ navigation }) => {
   const [darkMode, setDarkMode] = useState(false);
 
   const fetchPoolys = () => {
+    console.log("fewettt");
+    
     setLoading(true);
-    fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    })
-      .then((res) => res.json())
-      .then(({ pooly }) => {
-        setPooly(pooly);
-        setBudgetIds(pooly.map((p) => p.budget_id));
-        let new_money = 0;
-        pooly.map((item) => {
-          new_money += item.current_money;
-        });
-        setMoneyRemain(new_money);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
+
+    NetInfo.fetch().then((state) => {
+      console.log(state);
+
+      if (state.isConnected && state.isInternetReachable) {
+        // Только если есть интернет — делаем запрос
+        fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        })
+          .then((res) => res.json())
+          .then(({ pooly }) => {
+            setPooly(pooly);
+            setBudgetIds(pooly.map((p) => p.budget_id));
+            let new_money = 0;
+            pooly.forEach((item) => {
+              new_money += item.current_money;
+            });
+            setMoneyRemain(new_money);
+          })
+          .catch((err) => {
+            console.log("Ошибка запроса:", err);
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      } else {
+        console.log("Нет интернета — запрос не отправляется");
         setLoading(false);
-      });
+      }
+    });
+    // fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: token,
+    //   },
+    // })
+    //   .then((res) => res.json())
+    //   .then(({ pooly }) => {
+    //     setPooly(pooly);
+    //     setBudgetIds(pooly.map((p) => p.budget_id));
+    //     let new_money = 0;
+    //     pooly.map((item) => {
+    //       new_money += item.current_money;
+    //     });
+    //     setMoneyRemain(new_money);
+    //   })
+    //   .catch((err) => console.log(err))
+    //   .finally(() => {
+    //     setLoading(false);
+    //   });
   };
 
-  useBudgetNotifications(budgetIds);
+  // useBudgetNotifications(budgetIds);
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -124,10 +162,7 @@ const BudgetPage = ({ navigation }) => {
             <ButtonComponent
               title={"Start a Pooly"}
               func={() => navigation.navigate("CreatePolly")}
-              btnStyle={[
-                styles.btnStyle,
-                styles.shadowBox,
-              ]}
+              btnStyle={[styles.btnStyle, styles.shadowBox]}
               textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
               icon={<List />}
             />

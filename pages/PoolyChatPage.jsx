@@ -10,6 +10,7 @@ import {
   Text,
   TextInput,
   TouchableWithoutFeedback,
+  useColorScheme,
   View,
 } from "react-native";
 import { LOCAL_HOST, PORT } from "../env";
@@ -30,6 +31,17 @@ function PoolyChatPage({
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
   const flatListRef = useRef(null);
+
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   useEffect(() => {
     socket.current = new WebSocket(`ws://${LOCAL_HOST}:8080`);
@@ -91,113 +103,126 @@ function PoolyChatPage({
       style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <Arrow stroke={"#000"} />
-        </TouchableWithoutFeedback>
-        {loading ? (
-          <ActivityIndicator size="small" />
-        ) : (
-          <FlatList
-            ref={flatListRef}
-            data={[...messages].reverse()}
-            inverted={true}
-            keyExtractor={(item) => item.id.toString()}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignSelf: item.user_id === id ? "flex-end" : "flex-start",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  {item.user_id !== id ? (
-                    <Image
-                      source={{ uri: item.img_uri }}
-                      style={styles.image}
-                    />
-                  ) : null}
+      <View
+        style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+      >
+        <SafeAreaView style={styles.container}>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <Arrow stroke={darkMode ? "#fff" : "#000"} />
+          </TouchableWithoutFeedback>
+          {loading ? (
+            <ActivityIndicator size="small" />
+          ) : (
+            <FlatList
+              ref={flatListRef}
+              data={[...messages].reverse()}
+              inverted={true}
+              keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => {
+                return (
                   <View
                     style={{
+                      flexDirection: "row",
                       alignSelf:
                         item.user_id === id ? "flex-end" : "flex-start",
-                      backgroundColor: item.user_id === id ? "#13293D" : "grey",
-                      maxWidth: "75%",
-                      minWidth: "30%",
-                      padding: 10,
-                      borderRadius: 10,
+                      alignItems: "flex-end",
                     }}
                   >
                     {item.user_id !== id ? (
+                      <Image
+                        source={{ uri: item.img_uri }}
+                        style={styles.image}
+                      />
+                    ) : null}
+                    <View
+                      style={{
+                        alignSelf:
+                          item.user_id === id ? "flex-end" : "flex-start",
+                        backgroundColor:
+                          item.user_id === id
+                            ? darkMode
+                              ? "#912F40"
+                              : "#13293D"
+                            : "grey",
+                        maxWidth: "75%",
+                        minWidth: "30%",
+                        padding: 10,
+                        borderRadius: 10,
+                      }}
+                    >
+                      {item.user_id !== id ? (
+                        <Text
+                          style={{
+                            color: "white",
+                            fontSize: 10,
+                            marginBottom: 2,
+                          }}
+                        >
+                          {item.username}
+                        </Text>
+                      ) : null}
+
+                      <Text style={{ color: "white" }}>{item.content}</Text>
                       <Text
                         style={{
                           color: "white",
-                          fontSize: 10,
-                          marginBottom: 2,
+                          alignSelf: "flex-end",
+                          fontSize: 8,
+                          marginTop: 2,
                         }}
                       >
-                        {item.username}
+                        {new Date(item.created_at).toLocaleTimeString("de", {
+                          hour: "numeric",
+                          minute: "numeric",
+                        })}
                       </Text>
-                    ) : null}
-
-                    <Text style={{ color: "white" }}>{item.content}</Text>
-                    <Text
-                      style={{
-                        color: "white",
-                        alignSelf: "flex-end",
-                        fontSize: 8,
-                        marginTop: 2,
-                      }}
-                    >
-                      {new Date(item.created_at).toLocaleTimeString("de", {
-                        hour: "numeric",
-                        minute: "numeric",
-                      })}
-                    </Text>
+                    </View>
                   </View>
-                </View>
-              );
-            }}
-            style={{
-              paddingTop: 10,
-              flexDirection: "column",
-              //   marginBottom: 10,
-            }}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-            // onContentSizeChange={() =>
-            //   flatListRef.current?.scrollToEnd({ animated: true })
-            // }
-            // onLayout={() =>
-            //   flatListRef.current?.scrollToEnd({ animated: true })
-            // }
-          />
-        )}
+                );
+              }}
+              style={{
+                paddingTop: 10,
+                flexDirection: "column",
+                //   marginBottom: 10,
+              }}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+              // onContentSizeChange={() =>
+              //   flatListRef.current?.scrollToEnd({ animated: true })
+              // }
+              // onLayout={() =>
+              //   flatListRef.current?.scrollToEnd({ animated: true })
+              // }
+            />
+          )}
 
-        <View
-          style={{
-            flexDirection: "row",
-            marginBottom: 10,
-            borderWidth: 1,
-            borderColor: "grey",
-            padding: 5,
-            borderRadius: 30,
-          }}
-        >
-          <TextInput
-            value={message}
-            onChangeText={setMessage}
-            style={{ flex: 1, paddingLeft: 10 }}
-            placeholder="Message..."
-          />
-          <TouchableWithoutFeedback onPress={() => sendMessage()}>
-            <View style={styles.iconStyle}>
-              <SendIcon stroke={"white"} />
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </SafeAreaView>
+          <View
+            style={{
+              flexDirection: "row",
+              marginBottom: 10,
+              borderWidth: 1,
+              borderColor: "grey",
+              padding: 5,
+              borderRadius: 30,
+            }}
+          >
+            <TextInput
+              value={message}
+              onChangeText={setMessage}
+              style={[
+                { flex: 1, paddingLeft: 10 },
+                darkMode ? { color: "#fff" } : { color: "#000" },
+              ]}
+              placeholder="Message..."
+            />
+            <TouchableWithoutFeedback onPress={() => sendMessage()}>
+              <View style={darkMode ? styles.iconStyleBlack : styles.iconStyle}>
+                <SendIcon stroke={"white"} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+        </SafeAreaView>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -216,6 +241,15 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     backgroundColor: "#13293D",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "100%",
+    marginLeft: 5,
+  },
+  iconStyleBlack: {
+    width: 40,
+    height: 40,
+    backgroundColor: "#912F40",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: "100%",

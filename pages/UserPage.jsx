@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  useColorScheme,
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -16,7 +17,7 @@ import Info from "../components/svg/Info";
 import Arrow from "../components/svg/Arrow";
 import { ScrollView } from "react-native";
 import useUserStore from "../store/store";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { supabase } from "../utils/supabase";
 import * as FileSystem from "expo-file-system";
@@ -33,6 +34,17 @@ const UserPage = ({ navigation }) => {
   const { token, img, setImg, username } = useUserStore();
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   const pickImage = async () => {
     setLoading(true);
@@ -156,24 +168,27 @@ const UserPage = ({ navigation }) => {
     } catch (err) {
       console.error("Upload error:", err);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View
+      style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+    >
       <SafeAreaView
         style={{
-          marginTop: -insets.top,
+          // marginTop: -insets.top,
           backgroundColor: "#13293D",
         }}
       >
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
           <Arrow
             stroke="#FCF7F8"
-            style={{ paddingLeft: "20%", marginTop: "15%" }}
+            style={{ paddingLeft: "15%" }}
           ></Arrow>
         </TouchableWithoutFeedback>
+        
         <View style={styles.circleContainer}>
           {loading ? (
             <ActivityIndicator size="small" style={styles.image} />
@@ -198,6 +213,7 @@ const UserPage = ({ navigation }) => {
           />
         </View>
       </SafeAreaView>
+
       <ScrollView vertical={true}>
         <View style={styles.container}>
           <View style={styles.textContainer}>
@@ -244,9 +260,6 @@ const UserPage = ({ navigation }) => {
 export default UserPage;
 
 const styles = StyleSheet.create({
-  sex: {
-    color: "tomato",
-  },
   container: {
     flex: 1,
     width: "90%",

@@ -26,7 +26,7 @@ const useUserStore = create(
               headers: {
                 "Content-Type": "application/json",
                 Authorization:
-                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJ1c2VybmFtZSI6ImF1cm9yYSJ9.0DNS6FF6kD1QrIy52Sg_QI8K9lt-CFbOP5fUmGn1hcI",
+                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJ1c2VybmFtZSI6ImFkbWluIn0.FNhGVfx_PSZ1k5_YFgAMZtp0zrclaHU3BWyktMDjXAc",
               },
             }
           );
@@ -50,14 +50,37 @@ const useUserStore = create(
       partialize: (state) => ({ context: state.context }),
       storage: createJSONStorage(() => AsyncStorage),
       skipHydration: false,
+      // onRehydrateStorage: (state) => {
+      //   if (state) {
+      //     if (state.fetchUserData) {
+      //       state.fetchUserData();
+      //     } else {
+      //       console.error("fetchUserData not available in state");
+      //     }
+      //   }
+      // },
       onRehydrateStorage: (state) => {
-        if (state) {
-          if (state.fetchUserData) {
+        return (storedState, error) => {
+          console.log(storedState);
+
+          if (error) {
+            console.error("Rehydration error:", error);
+            return;
+          }
+
+          // Если уже есть данные — не делаем fetch
+          const alreadyLoaded =
+            storedState &&
+            storedState.username &&
+            storedState.token &&
+            storedState.id;
+
+          if (!alreadyLoaded && state?.fetchUserData) {
             state.fetchUserData();
           } else {
-            console.error("fetchUserData not available in state");
+            console.log("Пользователь уже был загружен — пропускаем fetch");
           }
-        }
+        };
       },
     }
   )
