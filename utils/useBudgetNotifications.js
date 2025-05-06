@@ -4,10 +4,6 @@ import Toast from "react-native-toast-message";
 import useUserStore from "../store/store";
 import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
-import {
-  EXPO_PUBLIC_SUPABASE_ANON_KEY1,
-  EXPO_PUBLIC_SUPABASE_URL1,
-} from "../env";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -19,7 +15,7 @@ Notifications.setNotificationHandler({
 
 export default function useBudgetNotifications(budgetIds = []) {
   const { username } = useUserStore();
-  const [lastCounts, setLastCounts] = useState({});
+  // const [lastCounts, setLastCounts] = useState({});
 
   useEffect(() => {
     const register = async () => {
@@ -42,141 +38,135 @@ export default function useBudgetNotifications(budgetIds = []) {
     register();
   }, []);
 
-  // useEffect(() => {
-  //   registerForPushNotificationsAsync();
-  // }, []);
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
-  // const registerForPushNotificationsAsync = async () => {
-  //   if (Device.isDevice) {
-  //     const { status: existingStatus } =
-  //       await Notifications.getPermissionsAsync();
-  //     let finalStatus = existingStatus;
-  //     if (existingStatus !== "granted") {
-  //       const { status } = await Notifications.requestPermissionsAsync();
-  //       finalStatus = status;
-  //     }
-  //     if (finalStatus !== "granted") {
-  //       Alert.alert("Разрешение на уведомления не получено!");
-  //       return;
-  //     }
-  //   } else {
-  //     Alert.alert("Уведомления работают только на физическом устройстве");
-  //   }
-  // };
-
-  const fetchNewTransactions = async (budgetId) => {
-    const res = await fetch(
-      `${EXPO_PUBLIC_SUPABASE_URL1}/rest/v1/transactions?budget_id=eq.${budgetId}&select=*`,
-      {
-        headers: {
-          apikey: EXPO_PUBLIC_SUPABASE_ANON_KEY1,
-          Authorization: `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY1}`,
-        },
+  const registerForPushNotificationsAsync = async () => {
+    if (Device.isDevice) {
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+      let finalStatus = existingStatus;
+      if (existingStatus !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
       }
-    );
-    const data = await res.json();
-    return data;
+      if (finalStatus !== "granted") {
+        Alert.alert("Разрешение на уведомления не получено!");
+        return;
+      }
+    } else {
+      Alert.alert("Уведомления работают только на физическом устройстве");
+    }
   };
 
-  useEffect(() => {
-    console.log("HEllo");
-
-    const interval = setInterval(async () => {
-      for (const budgetId of budgetIds) {
-        const transactions = await fetchNewTransactions(budgetId);
-
-        if (
-          !lastCounts[budgetId] ||
-          transactions.length > lastCounts[budgetId]
-        ) {
-          const tx = transactions[transactions.length - 1];
-
-          Notifications.scheduleNotificationAsync({
-            content: {
-              title:
-                tx.user_name === username ? "Success" : "💸 New transaction",
-              body:
-                tx.user_name === username
-                  ? `You withdrew ${new Intl.NumberFormat("de-US", {
-                      style: "currency",
-                      currency: "USD",
-                    }).format(tx.amount)}`
-                  : `${tx.user_name} withdrew ${new Intl.NumberFormat("de-US", {
-                      style: "currency",
-                      currency: "USD",
-                    }).format(tx.amount)}`,
-            },
-            trigger: null,
-          });
-
-          setLastCounts((prev) => ({
-            ...prev,
-            [budgetId]: transactions.length,
-          }));
-        }
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [budgetIds, lastCounts, username]);
+  // const fetchNewTransactions = async (budgetId) => {
+  //   const res = await fetch(
+  //     `${EXPO_PUBLIC_SUPABASE_URL1}/rest/v1/transactions?budget_id=eq.${budgetId}&select=*`,
+  //     {
+  //       headers: {
+  //         apikey: EXPO_PUBLIC_SUPABASE_ANON_KEY1,
+  //         Authorization: `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY1}`,
+  //       },
+  //     }
+  //   );
+  //   const data = await res.json();
+  //   return data;
+  // };
 
   // useEffect(() => {
-  //   if (!budgetIds.length) return;
-  //   console.log(budgetIds);
+  //   console.log("HEllo");
 
-  // const channels = budgetIds.map((id) =>
-  //   supabase_noti
-  //     .channel(`transactions-${id}`)
-  //     .on(
-  //       "postgres_changes",
-  //       {
-  //         event: "INSERT",
-  //         schema: "public",
-  //         table: "transactions",
-  //         filter: `budget_id=eq.${id}`,
-  //       },
-  //       (payload) => {
-  //         const tx = payload.new;
-  //         // handleSendNotification();
+  //   const interval = setInterval(async () => {
+  //     for (const budgetId of budgetIds) {
+  //       const transactions = await fetchNewTransactions(budgetId);
 
-  //         if (username != tx.user_name) {
-  //           Notifications.scheduleNotificationAsync({
-  //             content: {
-  //               title: "💸 New transaction",
-  //               body: `${tx.user_name} withdrew ${new Intl.NumberFormat(
-  //                 "de-US",
-  //                 {
-  //                   style: "currency",
-  //                   currency: "USD",
-  //                 }
-  //               ).format(tx.amount)}`,
-  //             },
-  //             trigger: null,
-  //           });
-  //         } else {
-  //           // Toast.show({
-  //           //   type: "success",
-  //           //   text1: "Success",
-  //           //   text2: `You withdrew ${tx.amount}₽`,
-  //           // });
-  //           Notifications.scheduleNotificationAsync({
-  //             content: {
-  //               title: "Success",
-  //               body: `You withdrew ${new Intl.NumberFormat("de-US", {
-  //                 style: "currency",
-  //                 currency: "USD",
-  //               }).format(tx.amount)}`,
-  //             },
-  //             trigger: null,
-  //           });
-  //         }
+  //       if (
+  //         !lastCounts[budgetId] ||
+  //         transactions.length > lastCounts[budgetId]
+  //       ) {
+  //         const tx = transactions[transactions.length - 1];
+
+  //         Notifications.scheduleNotificationAsync({
+  //           content: {
+  //             title:
+  //               tx.user_name === username ? "Success" : "💸 New transaction",
+  //             body:
+  //               tx.user_name === username
+  //                 ? `You withdrew ${new Intl.NumberFormat("de-US", {
+  //                     style: "currency",
+  //                     currency: "USD",
+  //                   }).format(tx.amount)}`
+  //                 : `${tx.user_name} withdrew ${new Intl.NumberFormat("de-US", {
+  //                     style: "currency",
+  //                     currency: "USD",
+  //                   }).format(tx.amount)}`,
+  //           },
+  //           trigger: null,
+  //         });
+
+  //         setLastCounts((prev) => ({
+  //           ...prev,
+  //           [budgetId]: transactions.length,
+  //         }));
   //       }
-  //     )
-  //     .subscribe()
-  // );
+  //     }
+  //   }, 5000);
 
-  // return () => {
-  //   channels.forEach((channel) => supabase_noti.removeChannel(channel));
-  // };
-  // }, [budgetIds]);
+  //   return () => clearInterval(interval);
+  // }, [budgetIds, lastCounts, username]);
+
+  useEffect(() => {
+    if (!budgetIds.length) return;
+    console.log(budgetIds);
+
+  const channels = budgetIds.map((id) =>
+    supabase_noti
+      .channel(`transactions-${id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "transactions",
+          filter: `budget_id=eq.${id}`,
+        },
+        (payload) => {
+          const tx = payload.new;
+
+          if (username != tx.user_name) {
+            Notifications.scheduleNotificationAsync({
+              content: {
+                title: "💸 New transaction",
+                body: `${tx.user_name} withdrew ${new Intl.NumberFormat(
+                  "de-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                  }
+                ).format(tx.amount)}`,
+              },
+              trigger: null,
+            });
+          } else {
+            Notifications.scheduleNotificationAsync({
+              content: {
+                title: "Success",
+                body: `You withdrew ${new Intl.NumberFormat("de-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(tx.amount)}`,
+              },
+              trigger: null,
+            });
+          }
+        }
+      )
+      .subscribe()
+  );
+
+  return () => {
+    channels.forEach((channel) => supabase_noti.removeChannel(channel));
+  };
+  }, [budgetIds]);
 }

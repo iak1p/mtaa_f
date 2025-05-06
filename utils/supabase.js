@@ -1,26 +1,6 @@
-// import { createClient } from "@supabase/supabase-js";
-// import {
-//   EXPO_PUBLIC_SUPABASE_ANON_KEY,
-//   EXPO_PUBLIC_SUPABASE_URL,
-// } from "../env";
+import { createClient } from "@supabase/supabase-js";
 
-// export const supabase = createClient(
-//   EXPO_PUBLIC_SUPABASE_URL || "",
-//   EXPO_PUBLIC_SUPABASE_ANON_KEY || "",
-//   {
-//     realtime: { enabled: false },
-//   }
-// );
-
-// import {
-//   EXPO_PUBLIC_SUPABASE_ANON_KEY1,
-//   EXPO_PUBLIC_SUPABASE_URL1,
-// } from "../env";
-
-// export const supabase_noti = createClient(
-//   EXPO_PUBLIC_SUPABASE_URL1 || "",
-//   EXPO_PUBLIC_SUPABASE_ANON_KEY1 || "",
-//   {
-//     realtime: { enabled: false },
-//   }
-// );
+export const supabase_noti = createClient(
+  "https://yzfmkyxkcwocoyznoxhb.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6Zm1reXhrY3dvY295em5veGhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MDU4NjQsImV4cCI6MjA2MTE4MTg2NH0.KWiby4nZBc7rCsv0JjTnfQ4yFS5VM0h8bGxAL93Aock"
+);

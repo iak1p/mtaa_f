@@ -10,7 +10,6 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { LOCAL_HOST, PORT } from "../env";
 import { ActivityIndicator } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import useUserStore from "../store/store";
@@ -55,13 +54,16 @@ function UserListPage({
 
   const fetchUsers = () => {
     setLoading(true);
-    fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/users`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    })
+    fetch(
+      `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/users`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    )
       .then((res) => res.json())
       .then(({ users }) => {
         setUsers(users);
@@ -105,7 +107,7 @@ function UserListPage({
         text: "Yes",
         onPress: () => {
           fetch(
-            `http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/drop/${item.id}`,
+            `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/drop/${item.id}`,
             {
               method: "DELETE",
               headers: {
