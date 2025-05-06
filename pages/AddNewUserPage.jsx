@@ -11,7 +11,6 @@ import {
   View,
 } from "react-native";
 import BaseForm from "../components/BaseForm";
-import { LOCAL_HOST, PORT } from "../env";
 import { useNavigation } from "@react-navigation/native";
 import useUserStore from "../store/store";
 import * as Haptics from "expo-haptics";
@@ -67,7 +66,7 @@ function AddNewUserPage({
     if (validate()) {
       try {
         const res = await fetch(
-          `http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/users`,
+          `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/users`,
           {
             method: "POST",
             headers: {

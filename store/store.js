@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { LOCAL_HOST, PORT } from "../env";
 
 const useUserStore = create(
   persist(
@@ -20,13 +19,13 @@ const useUserStore = create(
       fetchUserData: async () => {
         try {
           const res = await fetch(
-            `http://${LOCAL_HOST}:${PORT}/users/info/all`,
+            `http://${process.env.EXPO_PUBLIC_ADDRESS}/users/info/all`,
             {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
                 Authorization:
-                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUiLCJ1c2VybmFtZSI6ImFkbWluIn0.FNhGVfx_PSZ1k5_YFgAMZtp0zrclaHU3BWyktMDjXAc",
+                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJ1c2VybmFtZSI6ImJpYmFzcyJ9.0Tkek0sPyo9O_iRT-DmkMERXDJfR0S6TRbWrGTMFJMY",
               },
             }
           );
@@ -45,44 +44,44 @@ const useUserStore = create(
         }
       },
     }),
-    {
-      name: "position-storage",
-      partialize: (state) => ({ context: state.context }),
-      storage: createJSONStorage(() => AsyncStorage),
-      skipHydration: false,
-      // onRehydrateStorage: (state) => {
-      //   if (state) {
-      //     if (state.fetchUserData) {
-      //       state.fetchUserData();
-      //     } else {
-      //       console.error("fetchUserData not available in state");
-      //     }
-      //   }
-      // },
-      onRehydrateStorage: (state) => {
-        return (storedState, error) => {
-          console.log(storedState);
+    // {
+    //   name: "position-storage",
+    //   partialize: (state) => ({ context: state.context }),
+    //   storage: createJSONStorage(() => AsyncStorage),
+    //   skipHydration: false,
+    //   // onRehydrateStorage: (state) => {
+    //   //   if (state) {
+    //   //     if (state.fetchUserData) {
+    //   //       state.fetchUserData();
+    //   //     } else {
+    //   //       console.error("fetchUserData not available in state");
+    //   //     }
+    //   //   }
+    //   // },
+    //   onRehydrateStorage: (state) => {
+    //     return (storedState, error) => {
+    //       console.log(storedState);
 
-          if (error) {
-            console.error("Rehydration error:", error);
-            return;
-          }
+    //       if (error) {
+    //         console.error("Rehydration error:", error);
+    //         return;
+    //       }
 
-          // Если уже есть данные — не делаем fetch
-          const alreadyLoaded =
-            storedState &&
-            storedState.username &&
-            storedState.token &&
-            storedState.id;
+    //       // Если уже есть данные — не делаем fetch
+    //       const alreadyLoaded =
+    //         storedState &&
+    //         storedState.username &&
+    //         storedState.token &&
+    //         storedState.id;
 
-          if (!alreadyLoaded && state?.fetchUserData) {
-            state.fetchUserData();
-          } else {
-            console.log("Пользователь уже был загружен — пропускаем fetch");
-          }
-        };
-      },
-    }
+    //       if (!alreadyLoaded && state?.fetchUserData) {
+    //         state.fetchUserData();
+    //       } else {
+    //         console.log("Пользователь уже был загружен — пропускаем fetch");
+    //       }
+    //     };
+    //   },
+    // }
   )
 );
 

@@ -19,9 +19,7 @@ import { ScrollView } from "react-native";
 import useUserStore from "../store/store";
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import { supabase } from "../utils/supabase";
 import * as FileSystem from "expo-file-system";
-import { LOCAL_HOST, PORT } from "../env";
 import {
   ImageManipulator,
   manipulateAsync,
@@ -150,7 +148,7 @@ const UserPage = ({ navigation }) => {
       });
 
       const res = await fetch(
-        `http://${LOCAL_HOST}:${PORT}/users/change/image`,
+        `http://${process.env.EXPO_PUBLIC_ADDRESS}/users/change/image`,
         {
           method: "PATCH",
           headers: {
@@ -188,7 +186,7 @@ const UserPage = ({ navigation }) => {
             style={{ paddingLeft: "15%" }}
           ></Arrow>
         </TouchableWithoutFeedback>
-        
+
         <View style={styles.circleContainer}>
           {loading ? (
             <ActivityIndicator size="small" style={styles.image} />

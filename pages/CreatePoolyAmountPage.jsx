@@ -14,7 +14,6 @@ import BankaIcon from "../components/svg/BankaIcon";
 import { TextInput } from "react-native-gesture-handler";
 import { useEffect, useRef, useState } from "react";
 import ButtonComponent from "../components/ButtonComponent";
-import { LOCAL_HOST, PORT } from "../env";
 import useUserStore from "../store/store";
 import * as Haptics from "expo-haptics";
 import { useNavigation } from "@react-navigation/native";
@@ -32,17 +31,20 @@ const CreatePoolyAmountPage = ({
     // if (validate()) {
     console.log(poolyName + poolyAmount);
     try {
-      const res = await fetch(`http://${LOCAL_HOST}:${PORT}/budgets/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-        body: JSON.stringify({
-          amount: poolyAmount.replace(",", "."),
-          name: poolyName,
-        }),
-      });
+      const res = await fetch(
+        `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/create`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+          body: JSON.stringify({
+            amount: poolyAmount.replace(",", "."),
+            name: poolyName,
+          }),
+        }
+      );
       const data = await res.json();
       console.log(res.status);
 
