@@ -49,7 +49,6 @@ const BudgetPage = ({ navigation }) => {
       console.log(state);
 
       if (state.isConnected && state.isInternetReachable) {
-        // Только если есть интернет — делаем запрос
         fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
           method: "GET",
           headers: {
@@ -61,6 +60,7 @@ const BudgetPage = ({ navigation }) => {
           .then(({ pooly }) => {
             setPooly(pooly);
             setBudgetIds(pooly.map((p) => p.budget_id));
+
             let new_money = 0;
             pooly.forEach((item) => {
               new_money += item.current_money;
@@ -101,7 +101,7 @@ const BudgetPage = ({ navigation }) => {
     //   });
   };
 
-  // useBudgetNotifications(budgetIds);
+  useBudgetNotifications(budgetIds);
 
   useEffect(() => {
     if (colorScheme === "dark") {

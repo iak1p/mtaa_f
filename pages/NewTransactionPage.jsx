@@ -11,7 +11,7 @@ import {
 import BaseForm from "../components/BaseForm";
 import { useEffect, useState } from "react";
 import * as Haptics from "expo-haptics";
-import { LOCAL_HOST, PORT } from "../env";
+import { EXPO_PUBLIC_SUPABASE_ANON_KEY1, EXPO_PUBLIC_SUPABASE_URL1, LOCAL_HOST, PORT } from "../env";
 import useUserStore from "../store/store";
 import { useNavigation } from "@react-navigation/native";
 import Arrow from "../components/svg/Arrow";
@@ -88,20 +88,21 @@ function NewTransactionPage({
   }, [transactionAmount]);
 
   const addNewTransaction = async () => {
-    NetInfo.addEventListener(async (state) => {
-      console.log("Is connected?", state.isConnected);
-      if (!isConnected) {
-        if (validate()) {
-          const amount = transactionAmount.replace(",", ".");
-          addTransaction({
-            amount: amount,
-            date: new Date().toISOString(),
-            type: valueType,
-            category: value,
-          });
-        }
-      }
-    });
+    // NetInfo.addEventListener(async (state) => {
+    //   console.log("Is connected?", state.isConnected);
+
+    //   if (!isConnected) {
+    //     if (validate()) {
+    //       const amount = transactionAmount.replace(",", ".");
+    //       addTransaction({
+    //         amount: amount,
+    //         date: new Date().toISOString(),
+    //         type: valueType,
+    //         category: value,
+    //       });
+    //     }
+    //   }
+    // });
 
     if (validate()) {
       try {
@@ -124,6 +125,29 @@ function NewTransactionPage({
           }
         );
 
+        const response = await fetch(
+          `${EXPO_PUBLIC_SUPABASE_URL1}/rest/v1/transactions`,
+          {
+            method: "POST",
+            headers: {
+              apikey: EXPO_PUBLIC_SUPABASE_ANON_KEY1,
+              Authorization: `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY1}`,
+              "Content-Type": "application/json",
+              Prefer: "return=representation",
+            },
+            body: JSON.stringify([
+              {
+                budget_id,
+                user_name: username || "Unknown",
+                amount: parseFloat(amount),
+                created_at: new Date().toISOString(),
+              },
+            ]),
+          }
+        );
+
+        console.log(response);
+
         const data = await res.json();
 
         if (!res.ok) {
@@ -131,14 +155,14 @@ function NewTransactionPage({
           return;
         }
 
-        await supabase_noti.from("transactions").insert([
-          {
-            budget_id,
-            user_name: username || "Unknown",
-            amount: parseFloat(amount),
-            created_at: new Date().toISOString(),
-          },
-        ]);
+        // await supabase_noti.from("transactions").insert([
+        //   {
+        //     budget_id,
+        //     user_name: username || "Unknown",
+        //     amount: parseFloat(amount),
+        //     created_at: new Date().toISOString(),
+        //   },
+        // ]);
 
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
         navigation.goBack();
