@@ -27,6 +27,9 @@ import SettingsPage from "../pages/SettingsPage";
 import PoolyChatPage from "../pages/PoolyChatPage";
 import CreatePoolyAmountPage from "../pages/CreatePoolyAmountPage";
 import UsersIcon from "../components/svg/UsersIcon";
+import { Dimensions } from "react-native";
+import BudgetsPageTablet from "../pages/BudgetsPageTablet";
+import BudgetsPageMobile from "../pages/BudgetsPageMobile";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -34,6 +37,10 @@ const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
   const [darkMode, setDarkMode] = useState(false);
   const colorScheme = useColorScheme();
+
+  const { width, height } = Dimensions.get("window");
+  const isTabletFallback = Math.min(width, height) >= 600;
+  console.log(isTabletFallback);
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -48,7 +55,7 @@ const BottomTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           if (route.name === "Budget") {
-            return <List stroke={darkMode ? '#fff' : "#000"} />;
+            return <List stroke={darkMode ? "#fff" : "#000"} />;
           }
           if (route.name === "Settings") {
             return <List stroke={darkMode ? "#fff" : "#000"} />;
@@ -67,7 +74,11 @@ const BottomTabs = () => {
     >
       <Tab.Screen name="Settings" component={SettingsPage} />
       <Tab.Screen name="Home" component={MainPage} />
-      <Tab.Screen name="Budget" component={BudgetPage} />
+      {isTabletFallback ? (
+        <Tab.Screen name="Budget" component={BudgetsPageTablet} />
+      ) : (
+        <Tab.Screen name="Budget" component={BudgetsPageMobile} />
+      )}
     </Tab.Navigator>
   );
 };

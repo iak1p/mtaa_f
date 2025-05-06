@@ -11,7 +11,6 @@ import {
   Appearance,
   useColorScheme,
 } from "react-native";
-import Toast from "react-native-toast-message";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -29,10 +28,9 @@ import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import BankaIcon from "../components/svg/BankaIcon";
 
 import NetInfo from "@react-native-community/netinfo";
-import * as Device from "expo-device";
 import { Dimensions } from "react-native";
 
-const BudgetPage = ({ navigation }) => {
+const BudgetsPageMobile = () => {
   const [budgetIds, setBudgetIds] = useState([]);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -42,20 +40,11 @@ const BudgetPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
 
-  const { width, height } = Dimensions.get("window");
-  const isTabletFallback = Math.min(width, height) >= 600;
-  console.log(isTabletFallback);
-
   const fetchPoolys = () => {
-    console.log("fewettt");
-
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
-      console.log(state);
-
       if (state.isConnected && state.isInternetReachable) {
-        // Только если есть интернет — делаем запрос
         fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
           method: "GET",
           headers: {
@@ -67,44 +56,26 @@ const BudgetPage = ({ navigation }) => {
           .then(({ pooly }) => {
             setPooly(pooly);
             setBudgetIds(pooly.map((p) => p.budget_id));
+
             let new_money = 0;
+
             pooly.forEach((item) => {
               new_money += item.current_money;
             });
+
             setMoneyRemain(new_money);
           })
           .catch((err) => {
-            console.log("Ошибка запроса:", err);
+            console.log("Request error:", err);
           })
           .finally(() => {
             setLoading(false);
           });
       } else {
-        console.log("Нет интернета — запрос не отправляется");
+        console.log("No internet");
         setLoading(false);
       }
     });
-    // fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: token,
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then(({ pooly }) => {
-    //     setPooly(pooly);
-    //     setBudgetIds(pooly.map((p) => p.budget_id));
-    //     let new_money = 0;
-    //     pooly.map((item) => {
-    //       new_money += item.current_money;
-    //     });
-    //     setMoneyRemain(new_money);
-    //   })
-    //   .catch((err) => console.log(err))
-    //   .finally(() => {
-    //     setLoading(false);
-    //   });
   };
 
   // useBudgetNotifications(budgetIds);
@@ -213,7 +184,7 @@ const BudgetPage = ({ navigation }) => {
   );
 };
 
-export default BudgetPage;
+export default BudgetsPageMobile;
 
 const styles = StyleSheet.create({
   container: {

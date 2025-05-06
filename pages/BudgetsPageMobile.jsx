@@ -11,7 +11,6 @@ import {
   Appearance,
   useColorScheme,
 } from "react-native";
-import Toast from "react-native-toast-message";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -29,10 +28,9 @@ import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import BankaIcon from "../components/svg/BankaIcon";
 
 import NetInfo from "@react-native-community/netinfo";
-import * as Device from "expo-device";
 import { Dimensions } from "react-native";
 
-const BudgetPage = ({ navigation }) => {
+const BudgetsPageMobile = () => {
   const [budgetIds, setBudgetIds] = useState([]);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -55,7 +53,6 @@ const BudgetPage = ({ navigation }) => {
       console.log(state);
 
       if (state.isConnected && state.isInternetReachable) {
-        // Только если есть интернет — делаем запрос
         fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
           method: "GET",
           headers: {
@@ -213,7 +210,7 @@ const BudgetPage = ({ navigation }) => {
   );
 };
 
-export default BudgetPage;
+export default BudgetsPageMobile;
 
 const styles = StyleSheet.create({
   container: {
