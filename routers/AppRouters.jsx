@@ -30,6 +30,8 @@ import UsersIcon from "../components/svg/UsersIcon";
 import { Dimensions } from "react-native";
 import BudgetsPageTablet from "../pages/BudgetsPageTablet";
 import BudgetsPageMobile from "../pages/BudgetsPageMobile";
+import PoolyInfoPageTablet from "../pages/PoolyInfoPageTablet";
+import PoolyInfoPageMobile from "../pages/PoolyInfoPageMobile";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -110,6 +112,11 @@ const BottomTabs = () => {
 const AppRoutes = () => {
   const insets = useSafeAreaInsets();
   const { username, token } = useUserStore();
+
+  const { width, height } = Dimensions.get("window");
+  const isTabletFallback = Math.min(width, height) >= 600;
+  console.log(isTabletFallback);
+
   return (
     <NavigationContainer>
       <View style={styles.container}>
@@ -133,7 +140,14 @@ const AppRoutes = () => {
           <Stack.Screen name="Budget" component={BudgetPage} />
           <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
-          <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} />
+
+          {/* <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} /> */}
+          {isTabletFallback ? (
+            <Stack.Screen name="PoolyInfo" component={PoolyInfoPageTablet} />
+          ) : (
+            <Stack.Screen name="PoolyInfo" component={PoolyInfoPageMobile} />
+          )}
+
           <Stack.Screen name="UserPage" component={UserPage} />
         </Stack.Navigator>
       </View>

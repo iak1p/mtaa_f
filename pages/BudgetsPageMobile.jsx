@@ -11,6 +11,7 @@ import {
   Appearance,
   useColorScheme,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -28,9 +29,10 @@ import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import BankaIcon from "../components/svg/BankaIcon";
 
 import NetInfo from "@react-native-community/netinfo";
+import * as Device from "expo-device";
 import { Dimensions } from "react-native";
 
-const BudgetsPageMobile = () => {
+const BudgetPage = ({ navigation }) => {
   const [budgetIds, setBudgetIds] = useState([]);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -64,6 +66,7 @@ const BudgetsPageMobile = () => {
           .then(({ pooly }) => {
             setPooly(pooly);
             setBudgetIds(pooly.map((p) => p.budget_id));
+
             let new_money = 0;
             pooly.forEach((item) => {
               new_money += item.current_money;
@@ -104,7 +107,7 @@ const BudgetsPageMobile = () => {
     //   });
   };
 
-  // useBudgetNotifications(budgetIds);
+  useBudgetNotifications(budgetIds);
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -210,7 +213,7 @@ const BudgetsPageMobile = () => {
   );
 };
 
-export default BudgetsPageMobile;
+export default BudgetPage;
 
 const styles = StyleSheet.create({
   container: {

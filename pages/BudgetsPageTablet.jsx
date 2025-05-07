@@ -11,6 +11,7 @@ import {
   Appearance,
   useColorScheme,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import {
   SafeAreaView,
   useSafeAreaInsets,
@@ -28,9 +29,10 @@ import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import BankaIcon from "../components/svg/BankaIcon";
 
 import NetInfo from "@react-native-community/netinfo";
+import * as Device from "expo-device";
 import { Dimensions } from "react-native";
 
-const BudgetsPageMobile = () => {
+const BudgetPage = ({ navigation }) => {
   const [budgetIds, setBudgetIds] = useState([]);
   const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
@@ -39,6 +41,10 @@ const BudgetsPageMobile = () => {
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
+
+  const { width, height } = Dimensions.get("window");
+  const isTabletFallback = Math.min(width, height) >= 600;
+  console.log(isTabletFallback);
 
   const fetchPoolys = () => {
     setLoading(true);
@@ -58,27 +64,25 @@ const BudgetsPageMobile = () => {
             setBudgetIds(pooly.map((p) => p.budget_id));
 
             let new_money = 0;
-
             pooly.forEach((item) => {
               new_money += item.current_money;
             });
-
             setMoneyRemain(new_money);
           })
           .catch((err) => {
-            console.log("Request error:", err);
+            console.log("Ошибка запроса:", err);
           })
           .finally(() => {
             setLoading(false);
           });
       } else {
-        console.log("No internet");
+        console.log("Нет интернета — запрос не отправляется");
         setLoading(false);
       }
     });
   };
 
-  // useBudgetNotifications(budgetIds);
+  useBudgetNotifications(budgetIds);
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -100,11 +104,7 @@ const BudgetsPageMobile = () => {
     >
       <SafeAreaView
         style={[
-          // darkMode
-          //   ? { backgroundColor: "#912F40" }
-          //   :
           {
-            //   marginTop: -insets.top,
             backgroundColor: "#13293D",
           },
         ]}
@@ -125,26 +125,28 @@ const BudgetsPageMobile = () => {
             }).format(moneyRemain)}
           </Text>
         </View>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 10,
+            marginHorizontal: 20,
+          }}
+        >
+          <ButtonComponent
+            title={"Start a Pooly"}
+            func={() => navigation.navigate("CreatePolly")}
+            btnStyle={[styles.btnStyle, styles.shadowBox]}
+            textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
+            icon={<List />}
+          />
+        </View>
       </SafeAreaView>
 
-      <View style={{ top: -50 }}>
-        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-          <View
-            style={{
-              flexDirection: "row",
-              gap: 10,
-              marginHorizontal: 20,
-            }}
-          >
-            <ButtonComponent
-              title={"Start a Pooly"}
-              func={() => navigation.navigate("CreatePolly")}
-              btnStyle={[styles.btnStyle, styles.shadowBox]}
-              textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
-              icon={<List />}
-            />
-          </View>
-        </ScrollView>
+      <View style={{}}>
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        ></ScrollView>
       </View>
 
       <View style={styles.container}>
@@ -184,7 +186,7 @@ const BudgetsPageMobile = () => {
   );
 };
 
-export default BudgetsPageMobile;
+export default BudgetPage;
 
 const styles = StyleSheet.create({
   container: {
@@ -196,14 +198,14 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 24,
     paddingTop: 0,
     fontWeight: "bold",
     color: "white",
   },
   subTitle: {
     textAlign: "center",
-    fontSize: 45,
+    fontSize: 67,
     fontWeight: "bold",
     paddingTop: 16,
     paddingBottom: 30,
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
   classTitle: {
     fontWeight: "bold",
     fontSize: 16,
-    marginTop: -45,
+    // marginTop: -45,
   },
   classSubtitle: {
     paddingTop: 8,
@@ -243,8 +245,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: "100%",
     overflow: "hidden",
     resizeMode: "cover",
