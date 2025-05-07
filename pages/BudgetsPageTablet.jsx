@@ -20,6 +20,7 @@ import BankaIcon from "../components/svg/BankaIcon";
 import NetInfo from "@react-native-community/netinfo";
 import * as Device from "expo-device";
 import { Dimensions } from "react-native";
+import PoolyTablet from "../components/PoolyTablet";
 
 const BudgetPage = ({ navigation }) => {
   const { token, img } = useUserStore();
@@ -42,7 +43,6 @@ const BudgetPage = ({ navigation }) => {
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
-
       // if (state.isConnected && state.isInternetReachable) {
       fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
         method: "GET",
@@ -145,10 +145,11 @@ const BudgetPage = ({ navigation }) => {
           <ActivityIndicator size="small" />
         ) : (
           <FlatList
+            numColumns={2}
             data={pooly}
             keyExtractor={(item) => item.budget_id.toString()}
             renderItem={({ item }) => {
-              return <Pooly item={item} darkMode={darkMode} />;
+              return <PoolyTablet item={item} darkMode={darkMode} />;
             }}
             showsVerticalScrollIndicator={false}
             onEndReachedThreshold={1}

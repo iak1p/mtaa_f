@@ -18,6 +18,7 @@ import { supabase_noti } from "../utils/supabase"; // добавь свой пу
 import Toast from "react-native-toast-message";
 import DropDownPicker from "react-native-dropdown-picker";
 import NetInfo from "@react-native-community/netinfo";
+import * as Location from "expo-location";
 // import Geolocation from "react-native-geolocation-service";
 
 function NewTransactionPage({
@@ -91,6 +92,16 @@ function NewTransactionPage({
       try {
         const amount = transactionAmount.replace(",", ".");
 
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          setError("Permission to access location was denied");
+          return;
+        }
+
+        const location = await Location.getCurrentPositionAsync({});
+        const { latitude, longitude } = location.coords;
+        console.log(latitude, longitude);
+
         const res = await fetch(
           `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/transactions`,
           {
@@ -104,6 +115,7 @@ function NewTransactionPage({
               date: new Date().toISOString(),
               type: valueType,
               category: value,
+              location: { latitude, longitude },
             }),
           }
         );
