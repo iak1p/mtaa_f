@@ -13,7 +13,6 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { LOCAL_HOST, PORT } from "../env";
 import useUserStore from "../store/store";
 import Arrow from "../components/svg/Arrow";
 import { useNavigation } from "@react-navigation/native";
@@ -44,7 +43,9 @@ function PoolyChatPage({
   }, [colorScheme]);
 
   useEffect(() => {
-    socket.current = new WebSocket(`ws://${LOCAL_HOST}:8080`);
+    socket.current = new WebSocket(
+      `ws://${process.env.EXPO_PUBLIC_LOCAL_HOST}:8080`
+    );
 
     socket.current.onopen = () => {
       console.log("Connected to WebSocket");
@@ -63,13 +64,16 @@ function PoolyChatPage({
     };
 
     setLoading(true);
-    fetch(`http://${LOCAL_HOST}:${PORT}/chats/${budget_id}/messages`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    })
+    fetch(
+      `http://${process.env.EXPO_PUBLIC_ADDRESS}/chats/${budget_id}/messages`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    )
       .then((res) => res.json())
       .then((data) => {
         setMessages(data);

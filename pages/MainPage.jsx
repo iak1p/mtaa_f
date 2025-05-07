@@ -21,7 +21,6 @@ import OtherIcon from "../components/svg/OtherIcon";
 import Coffee from "../components/svg/Coffee";
 import useUserStore from "../store/store";
 import { useEffect } from "react";
-import { LOCAL_HOST, PORT } from "../env";
 import {
   BarChart,
   LineChart,
@@ -48,28 +47,27 @@ const MainPage = ({ navigation }) => {
   const [dataChart, setDataChart] = useState({});
   const [darkMode, setDarkMode] = useState(false);
 
-  // const [currentPage, setCurrentPage] = useState(0);
-
-  // const handleScroll = (event) => {
-  //   const contentOffsetX = event.nativeEvent.contentOffset.x;
-  //   const page = Math.floor(contentOffsetX / screenWidth); // Вычисляем текущую страницу
-  //   setCurrentPage(page);
-  // };
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      fetchTransactions(); 
+      fetchTransactions();
     });
 
     return unsubscribe;
   }, [navigation]);
 
   const fetchTransactions = () => {
-    if (colorScheme === "dark") setDarkMode(true);
     setLoading(true);
     setGrafLoading(true);
 
-    fetch(`http://${LOCAL_HOST}:${PORT}/users/transactions`, {
+    fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/transactions`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -150,92 +148,6 @@ const MainPage = ({ navigation }) => {
       });
   };
 
-  // useEffect(() => {
-  //   if (colorScheme === "dark") setDarkMode(true);
-  //   setLoading(true);
-  //   setGrafLoading(true);
-
-  //   fetch(`http://${LOCAL_HOST}:${PORT}/users/transactions`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: token,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then(({ transaction }) => {
-  //       const expensesByMonth = {};
-  //       const chartData = {
-  //         labels: [],
-  //         datasets: [
-  //           {
-  //             data: [],
-  //           },
-  //         ],
-  //       };
-
-  //       const monthTransaction = {};
-
-  //       transaction.forEach((item) => {
-  //         const dateNow = new Date().toISOString().slice(0, 7);
-  //         const month = new Date(item.date).toISOString().slice(0, 7);
-
-  //         if (dateNow == month) {
-  //           if (!monthTransaction[item.category]) {
-  //             monthTransaction[item.category] = 0;
-  //           }
-
-  //           monthTransaction[item.category] += item.amount;
-  //         }
-
-  //         if (!expensesByMonth[month]) {
-  //           expensesByMonth[month] = 0;
-  //         }
-  //         expensesByMonth[month] += item.amount;
-  //       });
-
-  //       console.log(monthTransaction);
-
-  //       const dateNow = new Date().toISOString().slice(0, 7);
-
-  //       const previousMonthDate = new Date();
-  //       previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
-
-  //       const previousMonth = previousMonthDate.toISOString().slice(0, 7);
-
-  //       setPercentExpenses(
-  //         ((expensesByMonth[dateNow] - expensesByMonth[previousMonth]) /
-  //           expensesByMonth[previousMonth]) *
-  //           100
-  //       );
-  //       setMoneyRemain(expensesByMonth[dateNow]);
-
-  //       Object.keys(expensesByMonth)
-  //         .sort()
-  //         .forEach((monthKey) => {
-  //           const label = new Date(monthKey).toLocaleDateString("en", {
-  //             month: "long",
-  //           });
-  //           chartData.labels.push(label);
-  //           chartData.datasets[0].data.push(expensesByMonth[monthKey]);
-  //         });
-
-  //       const monthtData = {
-  //         labels: Object.keys(monthTransaction),
-  //         datasets: [{ data: Object.values(monthTransaction) }],
-  //       };
-
-  //       setDataChart(monthtData);
-  //       setData(chartData);
-  //       setTransactions(transaction);
-  //     })
-  //     .catch((err) => console.log(err))
-  //     .finally(() => {
-  //       setLoading(false);
-  //       setGrafLoading(false);
-  //     });
-  // }, []);
-
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <SafeAreaView
@@ -272,11 +184,6 @@ const MainPage = ({ navigation }) => {
             horizontal={true}
             pagingEnabled={true}
             showsHorizontalScrollIndicator={false}
-            // horizontal={true}
-            // pagingEnabled={true}
-            // showsHorizontalScrollIndicator={false}
-            // onScroll={handleScroll} // Обработчик прокрутки
-            // scrollEventThrottle={16} // Обновление события прокрутки
           >
             <LineChart
               data={data}
@@ -320,25 +227,10 @@ const MainPage = ({ navigation }) => {
               // verticalLabelRotation={30}
             />
           </ScrollView>
-
-          {/* <View style={{ flexDirection: "row", marginTop: 10 }}>
-            {[0, 1].map((index) => (
-              <View
-                key={index}
-                style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 5,
-                  marginHorizontal: 5,
-                  backgroundColor: currentPage === index ? "blue" : "gray",
-                }}
-              />
-            ))}
-          </View> */}
         </View>
       )}
       <View style={styles.container}>
-        <Text style={styles.classTitle}>Operations</Text>
+        <Text style={styles.classTitle}>Transactions</Text>
         {loading ? (
           <ActivityIndicator size="small" />
         ) : (
