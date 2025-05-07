@@ -32,6 +32,9 @@ import BudgetsPageTablet from "../pages/BudgetsPageTablet";
 import BudgetsPageMobile from "../pages/BudgetsPageMobile";
 import PoolyInfoPageTablet from "../pages/PoolyInfoPageTablet";
 import PoolyInfoPageMobile from "../pages/PoolyInfoPageMobile";
+import ChangeUsernamePage from "../pages/ChangeUsernamePage";
+import ChangeUserPasswordPage from "../pages/ChangeUserPasswordPage";
+import MapScreen from "../components/MapScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -137,6 +140,12 @@ const AppRoutes = () => {
             name="CreatePoolyAmount"
             component={CreatePoolyAmountPage}
           />
+          <Stack.Screen name="ChangeUsername" component={ChangeUsernamePage} />
+          <Stack.Screen
+            name="ChangeUserPassword"
+            component={ChangeUserPasswordPage}
+          />
+          <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Budget" component={BudgetPage} />
           <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />

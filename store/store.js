@@ -12,6 +12,9 @@ const useUserStore = create(
       transactions: [],
       setUser: (user) => set((state) => ({ ...state, ...user })),
       setImg: (newImg) => set((state) => ({ ...state, img: newImg })),
+      setUsername: (newUsername) =>
+        set((state) => ({ ...state, username: newUsername })),
+      setToken: (token) => set((state) => ({ ...state, token: token })),
       addTransaction: (transaction) =>
         set((state) => ({
           transactions: [...state.transactions, transaction],
