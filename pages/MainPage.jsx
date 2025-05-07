@@ -176,127 +176,160 @@ const MainPage = ({ navigation }) => {
           </Text>
         </View>
       </SafeAreaView>
-      {grafLoading ? (
-        <ActivityIndicator size="small" />
-      ) : (
-        <View style={{ marginTop: 10 }}>
-          <ScrollView
-            horizontal={true}
-            pagingEnabled={true}
-            showsHorizontalScrollIndicator={false}
-          >
-            <LineChart
-              data={data}
-              width={screenWidth}
-              height={200}
-              chartConfig={{
-                backgroundGradientFrom: "#ffffff",
-                backgroundGradientFromOpacity: "#ffffff",
-                backgroundGradientTo: "#ffffff",
-                color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
-                strokeWidth: 2,
-                barPercentage: 1,
-              }}
-              yAxisSuffix="$"
-              yAxisInterval={1}
-              // formatYLabel={(value) => parseInt(value)}
-              segments={4}
-              yLabelsOffset={3}
-              fromZero={true}
-              withInnerLines={true}
-              withOuterLines={true}
-              bezier
-            />
-            <BarChart
-              // style={graphStyle}
-              data={dataChart}
-              width={screenWidth}
-              height={200}
-              fromZero={true}
-              yLabelsOffset={3}
-              // formatYLabel={(value) => parseInt(value)}
-              yAxisSuffix="$"
-              chartConfig={{
-                backgroundGradientFrom: "#ffffff",
-                backgroundGradientFromOpacity: "#ffffff",
-                backgroundGradientTo: "#ffffff",
-                color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
-                strokeWidth: 2,
-                barPercentage: 1,
-              }}
-              // verticalLabelRotation={30}
-            />
-          </ScrollView>
-        </View>
-      )}
-      <View style={styles.container}>
-        <Text style={styles.classTitle}>Transactions</Text>
-        {loading ? (
+      <View
+        style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
+      >
+        {grafLoading ? (
           <ActivityIndicator size="small" />
         ) : (
-          <FlatList
-            data={transactions}
-            keyExtractor={(item) => item.id.toString()}
-            showsVerticalScrollIndicator={false}
-            renderItem={({ item }) => {
-              return (
-                <>
-                  <View style={styles.transactionRow}>
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      {item.category === "food" ? (
-                        <Coffee />
-                      ) : item.category === "clothing" ? (
-                        <Phone />
-                      ) : item.category === "kids" ? (
-                        <EntertaimentSmile />
-                      ) : (
-                        <OtherIcon />
-                      )}
+          <View
+            style={[
+              { marginTop: 10 },
+              darkMode ? { backgroundColor: "#1C1C1C" } : null,
+            ]}
+          >
+            <ScrollView
+              horizontal={true}
+              pagingEnabled={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <LineChart
+                data={data}
+                width={screenWidth}
+                height={200}
+                chartConfig={{
+                  backgroundGradientFrom: darkMode ? "#1C1C1C" : "#ffffff",
+                  backgroundGradientFromOpacity: darkMode
+                    ? "#1C1C1C"
+                    : "#ffffff",
+                  backgroundGradientTo: darkMode ? "#1C1C1C" : "#ffffff",
+                  color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
+                  strokeWidth: 2,
+                  barPercentage: 1,
+                }}
+                yAxisSuffix="$"
+                yAxisInterval={1}
+                // formatYLabel={(value) => parseInt(value)}
+                segments={4}
+                yLabelsOffset={3}
+                fromZero={true}
+                withInnerLines={true}
+                withOuterLines={true}
+                bezier
+              />
+              <BarChart
+                // style={graphStyle}
+                data={dataChart}
+                width={screenWidth}
+                height={200}
+                fromZero={true}
+                yLabelsOffset={3}
+                // formatYLabel={(value) => parseInt(value)}
+                yAxisSuffix="$"
+                chartConfig={{
+                  backgroundGradientFrom: darkMode ? "#1C1C1C" : "#ffffff",
+                  backgroundGradientFromOpacity: darkMode
+                    ? "#1C1C1C"
+                    : "#ffffff",
+                  backgroundGradientTo: darkMode ? "#1C1C1C" : "#ffffff",
+                  color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
+                  strokeWidth: 2,
+                  barPercentage: 1,
+                }}
+                // verticalLabelRotation={30}
+              />
+            </ScrollView>
+          </View>
+        )}
 
-                      <View style={{ paddingLeft: 10 }}>
-                        <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                          {item.category ? item.category : "No category"}
+        <View style={styles.container}>
+          <Text
+            style={[
+              styles.classTitle,
+              darkMode ? { color: "#fff" } : { color: "#000" },
+            ]}
+          >
+            Transactions
+          </Text>
+          {loading ? (
+            <ActivityIndicator size="small" />
+          ) : (
+            <FlatList
+              data={transactions}
+              keyExtractor={(item) => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+              renderItem={({ item }) => {
+                return (
+                  <>
+                    <View style={styles.transactionRow}>
+                      <View
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        {item.category === "food" ? (
+                          <Coffee stroke={darkMode ? "#fff" : "#000"} />
+                        ) : item.category === "clothing" ? (
+                          <Phone stroke={darkMode ? "#fff" : "#000"} />
+                        ) : item.category === "kids" ? (
+                          <EntertaimentSmile
+                            stroke={darkMode ? "#fff" : "#000"}
+                          />
+                        ) : (
+                          <OtherIcon stroke={darkMode ? "#fff" : "#000"} />
+                        )}
+
+                        <View style={{ paddingLeft: 10 }}>
+                          <Text
+                            style={[
+                              { fontSize: 16, fontWeight: "bold" },
+                              darkMode ? { color: "#fff" } : { color: "#000" },
+                            ]}
+                          >
+                            {item.category ? item.category : "No category"}
+                          </Text>
+                          <Text style={{ fontSize: 14, color: "grey" }}>
+                            {new Date(item.date).toLocaleDateString("en", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            })}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <View style={{ alignItems: "flex-end" }}>
+                        <Text
+                          style={[
+                            { fontSize: 16, fontWeight: "bold" },
+                            darkMode ? { color: "#fff" } : { color: "#000" },
+                          ]}
+                        >
+                          -
+                          {new Intl.NumberFormat("de-US", {
+                            style: "currency",
+                            currency: "USD",
+                          }).format(item.amount)}
                         </Text>
                         <Text style={{ fontSize: 14, color: "grey" }}>
-                          {new Date(item.date).toLocaleDateString("en", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                          })}
+                          From {item.budget_id} Pooly
                         </Text>
                       </View>
                     </View>
-
-                    <View style={{ alignItems: "flex-end" }}>
-                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                        -
-                        {new Intl.NumberFormat("de-US", {
-                          style: "currency",
-                          currency: "USD",
-                        }).format(item.amount)}
-                      </Text>
-                      <Text style={{ fontSize: 14, color: "grey" }}>
-                        From {item.budget_id} Pooly
-                      </Text>
-                    </View>
-                  </View>
-                </>
-              );
-            }}
-            onEndReachedThreshold={1}
-            refreshing={loading}
-            // onRefresh={() => {
-            //   fetchPoolys();
-            //   Haptics.notificationAsync(
-            //     Haptics.NotificationFeedbackType.Succes
-            //   );
-            // }}
-            style={{ paddingTop: 10 }}
-            ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          />
-        )}
+                  </>
+                );
+              }}
+              onEndReachedThreshold={1}
+              refreshing={loading}
+              // onRefresh={() => {
+              //   fetchPoolys();
+              //   Haptics.notificationAsync(
+              //     Haptics.NotificationFeedbackType.Succes
+              //   );
+              // }}
+              style={{ paddingTop: 10 }}
+              ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+            />
+          )}
+        </View>
       </View>
     </View>
   );

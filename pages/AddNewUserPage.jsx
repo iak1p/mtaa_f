@@ -98,7 +98,7 @@ function AddNewUserPage({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View
         style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
       >
@@ -107,6 +107,7 @@ function AddNewUserPage({
             <Arrow stroke={darkMode ? "#fff" : "#000"} />
           </TouchableWithoutFeedback>
           <Text
+            accessibilityLabel={`User`}
             style={[
               {
                 textAlign: "center",
@@ -114,7 +115,8 @@ function AddNewUserPage({
                 marginTop: 5,
                 marginBottom: 15,
                 fontWeight: "bold",
-              }, darkMode ? {color: "#fff"} : {color: "#000"}
+              },
+              darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
           >
             Add new user to Pooly

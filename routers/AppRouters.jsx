@@ -27,6 +27,7 @@ import SettingsPage from "../pages/SettingsPage";
 import PoolyChatPage from "../pages/PoolyChatPage";
 import CreatePoolyAmountPage from "../pages/CreatePoolyAmountPage";
 import UsersIcon from "../components/svg/UsersIcon";
+import FilterModal from "../pages/FilterModal";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,7 +49,7 @@ const BottomTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           if (route.name === "Budget") {
-            return <List stroke={darkMode ? '#fff' : "#000"} />;
+            return <List stroke={darkMode ? "#fff" : "#000"} />;
           }
           if (route.name === "Settings") {
             return <List stroke={darkMode ? "#fff" : "#000"} />;
@@ -72,29 +73,29 @@ const BottomTabs = () => {
   );
 };
 
-// const BottomWelcomeTabs = () => {
-//   return (
-//     <Tab.Navigator
-//       screenOptions={({ route }) => ({
-//         tabBarIcon: ({ color, size }) => {
-//           let iconName;
-//           if (route.name === "Budget") iconName = "wallet";
-//           else if (route.name === "Home") iconName = "home";
-//           else if (route.name === "CreatePooly") iconName = "add-circle";
+const BottomWelcomeTabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName;
+          if (route.name === "Budget") iconName = "wallet";
+          else if (route.name === "Home") iconName = "home";
+          else if (route.name === "CreatePooly") iconName = "add-circle";
 
-//           return <List />;
-//         },
-//         tabBarActiveTintColor: "#007AFF",
-//         tabBarInactiveTintColor: "gray",
-//         tabBarStyle: { height: 70, paddingBottom: 0 },
-//         headerShown: false,
-//         // ...TransitionPresets.SlideFromRightIOS,
-//       })}
-//     >
-//       <Tab.Screen name="Welcome" component={WelcomePage} />
-//     </Tab.Navigator>
-//   );
-// };
+          return <List />;
+        },
+        tabBarActiveTintColor: "#007AFF",
+        tabBarInactiveTintColor: "gray",
+        tabBarStyle: { height: 70, paddingBottom: 0 },
+        headerShown: false,
+        // ...TransitionPresets.SlideFromRightIOS,
+      })}
+    >
+      <Tab.Screen name="Welcome" component={WelcomePage} />
+    </Tab.Navigator>
+  );
+};
 
 const AppRoutes = () => {
   const insets = useSafeAreaInsets();
@@ -109,7 +110,10 @@ const AppRoutes = () => {
             headerShown: false,
           }}
         >
-          {/* <Stack.Screen name="Welcome" component={WelcomePage} /> */}
+          {/* <Stack.Screen name="Welcome" component={WelcomePage} />
+          <Stack.Screen name="SignIn" component={SignInPage} />
+          <Stack.Screen name="SignUp" component={SignUpPage} /> */}
+
           <Stack.Screen name="Main" component={BottomTabs} />
           <Stack.Screen name="NewTransaction" component={NewTransactionPage} />
           <Stack.Screen name="ChatPage" component={PoolyChatPage} />
@@ -118,6 +122,14 @@ const AppRoutes = () => {
           <Stack.Screen
             name="CreatePoolyAmount"
             component={CreatePoolyAmountPage}
+          />
+          <Stack.Screen
+            name="FilterModal"
+            component={FilterModal}
+            options={{
+              presentation: "modal", // 👈 или "transparentModal"
+              headerShown: false,
+            }}
           />
           <Stack.Screen name="Budget" component={BudgetPage} />
           <Stack.Screen name="Home" component={MainPage} />

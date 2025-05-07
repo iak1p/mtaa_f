@@ -84,56 +84,6 @@ const UserPage = ({ navigation }) => {
     }
   };
 
-  // const uploadFile = async (uri) => {
-  //   try {
-  //     uri = await compressImage(uri);
-  //     console.log("new " + uri);
-
-  //     const formData = new FormData();
-  //     formData.append("file", {
-  //       uri,
-  //       name: `${Date.now()}.jpg`,
-  //       type: "image/jpeg",
-  //     });
-
-  //     const fileName = `${Date.now()}.jpg`;
-
-  //     const { data, error } = await supabase.storage
-  //       .from("img")
-  //       .upload(fileName, formData);
-
-  //     const { data: urlData } = supabase.storage
-  //       .from("img")
-  //       .getPublicUrl(fileName);
-
-  //     setImg(urlData.publicUrl);
-
-  //     const res = await fetch(
-  //       `http://${LOCAL_HOST}:${PORT}/users/change/image`,
-  //       {
-  //         method: "PATCH",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Authorization: token,
-  //         },
-  //         body: JSON.stringify({
-  //           url: urlData.publicUrl,
-  //         }),
-  //       }
-  //     );
-
-  //     const res_data = await res.json();
-
-  //     if (!res.ok) {
-  //       return;
-  //     }
-  //   } catch (err) {
-  //     console.error("Ошибка загрузки:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
   const uploadFile = async (uri) => {
     try {
       uri = await compressImage(uri);
@@ -176,15 +126,11 @@ const UserPage = ({ navigation }) => {
     >
       <SafeAreaView
         style={{
-          // marginTop: -insets.top,
           backgroundColor: "#13293D",
         }}
       >
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <Arrow
-            stroke="#FCF7F8"
-            style={{ paddingLeft: "15%" }}
-          ></Arrow>
+          <Arrow stroke="#FCF7F8" style={{ paddingLeft: "15%" }}></Arrow>
         </TouchableWithoutFeedback>
 
         <View style={styles.circleContainer}>
@@ -215,35 +161,56 @@ const UserPage = ({ navigation }) => {
       <ScrollView vertical={true}>
         <View style={styles.container}>
           <View style={styles.textContainer}>
-            <Sms />
+            <Sms stroke={darkMode ? "#fff" : "#000"} />
             <View style={styles.textContainer2}>
               <Text style={styles.header}>Username</Text>
-              <Text style={styles.text}>{username}</Text>
+              <Text
+                style={[
+                  styles.text,
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                {username}
+              </Text>
             </View>
           </View>
           <View style={styles.textContainer}>
-            <Phone></Phone>
+            <Phone stroke={darkMode ? "#fff" : "#000"} />
             <View style={styles.textContainer2}>
               <Text style={styles.header}>Phone number</Text>
-              <Text style={styles.text}>333222111</Text>
+              <Text
+                style={[
+                  styles.text,
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                333222111
+              </Text>
             </View>
           </View>
           <View style={styles.textContainer}>
-            <Email></Email>
+            <Email stroke={darkMode ? "#fff" : "#000"} />
             <View style={styles.textContainer2}>
               <Text style={styles.header}>Email</Text>
-              <Text style={styles.text}>sava@gmail.com</Text>
+              <Text
+                style={[
+                  styles.text,
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                sava@gmail.com
+              </Text>
             </View>
           </View>
           <View style={styles.textContainer}>
-            <Info></Info>
+            <Info stroke={darkMode ? "#fff" : "#000"} />
             <View style={styles.textContainer3}>
               <Button
                 title={"Personal data"}
                 type="clear"
                 titleStyle={{
                   fontSize: 22,
-                  color: "black",
+                  color: darkMode ? "#fff" : "#000",
                   fontWeight: "bold",
                 }}
               />

@@ -34,7 +34,7 @@ const WelcomePage = ({ navigation }) => {
           Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos quod
           amet voluptatum, odio error doloremque.
         </Text>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("Main")}>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("SignIn")}>
           <Text
             style={{
               textAlign: "center",
@@ -48,7 +48,7 @@ const WelcomePage = ({ navigation }) => {
             Sign In
           </Text>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("SignUp")}>
           <Text
             style={{
               marginTop: 5,

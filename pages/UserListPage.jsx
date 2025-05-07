@@ -145,7 +145,10 @@ function UserListPage({
       style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
     >
       <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <TouchableWithoutFeedback
+          onPress={() => navigation.goBack()}
+          accessibilityLabel="Go back"
+        >
           <Arrow stroke={darkMode ? "#fff" : "#000"} />
         </TouchableWithoutFeedback>
         <View style={{ alignItems: "center" }}>
@@ -199,6 +202,7 @@ function UserListPage({
                           { fontWeight: "bold" },
                           darkMode ? { color: "#fff" } : null,
                         ]}
+                        accessibilityLabel={`User ${item.username}`}
                       >
                         {item.username}
                       </Text>
@@ -241,7 +245,7 @@ function UserListPage({
                   {creator == id && creator != item.id ? (
                     <TouchableWithoutFeedback onPress={() => dropUser(item)}>
                       <Text
-                        accessibilityLabel="Drop user"
+                        accessibilityLabel={`Drop user ${item.username}`}
                         style={[
                           {
                             paddingVertical: 10,

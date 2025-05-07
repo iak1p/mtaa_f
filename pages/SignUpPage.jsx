@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  useColorScheme,
   View,
 } from "react-native";
 import { Link, useNavigate } from "react-router-native";
@@ -12,12 +13,23 @@ import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
 
-export default function SignInPage() {
+export default function SignInPage({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password_repeat, setPasswordRepeat] = useState("");
   const [backendError, setbackendError] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   const [errors, setErrors] = useState({
     username: { hasError: false, message: "" },
@@ -72,7 +84,11 @@ export default function SignInPage() {
         }
 
         console.log("Response:", data);
-        navigate("/main");
+        
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        });
       } catch (error) {
         console.error("Error:", error);
       }
@@ -81,13 +97,16 @@ export default function SignInPage() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View
-        style={{ display: "flex", justifyContent: "space-between", flex: 1 }}
+      <SafeAreaView
+        style={[
+          { display: "flex", justifyContent: "space-between", flex: 1 },
+          styles.container,
+        ]}
       >
         <View>
-          <Link to="/" style={{ paddingTop: 10 }}>
-            <Arrow />
-          </Link>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <Arrow stroke={darkMode ? "#fff" : "#000"} />
+          </TouchableWithoutFeedback>
           <Text style={styles.header_text}>Create account</Text>
           <Text style={styles.header2_text}>Let’s get you set up!</Text>
 
@@ -119,9 +138,11 @@ export default function SignInPage() {
         </View>
 
         <View>
-          <Link to="/signin">
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("SignIn")}
+          >
             <Text style={styles.link}>Already have an account?</Text>
-          </Link>
+          </TouchableWithoutFeedback>
 
           <Button
             title={"Login"}
@@ -129,7 +150,7 @@ export default function SignInPage() {
             color={"#012E4A"}
             buttonStyle={{
               padding: 15,
-              marginBottom: 15,
+              // marginBottom: 15,
               borderColor: "#012E4A",
               borderStyle: "solid",
               borderWidth: 1,
@@ -138,7 +159,7 @@ export default function SignInPage() {
             onPress={auth}
           />
         </View>
-      </View>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 }
@@ -164,5 +185,14 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
+  },
+  container: {
+    flex: 1,
+    width: "85%",
+    marginTop: 0,
+    marginLeft: "auto",
+    marginBottom: 0,
+    marginRight: "auto",
+    position: "relative",
   },
 });
