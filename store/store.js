@@ -25,7 +25,7 @@ const useUserStore = create(
               headers: {
                 "Content-Type": "application/json",
                 Authorization:
-                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJ1c2VybmFtZSI6ImJpYmFzcyJ9.0Tkek0sPyo9O_iRT-DmkMERXDJfR0S6TRbWrGTMFJMY",
+                  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjIiLCJ1c2VybmFtZSI6ImN1YmEifQ.ykIzJOkfiZ2Y2jDPKGz47IAkYq364aB9VY0JmmY4BNw",
               },
             }
           );
@@ -44,44 +44,21 @@ const useUserStore = create(
         }
       },
     }),
-    // {
-    //   name: "position-storage",
-    //   partialize: (state) => ({ context: state.context }),
-    //   storage: createJSONStorage(() => AsyncStorage),
-    //   skipHydration: false,
-    //   // onRehydrateStorage: (state) => {
-    //   //   if (state) {
-    //   //     if (state.fetchUserData) {
-    //   //       state.fetchUserData();
-    //   //     } else {
-    //   //       console.error("fetchUserData not available in state");
-    //   //     }
-    //   //   }
-    //   // },
-    //   onRehydrateStorage: (state) => {
-    //     return (storedState, error) => {
-    //       console.log(storedState);
-
-    //       if (error) {
-    //         console.error("Rehydration error:", error);
-    //         return;
-    //       }
-
-    //       // Если уже есть данные — не делаем fetch
-    //       const alreadyLoaded =
-    //         storedState &&
-    //         storedState.username &&
-    //         storedState.token &&
-    //         storedState.id;
-
-    //       if (!alreadyLoaded && state?.fetchUserData) {
-    //         state.fetchUserData();
-    //       } else {
-    //         console.log("Пользователь уже был загружен — пропускаем fetch");
-    //       }
-    //     };
-    //   },
-    // }
+    {
+      name: "position-storage",
+      partialize: (state) => ({ context: state.context }),
+      storage: createJSONStorage(() => AsyncStorage),
+      skipHydration: false,
+      onRehydrateStorage: (state) => {
+        if (state) {
+          if (state.fetchUserData) {
+            state.fetchUserData();
+          } else {
+            console.error("fetchUserData not available in state");
+          }
+        }
+      },
+    }
   )
 );
 

@@ -15,7 +15,6 @@ import {
   import { useNavigation } from "@react-navigation/native";
   import BankaIcon from "../components/svg/BankaIcon";
   import { useEffect, useState } from "react";
-  import { LOCAL_HOST, PORT } from "../env";
   import useUserStore from "../store/store";
   import { ScrollView } from "react-native-gesture-handler";
   import List from "../components/svg/List";
@@ -25,7 +24,7 @@ import {
   import Phone from "../components/svg/Phone";
   import { Accelerometer } from "expo-sensors";
   
-  const PoolyInfoPageMobile = ({
+  const PoolyInfoPage = ({
     route: {
       params: { name, max_money, current_money, budget_id, creator },
     },
@@ -54,7 +53,7 @@ import {
           text: "Yes",
           onPress: () => {
             fetch(
-              `http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/users/drop`,
+              `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/users/drop`,
               {
                 method: "DELETE",
                 headers: {
@@ -138,13 +137,16 @@ import {
   
     const fetchTransactions = () => {
       setLoading(true);
-      fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/transactions`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      })
+      fetch(
+        `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/transactions`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      )
         .then((res) => res.json())
         .then(({ transaction }) => {
           setTransactions(transaction);
@@ -336,7 +338,7 @@ import {
     );
   };
   
-  export default PoolyInfoPageMobile;
+  export default PoolyInfoPage;
   
   const styles = StyleSheet.create({
     container: {

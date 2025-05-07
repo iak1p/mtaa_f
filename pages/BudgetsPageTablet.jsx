@@ -4,39 +4,30 @@ import {
   Text,
   View,
   FlatList,
-  ScrollView,
   ActivityIndicator,
   TouchableWithoutFeedback,
   Image,
-  Appearance,
   useColorScheme,
-} from "react-native";
-import Toast from "react-native-toast-message";
-import {
   SafeAreaView,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
+} from "react-native";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Pooly from "../components/Pooly";
-import List from "../components/svg/List";
-import ButtonComponent from "../components/ButtonComponent";
-import { LOCAL_HOST, PORT } from "../env";
 import * as Haptics from "expo-haptics";
 import useUserStore from "../store/store";
-import { Accelerometer } from "expo-sensors";
-import { Alert } from "react-native";
 import useBudgetNotifications from "../utils/useBudgetNotifications";
 import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import BankaIcon from "../components/svg/BankaIcon";
-
 import NetInfo from "@react-native-community/netinfo";
 import * as Device from "expo-device";
 import { Dimensions } from "react-native";
+import PoolyTablet from "../components/PoolyTablet";
 
 const BudgetPage = ({ navigation }) => {
-  const [budgetIds, setBudgetIds] = useState([]);
-  const insets = useSafeAreaInsets();
+  const { token, img } = useUserStore();
+  // const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
-  const { token, img, transactions } = useUserStore();
+
+  const [budgetIds, setBudgetIds] = useState([]);
   const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
@@ -47,38 +38,41 @@ const BudgetPage = ({ navigation }) => {
   console.log(isTabletFallback);
 
   const fetchPoolys = () => {
+    console.log("fewettt");
+
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
-      if (state.isConnected && state.isInternetReachable) {
-        fetch(`http://${LOCAL_HOST}:${PORT}/users/budgets/all`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        })
-          .then((res) => res.json())
-          .then(({ pooly }) => {
-            setPooly(pooly);
-            setBudgetIds(pooly.map((p) => p.budget_id));
+      // if (state.isConnected && state.isInternetReachable) {
+      fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      })
+        .then((res) => res.json())
+        .then(({ pooly }) => {
+          setPooly(pooly);
+          setBudgetIds(pooly.map((p) => p.budget_id));
 
-            let new_money = 0;
-            pooly.forEach((item) => {
-              new_money += item.current_money;
-            });
-            setMoneyRemain(new_money);
-          })
-          .catch((err) => {
-            console.log("Ошибка запроса:", err);
-          })
-          .finally(() => {
-            setLoading(false);
+          let new_money = 0;
+          pooly.forEach((item) => {
+            new_money += item.current_money;
           });
-      } else {
-        console.log("Нет интернета — запрос не отправляется");
-        setLoading(false);
-      }
+
+          setMoneyRemain(new_money);
+        })
+        .catch((err) => {
+          console.log("Request error:", err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+      // } else {
+      //   console.log("No wifi connection");
+      //   setLoading(false);
+      // }
     });
   };
 
@@ -103,11 +97,9 @@ const BudgetPage = ({ navigation }) => {
       style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
     >
       <SafeAreaView
-        style={[
-          {
-            backgroundColor: "#13293D",
-          },
-        ]}
+        style={{
+          backgroundColor: "#13293D",
+        }}
       >
         <View style={{ alignItems: "flex-end" }}>
           <TouchableWithoutFeedback
@@ -125,31 +117,20 @@ const BudgetPage = ({ navigation }) => {
             }).format(moneyRemain)}
           </Text>
         </View>
-        <View
-          style={{
-            flexDirection: "row",
-            gap: 10,
-            marginHorizontal: 20,
-          }}
-        >
-          <ButtonComponent
-            title={"Start a Pooly"}
-            func={() => navigation.navigate("CreatePolly")}
-            btnStyle={[styles.btnStyle, styles.shadowBox]}
-            textStyle={{ paddingLeft: 5, fontWeight: "bold", color: "black" }}
-            icon={<List />}
-          />
-        </View>
       </SafeAreaView>
 
-      <View style={{}}>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        ></ScrollView>
-      </View>
-
       <View style={styles.container}>
+        <PoolyInfoComponent
+          btnFunc={() => navigation.navigate("CreatePolly")}
+          style={[
+            darkMode ? styles.iconStyleBlack : styles.iconStyle,
+            { marginTop: 10 },
+          ]}
+          text={`Start a Pooly`}
+          icon={<BankaIcon stroke="#fff" />}
+          darkMode={darkMode}
+        />
+
         <Text style={[styles.classTitle, darkMode ? { color: "#fff" } : null]}>
           Pooly's
         </Text>
@@ -164,10 +145,11 @@ const BudgetPage = ({ navigation }) => {
           <ActivityIndicator size="small" />
         ) : (
           <FlatList
+            numColumns={2}
             data={pooly}
             keyExtractor={(item) => item.budget_id.toString()}
             renderItem={({ item }) => {
-              return <Pooly item={item} darkMode={darkMode} />;
+              return <PoolyTablet item={item} darkMode={darkMode} />;
             }}
             showsVerticalScrollIndicator={false}
             onEndReachedThreshold={1}
@@ -198,14 +180,14 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 16,
     paddingTop: 0,
     fontWeight: "bold",
     color: "white",
   },
   subTitle: {
     textAlign: "center",
-    fontSize: 67,
+    fontSize: 45,
     fontWeight: "bold",
     paddingTop: 16,
     paddingBottom: 30,
@@ -215,7 +197,6 @@ const styles = StyleSheet.create({
   classTitle: {
     fontWeight: "bold",
     fontSize: 16,
-    // marginTop: -45,
   },
   classSubtitle: {
     paddingTop: 8,
@@ -245,11 +226,27 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: "100%",
     overflow: "hidden",
     resizeMode: "cover",
     marginHorizontal: 20,
+  },
+  iconStyle: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#13293D",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "100%",
+  },
+  iconStyleBlack: {
+    width: 50,
+    height: 50,
+    backgroundColor: "#912F40",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "100%",
   },
 });
