@@ -12,6 +12,9 @@ const useUserStore = create(
       transactions: [],
       setUser: (user) => set((state) => ({ ...state, ...user })),
       setImg: (newImg) => set((state) => ({ ...state, img: newImg })),
+      setUsername: (newUsername) =>
+        set((state) => ({ ...state, username: newUsername })),
+      setToken: (token) => set((state) => ({ ...state, token: token })),
       addTransaction: (transaction) =>
         set((state) => ({
           transactions: [...state.transactions, transaction],
@@ -44,44 +47,21 @@ const useUserStore = create(
         }
       },
     }),
-    // {
-    //   name: "position-storage",
-    //   partialize: (state) => ({ context: state.context }),
-    //   storage: createJSONStorage(() => AsyncStorage),
-    //   skipHydration: false,
-    //   // onRehydrateStorage: (state) => {
-    //   //   if (state) {
-    //   //     if (state.fetchUserData) {
-    //   //       state.fetchUserData();
-    //   //     } else {
-    //   //       console.error("fetchUserData not available in state");
-    //   //     }
-    //   //   }
-    //   // },
-    //   onRehydrateStorage: (state) => {
-    //     return (storedState, error) => {
-    //       console.log(storedState);
-
-    //       if (error) {
-    //         console.error("Rehydration error:", error);
-    //         return;
-    //       }
-
-    //       // Если уже есть данные — не делаем fetch
-    //       const alreadyLoaded =
-    //         storedState &&
-    //         storedState.username &&
-    //         storedState.token &&
-    //         storedState.id;
-
-    //       if (!alreadyLoaded && state?.fetchUserData) {
-    //         state.fetchUserData();
-    //       } else {
-    //         console.log("Пользователь уже был загружен — пропускаем fetch");
-    //       }
-    //     };
-    //   },
-    // }
+    {
+      name: "position-storage",
+      partialize: (state) => ({ context: state.context }),
+      storage: createJSONStorage(() => AsyncStorage),
+      skipHydration: false,
+      onRehydrateStorage: (state) => {
+        if (state) {
+          if (state.fetchUserData) {
+            state.fetchUserData();
+          } else {
+            console.error("fetchUserData not available in state");
+          }
+        }
+      },
+    }
   )
 );
 

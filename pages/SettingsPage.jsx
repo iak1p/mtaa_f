@@ -1,15 +1,33 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Image } from "react-native";
-import { FlatList, Switch } from "react-native-gesture-handler";
+import React, { useEffect, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Image,
+  useColorScheme,
+  ScrollView,
+} from "react-native";
 import { TouchableWithoutFeedback } from "react-native";
 import useUserStore from "../store/store";
 
 const SettingsPage = ({ navigation }) => {
-  const [isOn, setIsOn] = useState(false);
   const { token, img } = useUserStore();
 
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
   return (
-    <View style={{ flex: 1 }}>
+    <View
+      style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+    >
       <SafeAreaView
         style={{
           // marginTop: -insets.top,
@@ -32,93 +50,94 @@ const SettingsPage = ({ navigation }) => {
           </TouchableWithoutFeedback>
         </View>
       </SafeAreaView>
-      <View style={styles.container}>
-        <View style={[styles.btnStyle, styles.shadowBox]}>
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("UserPage")}
+      <ScrollView vertical={true} showsVerticalScrollIndicator={false}>
+        <View style={styles.container}>
+          <View
+            style={[
+              darkMode
+                ? { backgroundColor: "#912F40" }
+                : { backgroundColor: "white" },
+              styles.btnStyle,
+              styles.shadowBox,
+            ]}
           >
-            <View
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("ChangeUsername")}
             >
-              <Text
+              <View
                 style={{
-                  paddingLeft: 8,
-                  fontWeight: "bold",
-                  color: "black",
-                  fontSize: 20,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  alignItems: "center",
                 }}
               >
-                Change password1
-              </Text>
-              <Text style={{ fontWeight: "bold", fontSize: 20 }}>{"❯"}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View style={[styles.btnStyle, styles.shadowBox]}>
-          <View style={styles.row}>
-            <Text style={styles.text}>Dark mode</Text>
-            <Switch
-              value={isOn}
-              onValueChange={() => setIsOn(!isOn)}
-              trackColor={{ false: "white", true: "#292929" }}
-              thumbColor={"black"}
-            />
+                <Text
+                  style={[
+                    darkMode ? { color: "#fff" } : { color: "black" },
+                    {
+                      paddingLeft: 8,
+                      fontSize: 20,
+                    },
+                  ]}
+                >
+                  Change username
+                </Text>
+                <Text
+                  style={[
+                    darkMode ? { color: "#fff" } : { color: "black" },
+                    { fontWeight: "bold", fontSize: 20 },
+                  ]}
+                >
+                  {"❯"}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+          <View
+            style={[
+              darkMode
+                ? { backgroundColor: "#912F40" }
+                : { backgroundColor: "white" },
+              styles.btnStyle,
+              styles.shadowBox,
+            ]}
+          >
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("ChangeUserPassword")}
+            >
+              <View
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Text
+                  style={[
+                    darkMode ? { color: "#fff" } : { color: "black" },
+                    {
+                      paddingLeft: 8,
+                      fontSize: 20,
+                    },
+                  ]}
+                >
+                  Change password
+                </Text>
+                <Text
+                  style={[
+                    darkMode ? { color: "#fff" } : { color: "black" },
+                    { fontWeight: "bold", fontSize: 20 },
+                  ]}
+                >
+                  {"❯"}
+                </Text>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
         </View>
-        <View style={[styles.btnStyle, styles.shadowBox]}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("#")}>
-            <View
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  paddingLeft: 8,
-                  fontWeight: "bold",
-                  color: "black",
-                  fontSize: 20,
-                }}
-              >
-                Change password
-              </Text>
-              <Text style={{ fontWeight: "bold", fontSize: 20 }}>{"❯"}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View style={[styles.btnStyle, styles.shadowBox]}>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("#")}>
-            <View
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
-              <Text
-                style={{
-                  paddingLeft: 8,
-                  fontWeight: "bold",
-                  color: "black",
-                  fontSize: 20,
-                }}
-              >
-                Change password
-              </Text>
-              <Text style={{ fontWeight: "bold", fontSize: 20 }}>{"❯"}</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -149,13 +168,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
   btnStyle: {
-    backgroundColor: "#FCF7F8",
     paddingHorizontal: 10,
     paddingVertical: 15,
     borderRadius: 5,
   },
   shadowBox: {
-    backgroundColor: "white",
     marginBottom: 20,
     borderRadius: 10,
 
