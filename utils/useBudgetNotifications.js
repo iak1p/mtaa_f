@@ -43,7 +43,7 @@ export default function useBudgetNotifications(budgetIds = []) {
   }, []);
 
   const registerForPushNotificationsAsync = async () => {
-    if (Device.isDevice) {
+    // if (Device.isDevice) {
       const { status: existingStatus } =
         await Notifications.getPermissionsAsync();
       let finalStatus = existingStatus;
@@ -55,9 +55,9 @@ export default function useBudgetNotifications(budgetIds = []) {
         Alert.alert("Разрешение на уведомления не получено!");
         return;
       }
-    } else {
-      Alert.alert("Уведомления работают только на физическом устройстве");
-    }
+    // } else {
+    //   Alert.alert("Уведомления работают только на физическом устройстве");
+    // }
   };
 
   // const fetchNewTransactions = async (budgetId) => {

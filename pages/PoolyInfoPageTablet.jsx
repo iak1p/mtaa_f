@@ -12,13 +12,9 @@ import {
   useColorScheme,
 } from "react-native";
 import Arrow from "../components/svg/Arrow";
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import BankaIcon from "../components/svg/BankaIcon";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useUserStore from "../store/store";
 import { ScrollView } from "react-native-gesture-handler";
 import List from "../components/svg/List";
@@ -27,9 +23,8 @@ import AddUserIcon from "../components/svg/AddUserIcon";
 import UsersIcon from "../components/svg/UsersIcon";
 import Phone from "../components/svg/Phone";
 import { Accelerometer } from "expo-sensors";
-import DropDownPicker from "react-native-dropdown-picker";
 
-const PoolyInfoPage = ({
+const PoolyInfoPageTablet = ({
   route: {
     params: { name, max_money, current_money, budget_id, creator },
   },
@@ -43,10 +38,6 @@ const PoolyInfoPage = ({
 
   const [data, setData] = useState({});
   const [lastShakeTime, setLastShakeTime] = useState(0);
-
-  const [filters, setFilters] = useState({ type: "all", category: "all" });
-
-  const route = useRoute();
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -118,36 +109,13 @@ const PoolyInfoPage = ({
     });
   };
 
-  const onSelect = (data) => {
-    setFilters(data);
-  };
-
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchTransactions();
-      console.log(filters);
     });
 
     return unsubscribe;
-  }, [navigation, filters]);
-
-  // useEffect(() => {
-  //   if (colorScheme === "dark") setDarkMode(true);
-  //   setLoading(true);
-  //   fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/transactions`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: token,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then(({transaction}) => {
-  //       setTransactions(transaction);
-  //     })
-  //     .catch((err) => console.log(err))
-  //     .finally(() => setLoading(false));
-  // }, []);
+  }, [navigation]);
 
   const fetchTransactions = () => {
     setLoading(true);
@@ -163,11 +131,6 @@ const PoolyInfoPage = ({
     )
       .then((res) => res.json())
       .then(({ transaction }) => {
-        transaction = transaction.filter(
-          (item) =>
-            filters.category === "all" || item.category === filters.category
-        );
-
         setTransactions(transaction);
       })
       .catch((err) => console.log(err))
@@ -178,7 +141,10 @@ const PoolyInfoPage = ({
     <View style={darkMode ? styles.backBack : styles.back}>
       <SafeAreaView style={styles.container}>
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <Arrow stroke={darkMode ? "#fff" : "#000"} />
+          <Arrow
+            stroke={darkMode ? "#fff" : "#000"}
+            style={{ marginTop: 10 }}
+          />
         </TouchableWithoutFeedback>
         <View style={{ alignItems: "center" }}>
           <View style={darkMode ? styles.iconStyleBlack : styles.iconStyle}>
@@ -267,38 +233,18 @@ const PoolyInfoPage = ({
           </ScrollView>
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 20,
-          }}
+        <Text
+          style={[
+            { fontWeight: "bold", marginTop: 20, fontSize: 24 },
+            darkMode
+              ? {
+                  color: "#fff",
+                }
+              : "null",
+          ]}
         >
-          <Text
-            style={[
-              { fontWeight: "bold", fontSize: 16 },
-              darkMode
-                ? {
-                    color: "#fff",
-                  }
-                : "null",
-            ]}
-          >
-            Transactions
-          </Text>
-
-          <TouchableWithoutFeedback
-            onPress={() =>
-              navigation.navigate("FilterModal", {
-                onSelect: onSelect,
-                filters: filters,
-              })
-            }
-          >
-            <Text style={{ color: "grey" }}>Filter</Text>
-          </TouchableWithoutFeedback>
-        </View>
+          Transactions
+        </Text>
 
         {loading ? (
           <ActivityIndicator size="small" />
@@ -316,7 +262,6 @@ const PoolyInfoPage = ({
                     })
                   }
                 >
-                  
                   <View style={{ flexDirection: "row" }}>
                     <Image
                       source={{ uri: item.img_uri }}
@@ -325,32 +270,15 @@ const PoolyInfoPage = ({
                     <View
                       style={{ flex: 1, paddingLeft: 10, paddingVertical: 5 }}
                     >
-
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-                      >
-                        {item.category.charAt(0).toUpperCase() +
-                          item.category.slice(1)}
-                      </Text>
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-
                       <View
                         style={{
                           flexDirection: "row",
                           justifyContent: "space-between",
                         }}
-
                       >
                         <Text
                           style={[
-                            { fontWeight: "bold" },
+                            { fontWeight: "bold", fontSize: 20 },
                             darkMode ? { color: "#fff" } : "null",
                           ]}
                         >
@@ -358,7 +286,7 @@ const PoolyInfoPage = ({
                         </Text>
                         <Text
                           style={[
-                            { fontWeight: "bold" },
+                            { fontWeight: "bold", fontSize: 20 },
                             darkMode ? { color: "#fff" } : "null",
                           ]}
                         >
@@ -375,13 +303,19 @@ const PoolyInfoPage = ({
                           justifyContent: "space-between",
                         }}
                       >
-                        <Text style={{ color: "#A8A8A8", marginTop: 3 }}>
+                        <Text
+                          style={{
+                            color: "#A8A8A8",
+                            marginTop: 3,
+                            fontSize: 16,
+                          }}
+                        >
                           by {item.username ? item.username : "test"}
                         </Text>
 
                         <Text
                           style={[
-                            { marginTop: 3 },
+                            { marginTop: 3, fontSize: 16 },
                             darkMode ? { color: "#fff" } : "null",
                           ]}
                         >
@@ -406,7 +340,7 @@ const PoolyInfoPage = ({
   );
 };
 
-export default PoolyInfoPage;
+export default PoolyInfoPageTablet;
 
 const styles = StyleSheet.create({
   container: {
@@ -455,8 +389,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   image: {
-    width: 50,
-    height: 50,
+    width: 60,
+    height: 60,
     borderRadius: "100%",
     overflow: "hidden",
     resizeMode: "cover",

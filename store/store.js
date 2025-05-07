@@ -12,6 +12,9 @@ const useUserStore = create(
       transactions: [],
       setUser: (user) => set((state) => ({ ...state, ...user })),
       setImg: (newImg) => set((state) => ({ ...state, img: newImg })),
+      setUsername: (newUsername) =>
+        set((state) => ({ ...state, username: newUsername })),
+      setToken: (token) => set((state) => ({ ...state, token: token })),
       addTransaction: (transaction) =>
         set((state) => ({
           transactions: [...state.transactions, transaction],
@@ -26,7 +29,6 @@ const useUserStore = create(
                 "Content-Type": "application/json",
                 Authorization:
                   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjMiLCJ1c2VybmFtZSI6ImF1cm9yYSJ9.0DNS6FF6kD1QrIy52Sg_QI8K9lt-CFbOP5fUmGn1hcI",
-                // Authorization: token,
               },
             }
           );

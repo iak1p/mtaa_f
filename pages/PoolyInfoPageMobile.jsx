@@ -12,13 +12,9 @@ import {
   useColorScheme,
 } from "react-native";
 import Arrow from "../components/svg/Arrow";
-import {
-  useFocusEffect,
-  useNavigation,
-  useRoute,
-} from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import BankaIcon from "../components/svg/BankaIcon";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useUserStore from "../store/store";
 import { ScrollView } from "react-native-gesture-handler";
 import List from "../components/svg/List";
@@ -27,7 +23,6 @@ import AddUserIcon from "../components/svg/AddUserIcon";
 import UsersIcon from "../components/svg/UsersIcon";
 import Phone from "../components/svg/Phone";
 import { Accelerometer } from "expo-sensors";
-import DropDownPicker from "react-native-dropdown-picker";
 
 const PoolyInfoPage = ({
   route: {
@@ -43,10 +38,6 @@ const PoolyInfoPage = ({
 
   const [data, setData] = useState({});
   const [lastShakeTime, setLastShakeTime] = useState(0);
-
-  const [filters, setFilters] = useState({ type: "all", category: "all" });
-
-  const route = useRoute();
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -118,18 +109,13 @@ const PoolyInfoPage = ({
     });
   };
 
-  const onSelect = (data) => {
-    setFilters(data);
-  };
-
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchTransactions();
-      console.log(filters);
     });
 
     return unsubscribe;
-  }, [navigation, filters]);
+  }, [navigation]);
 
   // useEffect(() => {
   //   if (colorScheme === "dark") setDarkMode(true);
@@ -163,11 +149,6 @@ const PoolyInfoPage = ({
     )
       .then((res) => res.json())
       .then(({ transaction }) => {
-        transaction = transaction.filter(
-          (item) =>
-            filters.category === "all" || item.category === filters.category
-        );
-
         setTransactions(transaction);
       })
       .catch((err) => console.log(err))
@@ -267,38 +248,18 @@ const PoolyInfoPage = ({
           </ScrollView>
         </View>
 
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: 20,
-          }}
+        <Text
+          style={[
+            { fontWeight: "bold", marginTop: 20, fontSize: 16 },
+            darkMode
+              ? {
+                  color: "#fff",
+                }
+              : "null",
+          ]}
         >
-          <Text
-            style={[
-              { fontWeight: "bold", fontSize: 16 },
-              darkMode
-                ? {
-                    color: "#fff",
-                  }
-                : "null",
-            ]}
-          >
-            Transactions
-          </Text>
-
-          <TouchableWithoutFeedback
-            onPress={() =>
-              navigation.navigate("FilterModal", {
-                onSelect: onSelect,
-                filters: filters,
-              })
-            }
-          >
-            <Text style={{ color: "grey" }}>Filter</Text>
-          </TouchableWithoutFeedback>
-        </View>
+          Transactions
+        </Text>
 
         {loading ? (
           <ActivityIndicator size="small" />
@@ -325,28 +286,11 @@ const PoolyInfoPage = ({
                     <View
                       style={{ flex: 1, paddingLeft: 10, paddingVertical: 5 }}
                     >
-
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-                      >
-                        {item.category.charAt(0).toUpperCase() +
-                          item.category.slice(1)}
-                      </Text>
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-
                       <View
                         style={{
                           flexDirection: "row",
                           justifyContent: "space-between",
                         }}
-
                       >
                         <Text
                           style={[
