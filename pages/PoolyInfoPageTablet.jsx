@@ -119,13 +119,16 @@ const PoolyInfoPageTablet = ({
 
   const fetchTransactions = () => {
     setLoading(true);
-    fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/transactions`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: token,
-      },
-    })
+    fetch(
+      `http://${process.env.EXPO_PUBLIC_ADDRESS}/budgets/${budget_id}/transactions`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      }
+    )
       .then((res) => res.json())
       .then(({ transaction }) => {
         setTransactions(transaction);
@@ -252,65 +255,80 @@ const PoolyInfoPageTablet = ({
             showsVerticalScrollIndicator={false}
             renderItem={({ item }) => {
               return (
-                <View style={{ flexDirection: "row" }}>
-                  <Image source={{ uri: item.img_uri }} style={styles.image} />
-                  <View
-                    style={{ flex: 1, paddingLeft: 10, paddingVertical: 5 }}
-                  >
+                <TouchableWithoutFeedback
+                  onPress={() =>
+                    navigation.navigate("Map", {
+                      transaction: item,
+                    })
+                  }
+                >
+                  <View style={{ flexDirection: "row" }}>
+                    <Image
+                      source={{ uri: item.img_uri }}
+                      style={styles.image}
+                    />
                     <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
+                      style={{ flex: 1, paddingLeft: 10, paddingVertical: 5 }}
                     >
-                      <Text
-                        style={[
-                          { fontWeight: "bold", fontSize: 20 },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
                       >
-                        Cashed Out
-                      </Text>
-                      <Text
-                        style={[
-                          { fontWeight: "bold", fontSize: 20 },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-                      >
-                        {new Intl.NumberFormat("de-US", {
-                          style: "currency",
-                          currency: "USD",
-                        }).format(item.amount)}
-                      </Text>
-                    </View>
+                        <Text
+                          style={[
+                            { fontWeight: "bold", fontSize: 20 },
+                            darkMode ? { color: "#fff" } : "null",
+                          ]}
+                        >
+                          Cashed Out
+                        </Text>
+                        <Text
+                          style={[
+                            { fontWeight: "bold", fontSize: 20 },
+                            darkMode ? { color: "#fff" } : "null",
+                          ]}
+                        >
+                          {new Intl.NumberFormat("de-US", {
+                            style: "currency",
+                            currency: "USD",
+                          }).format(item.amount)}
+                        </Text>
+                      </View>
 
-                    <View
-                      style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text
-                        style={{ color: "#A8A8A8", marginTop: 3, fontSize: 16 }}
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
                       >
-                        by {item.username ? item.username : "test"}
-                      </Text>
+                        <Text
+                          style={{
+                            color: "#A8A8A8",
+                            marginTop: 3,
+                            fontSize: 16,
+                          }}
+                        >
+                          by {item.username ? item.username : "test"}
+                        </Text>
 
-                      <Text
-                        style={[
-                          { marginTop: 3, fontSize: 16 },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-                      >
-                        {new Date(item.date).toLocaleDateString("en", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric",
-                        })}
-                      </Text>
+                        <Text
+                          style={[
+                            { marginTop: 3, fontSize: 16 },
+                            darkMode ? { color: "#fff" } : "null",
+                          ]}
+                        >
+                          {new Date(item.date).toLocaleDateString("en", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </Text>
+                      </View>
                     </View>
                   </View>
-                </View>
+                </TouchableWithoutFeedback>
               );
             }}
             style={{ paddingTop: 10 }}
