@@ -27,6 +27,9 @@ import SettingsPage from "../pages/SettingsPage";
 import PoolyChatPage from "../pages/PoolyChatPage";
 import CreatePoolyAmountPage from "../pages/CreatePoolyAmountPage";
 import UsersIcon from "../components/svg/UsersIcon";
+import ChangeUsernamePage from "../pages/ChangeUsernamePage";
+import ChangeUserPasswordPage from "../pages/ChangeUserPasswordPage";
+import MapScreen from "../components/MapScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -48,7 +51,7 @@ const BottomTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           if (route.name === "Budget") {
-            return <List stroke={darkMode ? '#fff' : "#000"} />;
+            return <List stroke={darkMode ? "#fff" : "#000"} />;
           }
           if (route.name === "Settings") {
             return <List stroke={darkMode ? "#fff" : "#000"} />;
@@ -119,6 +122,12 @@ const AppRoutes = () => {
             name="CreatePoolyAmount"
             component={CreatePoolyAmountPage}
           />
+          <Stack.Screen name="ChangeUsername" component={ChangeUsernamePage} />
+          <Stack.Screen
+            name="ChangeUserPassword"
+            component={ChangeUserPasswordPage}
+          />
+          <Stack.Screen name="Map" component={MapScreen} />
           <Stack.Screen name="Budget" component={BudgetPage} />
           <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
