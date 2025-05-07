@@ -1,7 +1,7 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 
-function OtherIcon(props) {
+function OtherIcon({ props, stroke = "#1E1E1E" }) {
   return (
     <Svg
       width={24}
@@ -13,7 +13,7 @@ function OtherIcon(props) {
     >
       <Path
         d="M21 10H3m18-4H3m18 8H3m18 4H3"
-        stroke="#1E1E1E"
+        stroke={stroke}
         strokeWidth={2.5}
         strokeLinecap="round"
         strokeLinejoin="round"

@@ -1,23 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Keyboard,
   SafeAreaView,
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  useColorScheme,
   View,
 } from "react-native";
-import { Link, useNavigate } from "react-router-native";
 import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
 
-export default function SignInPage() {
+export default function SignInPage({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [backendError, setbackendError] = useState("");
-  const navigate = useNavigate();
+  const { fetchUserData, setUser } = useUserStore();
+
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   const [errors, setErrors] = useState({
     username: { hasError: false, message: "" },
@@ -34,8 +45,8 @@ export default function SignInPage() {
       newErrors.username.message = "Username is to short";
       newErrors.username.hasError = true;
     }
-    if (password.length < 4) {
-      newErrors.password.message = "Password is to short. Min. 4 letters";
+    if (password.length < 3) {
+      newErrors.password.message = "Password is to short. Min. 3 letters";
       newErrors.password.hasError = true;
     }
 
@@ -65,10 +76,15 @@ export default function SignInPage() {
         }
 
         console.log("Response:", data);
-        useUserStore
-          .getState()
-          .setUser({ username: "Sava", token: data.token });
-        navigate("/main");
+
+        setUser({ username: username, token: data.token });
+        
+        fetchUserData();
+
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        });
       } catch (error) {
         console.error("Error:", error);
       }
@@ -77,13 +93,16 @@ export default function SignInPage() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View
-        style={{ display: "flex", justifyContent: "space-between", flex: 1 }}
+      <SafeAreaView
+        style={[
+          { display: "flex", justifyContent: "space-between", flex: 1 },
+          styles.container,
+        ]}
       >
         <View>
-          <Link to="/" style={{ paddingTop: 10 }}>
-            <Arrow />
-          </Link>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <Arrow stroke={darkMode ? "#fff" : "#000"} />
+          </TouchableWithoutFeedback>
           <Text style={styles.header_text}>Let's Sign you in.</Text>
           <Text style={styles.header2_text}>Good to see you again!</Text>
 
@@ -109,9 +128,11 @@ export default function SignInPage() {
         </View>
 
         <View>
-          <Link to="/signup">
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate("SignUp")}
+          >
             <Text style={styles.link}>Don't have an account?</Text>
-          </Link>
+          </TouchableWithoutFeedback>
 
           <Button
             title={"Login"}
@@ -128,7 +149,7 @@ export default function SignInPage() {
             onPress={auth}
           />
         </View>
-      </View>
+      </SafeAreaView>
     </TouchableWithoutFeedback>
   );
 }
