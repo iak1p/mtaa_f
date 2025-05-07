@@ -277,6 +277,7 @@ const PoolyInfoPage = ({
                     })
                   }
                 >
+                  
                   <View style={{ flexDirection: "row" }}>
                     <Image
                       source={{ uri: item.img_uri }}

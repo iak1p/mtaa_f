@@ -24,19 +24,31 @@ export default function Map({ route }) {
       setDarkMode(false);
     }
   }, [colorScheme]);
-  const transaction = route.params?.transaction;
-  console.log(transaction);
-  //   if (!transaction || !transaction.location) {
-  //     return (
-  //       <View style={styles.center}>
-  //         <Text>No location data for this transaction.</Text>
-  //       </View>
-  //     );
-  //   }
 
-  const { latitude, longitude } = transaction.location
-    ? transaction.location
-    : { latitude: 48.146902372339774, longitude: 17.13904885221579 };
+  const transaction = route.params?.transaction;
+  const latitude = transaction.latitude;
+  const longitude = transaction.longitude;
+
+  if (!transaction || !latitude || !longitude) {
+    return (
+      <View
+        style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+      >
+        <SafeAreaView style={styles.container}>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <View>
+              <Arrow stroke={darkMode ? "#fff" : "#000"} />
+            </View>
+          </TouchableWithoutFeedback>
+          <View style={[darkMode ? "#fff" : "#000", styles.center]}>
+            <Text style={[darkMode ? { color: "#fff" } : { color: "black" }]}>
+              No location data for this transaction.
+            </Text>
+          </View>
+        </SafeAreaView>
+      </View>
+    );
+  }
 
   return (
     <View
@@ -95,5 +107,10 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     height: "80%",
     borderRadius: 10,
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
