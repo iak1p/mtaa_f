@@ -27,6 +27,11 @@ import SettingsPage from "../pages/SettingsPage";
 import PoolyChatPage from "../pages/PoolyChatPage";
 import CreatePoolyAmountPage from "../pages/CreatePoolyAmountPage";
 import UsersIcon from "../components/svg/UsersIcon";
+import { Dimensions } from "react-native";
+import BudgetsPageTablet from "../pages/BudgetsPageTablet";
+import BudgetsPageMobile from "../pages/BudgetsPageMobile";
+import PoolyInfoPageTablet from "../pages/PoolyInfoPageTablet";
+import PoolyInfoPageMobile from "../pages/PoolyInfoPageMobile";
 import ChangeUsernamePage from "../pages/ChangeUsernamePage";
 import ChangeUserPasswordPage from "../pages/ChangeUserPasswordPage";
 import MapScreen from "../components/MapScreen";
@@ -37,6 +42,10 @@ const Tab = createBottomTabNavigator();
 const BottomTabs = () => {
   const [darkMode, setDarkMode] = useState(false);
   const colorScheme = useColorScheme();
+
+  const { width, height } = Dimensions.get("window");
+  const isTabletFallback = Math.min(width, height) >= 600;
+  console.log(isTabletFallback);
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -70,7 +79,11 @@ const BottomTabs = () => {
     >
       <Tab.Screen name="Settings" component={SettingsPage} />
       <Tab.Screen name="Home" component={MainPage} />
-      <Tab.Screen name="Budget" component={BudgetPage} />
+      {isTabletFallback ? (
+        <Tab.Screen name="Budget" component={BudgetsPageTablet} />
+      ) : (
+        <Tab.Screen name="Budget" component={BudgetsPageMobile} />
+      )}
     </Tab.Navigator>
   );
 };
@@ -102,6 +115,11 @@ const BottomTabs = () => {
 const AppRoutes = () => {
   const insets = useSafeAreaInsets();
   const { username, token } = useUserStore();
+
+  const { width, height } = Dimensions.get("window");
+  const isTabletFallback = Math.min(width, height) >= 600;
+  console.log(isTabletFallback);
+
   return (
     <NavigationContainer>
       <View style={styles.container}>
@@ -131,7 +149,14 @@ const AppRoutes = () => {
           <Stack.Screen name="Budget" component={BudgetPage} />
           <Stack.Screen name="Home" component={MainPage} />
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
-          <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} />
+
+          {/* <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} /> */}
+          {isTabletFallback ? (
+            <Stack.Screen name="PoolyInfo" component={PoolyInfoPageTablet} />
+          ) : (
+            <Stack.Screen name="PoolyInfo" component={PoolyInfoPageMobile} />
+          )}
+
           <Stack.Screen name="UserPage" component={UserPage} />
         </Stack.Navigator>
       </View>
