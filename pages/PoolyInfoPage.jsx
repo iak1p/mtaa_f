@@ -316,7 +316,6 @@ const PoolyInfoPage = ({
                     })
                   }
                 >
-                  
                   <View style={{ flexDirection: "row" }}>
                     <Image
                       source={{ uri: item.img_uri }}
@@ -325,28 +324,11 @@ const PoolyInfoPage = ({
                     <View
                       style={{ flex: 1, paddingLeft: 10, paddingVertical: 5 }}
                     >
-
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-                      >
-                        {item.category.charAt(0).toUpperCase() +
-                          item.category.slice(1)}
-                      </Text>
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-
                       <View
                         style={{
                           flexDirection: "row",
                           justifyContent: "space-between",
                         }}
-
                       >
                         <Text
                           style={[
@@ -354,7 +336,8 @@ const PoolyInfoPage = ({
                             darkMode ? { color: "#fff" } : "null",
                           ]}
                         >
-                          Cashed Out
+                          {item.category.charAt(0).toUpperCase() +
+                            item.category.slice(1)}
                         </Text>
                         <Text
                           style={[
