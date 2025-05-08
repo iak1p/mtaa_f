@@ -116,6 +116,7 @@ const BudgetPage = ({ navigation }) => {
               currency: "USD",
             }).format(moneyRemain)}
           </Text>
+          <Text style={styles.subTitle2}>😎</Text>
         </View>
       </SafeAreaView>
 
@@ -191,6 +192,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingTop: 16,
     paddingBottom: 30,
+    color: "white",
+    fontFamily: "Montserat",
+  },
+  subTitle2: {
+    textAlign: "center",
+    fontSize: 14,
+    paddingTop: 15,
+    paddingBottom: 15,
     color: "white",
     fontFamily: "Montserat",
   },

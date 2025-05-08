@@ -159,18 +159,36 @@ const MainPage = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("UserPage")}
           >
-            <Image source={{ uri: img }} style={styles.image} />
+            <View
+              accessebity={true}
+              accessibilityLabel="Go to user page"
+              accessibilityRole="imagebutton"
+            >
+              <Image source={{ uri: img }} style={styles.image} />
+            </View>
           </TouchableWithoutFeedback>
         </View>
         <View>
-          <Text style={styles.title}>Spend this month</Text>
-          <Text style={styles.subTitle}>
+          <Text accessibilityLabel="Spend this month" style={styles.title}>
+            Spend this month
+          </Text>
+          <Text
+            accessibilityLabel={`You have ${moneyRemain} dollars spent this month`}
+            style={styles.subTitle}
+          >
             {new Intl.NumberFormat("de-US", {
               style: "currency",
               currency: "USD",
             }).format(moneyRemain)}
           </Text>
-          <Text style={styles.subTitle2}>
+          <Text
+            accessibilityLabel={`You spend ${percentExpenses.toFixed(
+              2
+            )} percent ${
+              percentExpenses < 0 ? "less" : "more"
+            } than previous month`}
+            style={styles.subTitle2}
+          >
             You spend {percentExpenses.toFixed(2)}%{" "}
             {percentExpenses < 0 ? "less" : "more"} than previous month
           </Text>
@@ -183,6 +201,8 @@ const MainPage = ({ navigation }) => {
           <ActivityIndicator size="small" />
         ) : (
           <View
+            accessible={true}
+            accessibilityLabel="Line chart showing monthly spending trend"
             style={[
               { marginTop: 10 },
               darkMode ? { backgroundColor: "#1C1C1C" } : null,
@@ -198,11 +218,9 @@ const MainPage = ({ navigation }) => {
                 width={screenWidth}
                 height={200}
                 chartConfig={{
-                  backgroundGradientFrom: darkMode ? "#1C1C1C" : "#ffffff",
-                  backgroundGradientFromOpacity: darkMode
-                    ? "#1C1C1C"
-                    : "#ffffff",
-                  backgroundGradientTo: darkMode ? "#1C1C1C" : "#ffffff",
+                  backgroundGradientFrom: "#ffffff",
+                  backgroundGradientFromOpacity: "#ffffff",
+                  backgroundGradientTo: "#ffffff",
                   color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
                   strokeWidth: 2,
                   barPercentage: 1,
@@ -236,6 +254,8 @@ const MainPage = ({ navigation }) => {
                   strokeWidth: 2,
                   barPercentage: 1,
                 }}
+                accessible={true}
+                accessibilityLabel="Bar chart showing categorized spending"
                 // verticalLabelRotation={30}
               />
             </ScrollView>
@@ -244,6 +264,8 @@ const MainPage = ({ navigation }) => {
 
         <View style={styles.container}>
           <Text
+            accessible={true}
+            accessibilityLabel="List of recent transactions"
             style={[
               styles.classTitle,
               darkMode ? { color: "#fff" } : { color: "#000" },
@@ -261,7 +283,18 @@ const MainPage = ({ navigation }) => {
               renderItem={({ item }) => {
                 return (
                   <>
-                    <View style={styles.transactionRow}>
+                    <View
+                      accessible={true}
+                      accessibilityLabel={`Transaction for ${
+                        item.category || "no category"
+                      }, amount ${item.amount} dollars, date ${new Date(
+                        item.date
+                      ).toLocaleDateString("sk-SK")}, from pool number ${
+                        item.budget_id
+                      }`}
+                      accessibilityRole="summary"
+                      style={styles.transactionRow}
+                    >
                       <View
                         style={{ flexDirection: "row", alignItems: "center" }}
                       >

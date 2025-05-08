@@ -129,7 +129,12 @@ const UserPage = ({ navigation }) => {
           backgroundColor: "#13293D",
         }}
       >
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <TouchableWithoutFeedback
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+          onPress={() => navigation.goBack()}
+        >
           <Arrow stroke="#FCF7F8" style={{ paddingLeft: "15%" }}></Arrow>
         </TouchableWithoutFeedback>
 
@@ -137,7 +142,13 @@ const UserPage = ({ navigation }) => {
           {loading ? (
             <ActivityIndicator size="small" style={styles.image} />
           ) : (
-            <Image source={{ uri: img }} style={styles.image} />
+            <View
+              accessebility={true}
+              accessibilityLabel="Your profile photo"
+              accessibilityRole="image"
+            >
+              <Image source={{ uri: img }} style={styles.image} />
+            </View>
           )}
           <Button
             title={"Upload new photo"}
@@ -153,6 +164,8 @@ const UserPage = ({ navigation }) => {
               color: "#FCF7F8",
               letterSpacing: 1.5,
             }}
+            accessibilityLabel="Upload a new profile photo"
+            accessibilityRole="button"
             onPress={() => pickImage()}
           />
         </View>
@@ -162,7 +175,11 @@ const UserPage = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.textContainer}>
             <Sms stroke={darkMode ? "#fff" : "#000"} />
-            <View style={styles.textContainer2}>
+            <View
+              accessible={true}
+              accessibilityLabel={`Your username is ${username}`}
+              style={styles.textContainer2}
+            >
               <Text style={styles.header}>Username</Text>
               <Text
                 style={[
@@ -176,7 +193,11 @@ const UserPage = ({ navigation }) => {
           </View>
           <View style={styles.textContainer}>
             <Phone stroke={darkMode ? "#fff" : "#000"} />
-            <View style={styles.textContainer2}>
+            <View
+              accessible={true}
+              accessibilityLabel="Phone number: 333222111"
+              style={styles.textContainer2}
+            >
               <Text style={styles.header}>Phone number</Text>
               <Text
                 style={[
