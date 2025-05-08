@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  useColorScheme,
   View,
 } from "react-native";
 import Arrow from "../components/svg/Arrow";
@@ -17,51 +18,92 @@ import ButtonComponent from "../components/ButtonComponent";
 
 const CreatePoolyPage = ({ navigation }) => {
   const [poolyName, setPoolyName] = useState("On ");
+  const colorScheme = useColorScheme();
+  const [error, setError] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, marginTop: 20 }}
+      style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <Arrow stroke="#000" />
-        </TouchableWithoutFeedback>
-        <View
-          style={{
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
+      <View
+        style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+      >
+        <SafeAreaView style={styles.container}>
+          <TouchableWithoutFeedback
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+            onPress={() => navigation.goBack()}
+          >
+            <Arrow stroke={darkMode ? "#fff" : "#000"} />
+          </TouchableWithoutFeedback>
           <View
             style={{
-              alignItems: "center",
+              justifyContent: "space-between",
+              flex: 1,
             }}
           >
-            <WelcomeScreenSVG />
-            <TextInput
+            <View
               style={{
-                fontSize: 28,
-                fontWeight: "bold",
-                padding: 5,
-                width: 200,
-                textAlign: "center",
+                alignItems: "center",
               }}
-              onChangeText={setPoolyName}
-              value={poolyName}
-              autoCorrect={false}
-              autoFocus={true}
-              maxLength={10}
+            >
+              <WelcomeScreenSVG
+                accessible={true}
+                accessibilityLabel="Welcome to the Pooly creation screen"
+              />
+              <TextInput
+                style={[
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                  {
+                    fontSize: 28,
+                    fontWeight: "bold",
+                    padding: 5,
+                    width: 200,
+                    textAlign: "center",
+                  },
+                ]}
+                onChangeText={setPoolyName}
+                value={poolyName}
+                autoCorrect={false}
+                autoFocus={true}
+                maxLength={10}
+                accessibilityLabel="Enter name for your Pooly"
+                accessibilityHint="Maximum 10 characters"
+                accessibilityRole="keyboardkey"
+              />
+            </View>
+            <ButtonComponent
+              title={"Set name"}
+              btnStyle={[
+                darkMode
+                  ? { backgroundColor: "#912F40" }
+                  : { backgroundColor: "#13293D" },
+                styles.btnStyle,
+              ]}
+              textStyle={[styles.btnTextStyle]}
+              accessibilityLabel="Set Pooly name and continue"
+              accessibilityRole="button"
+              func={() => {
+                if (poolyName.trim().length === 0) {
+                  return;
+                }
+                navigation.navigate("CreatePoolyAmount", { poolyName });
+              }}
             />
           </View>
-          <ButtonComponent
-            title={"Set name"}
-            btnStyle={styles.btnStyle}
-            textStyle={styles.btnTextStyle}
-            func={() => navigation.navigate("CreatePoolyAmount", { poolyName })}
-          />
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -77,7 +119,6 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   btnStyle: {
-    backgroundColor: "#13293D",
     paddingHorizontal: 10,
     paddingVertical: 20,
     borderRadius: 10,

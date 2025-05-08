@@ -4,6 +4,7 @@ import {
   SafeAreaView,
   StyleSheet,
   Text,
+  useColorScheme,
   View,
 } from "react-native";
 import Arrow from "../components/svg/Arrow";
@@ -26,6 +27,17 @@ const CreatePoolyAmountPage = ({
   const [poolyAmount, setPoolyAmount] = useState();
   const { token } = useUserStore();
   const navigation = useNavigation();
+  const colorScheme = useColorScheme();
+  const [darkMode, setDarkMode] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (colorScheme === "dark") {
+      setDarkMode(true);
+    } else {
+      setDarkMode(false);
+    }
+  }, [colorScheme]);
 
   const addNewPooly = async () => {
     // if (validate()) {
@@ -67,49 +79,88 @@ const CreatePoolyAmountPage = ({
 
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1, marginTop: 20 }}
+      style={{ flex: 1 }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
-      <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <Arrow stroke="#000" />
-        </TouchableWithoutFeedback>
-        <View
-          style={{
-            justifyContent: "space-between",
-            flex: 1,
-          }}
-        >
+      <View
+        style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+      >
+        <SafeAreaView style={styles.container}>
+          <TouchableWithoutFeedback
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+            accessibilityHint="Navigates to the previous screen"
+            onPress={() => navigation.goBack()}
+          >
+            <Arrow stroke={darkMode ? "#fff" : "#000"} />
+          </TouchableWithoutFeedback>
           <View
             style={{
-              alignItems: "center",
+              justifyContent: "space-between",
+              flex: 1,
             }}
           >
-            <WelcomeScreenSVG />
-            <Text>{poolyName}</Text>
-            <TextInput
+            <View
               style={{
-                fontSize: 28,
-                fontWeight: "bold",
-                padding: 5,
-                width: 200,
-                textAlign: "center",
+                alignItems: "center",
               }}
-              onChangeText={setPoolyAmount}
-              value={poolyAmount}
-              autoCorrect={false}
-              autoFocus={true}
-              maxLength={10}
+            >
+              <WelcomeScreenSVG />
+              <Text
+                style={[
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                  {
+                    fontSize: 15,
+                    fontWeight: "bold",
+                    padding: 5,
+                    width: 189,
+                    textAlign: "center",
+                  },
+                ]}
+                accessible={true}
+                accessibilityLabel={`Creating Pooly named ${poolyName}`}
+              >
+                Enter amount for Pooly: {poolyName}
+              </Text>
+              <TextInput
+                style={[
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                  {
+                    fontSize: 28,
+                    fontWeight: "bold",
+                    padding: 5,
+                    width: 200,
+                    textAlign: "center",
+                  },
+                ]}
+                onChangeText={setPoolyAmount}
+                value={poolyAmount}
+                autoCorrect={false}
+                autoFocus={true}
+                maxLength={10}
+                keyboardType="numeric"
+                accessibilityLabel="Enter Pooly amount"
+                accessibilityHint="Maximum 10 characters allowed"
+                accessibilityRole="keyboardkey"
+              />
+            </View>
+            <ButtonComponent
+              title={"Create Pooly"}
+              btnStyle={[
+                darkMode
+                  ? { backgroundColor: "#912F40" }
+                  : { backgroundColor: "#13293D" },
+                styles.btnStyle,
+              ]}
+              textStyle={styles.btnTextStyle}
+              func={() => addNewPooly()}
+              accessibilityLabel="Create Pooly"
+              accessibilityHint="Creates a new Pooly with the entered name and amount"
+              accessibilityRole="button"
             />
           </View>
-          <ButtonComponent
-            title={"Create Pooly"}
-            btnStyle={styles.btnStyle}
-            textStyle={styles.btnTextStyle}
-            func={() => addNewPooly()}
-          />
-        </View>
-      </SafeAreaView>
+        </SafeAreaView>
+      </View>
     </KeyboardAvoidingView>
   );
 };
@@ -125,7 +176,6 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   btnStyle: {
-    backgroundColor: "#13293D",
     paddingHorizontal: 10,
     paddingVertical: 20,
     borderRadius: 10,
