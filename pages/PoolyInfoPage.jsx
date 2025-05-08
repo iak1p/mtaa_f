@@ -289,10 +289,10 @@ const PoolyInfoPage = ({
             </View>
           </ScrollView>
         </View>
-
+        <View>
           <Text
-                    accessible={true}
-          accessibilityLabel="Transactions list"
+            accessible={true}
+            accessibilityLabel="Transactions list"
             style={[
               { fontWeight: "bold", fontSize: 16 },
               darkMode
