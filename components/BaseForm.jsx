@@ -70,7 +70,7 @@ export default function BaseForm({ inputs }) {
                       paddingBottom: 5,
                     }
                   : {
-                      color: "black",
+                      color: darkMode ? "#fff" : "#000",
                       fontSize: 12,
                       paddingBottom: 5,
                     }

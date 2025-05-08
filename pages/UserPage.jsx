@@ -29,7 +29,7 @@ import {
 
 const UserPage = ({ navigation }) => {
   // const insets = useSafeAreaInsets();
-  const { token, img, setImg, username } = useUserStore();
+  const { token, img, setImg, username, resetUser } = useUserStore();
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -175,10 +175,11 @@ const UserPage = ({ navigation }) => {
         <View style={styles.container}>
           <View style={styles.textContainer}>
             <Sms stroke={darkMode ? "#fff" : "#000"} />
+
             <View
               accessible={true}
               accessibilityLabel={`Your username is ${username}`}
-              style={styles.textContainer2}
+              style={{}}
             >
               <Text style={styles.header}>Username</Text>
               <Text
@@ -191,7 +192,32 @@ const UserPage = ({ navigation }) => {
               </Text>
             </View>
           </View>
+
           <View style={styles.textContainer}>
+            <Info stroke={darkMode ? "#fff" : "#000"} />
+
+            <TouchableWithoutFeedback
+              onPress={() => {
+                resetUser();
+                
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "Welcome" }],
+                });
+              }}
+            >
+              <Text
+                style={[
+                  styles.text,
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                Log Out
+              </Text>
+            </TouchableWithoutFeedback>
+          </View>
+
+          {/* <View style={styles.textContainer}>
             <Phone stroke={darkMode ? "#fff" : "#000"} />
             <View
               accessible={true}
@@ -209,6 +235,7 @@ const UserPage = ({ navigation }) => {
               </Text>
             </View>
           </View>
+
           <View style={styles.textContainer}>
             <Email stroke={darkMode ? "#fff" : "#000"} />
             <View style={styles.textContainer2}>
@@ -222,8 +249,9 @@ const UserPage = ({ navigation }) => {
                 sava@gmail.com
               </Text>
             </View>
-          </View>
-          <View style={styles.textContainer}>
+          </View> */}
+
+          {/* <View style={styles.textContainer}>
             <Info stroke={darkMode ? "#fff" : "#000"} />
             <View style={styles.textContainer3}>
               <Button
@@ -236,7 +264,7 @@ const UserPage = ({ navigation }) => {
                 }}
               />
             </View>
-          </View>
+          </View> */}
         </View>
       </ScrollView>
     </View>
@@ -277,12 +305,6 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    paddingTop: "7%",
-  },
-  textContainer2: {
-    paddingLeft: 20,
-  },
-  textContainer3: {
-    paddingLeft: 15,
+    marginTop: 20,
   },
 });

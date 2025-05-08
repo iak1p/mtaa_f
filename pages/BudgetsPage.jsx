@@ -38,7 +38,7 @@ const BudgetPage = ({ navigation }) => {
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
-      if (state.isConnected && state.isInternetReachable) {
+      // if (state.isConnected && state.isInternetReachable) {
         fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
           method: "GET",
           headers: {
@@ -64,10 +64,10 @@ const BudgetPage = ({ navigation }) => {
           .finally(() => {
             setLoading(false);
           });
-      } else {
-        console.log("No wifi connection");
-        setLoading(false);
-      }
+      // } else {
+      //   console.log("No wifi connection");
+      //   setLoading(false);
+      // }
     });
   };
 

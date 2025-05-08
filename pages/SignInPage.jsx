@@ -17,7 +17,7 @@ export default function SignInPage({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [backendError, setbackendError] = useState("");
-  const { fetchUserData, setUser } = useUserStore();
+  const { fetchUserData } = useUserStore();
 
   const colorScheme = useColorScheme();
   const [darkMode, setDarkMode] = useState(false);
@@ -77,9 +77,9 @@ export default function SignInPage({ navigation }) {
 
         console.log("Response:", data);
 
-        setUser({ username: username, token: data.token });
-        
-        fetchUserData();
+        // setUser({ username: username, token: data.token });
+
+        fetchUserData(data.token);
 
         navigation.reset({
           index: 0,
@@ -93,63 +93,74 @@ export default function SignInPage({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView
-        style={[
-          { display: "flex", justifyContent: "space-between", flex: 1 },
-          styles.container,
-        ]}
+      <View
+        style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
       >
-        <View>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-            <Arrow stroke={darkMode ? "#fff" : "#000"} />
-          </TouchableWithoutFeedback>
-          <Text style={styles.header_text}>Let's Sign you in.</Text>
-          <Text style={styles.header2_text}>Good to see you again!</Text>
-
-          <View style={{ paddingTop: 50 }}>
-            <BaseForm
-              inputs={[
-                {
-                  lable: "Username",
-                  placeholder: "Enter username",
-                  state: setUsername,
-                  error: errors.username,
-                },
-                {
-                  lable: "Password",
-                  placeholder: "Enter password",
-                  state: setPassword,
-                  error: errors.password,
-                },
+        <SafeAreaView
+          style={[
+            { display: "flex", justifyContent: "space-between", flex: 1 },
+            styles.container,
+          ]}
+        >
+          <View>
+            <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+              <Arrow stroke={darkMode ? "#fff" : "#000"} />
+            </TouchableWithoutFeedback>
+            <Text
+              style={[
+                styles.header_text,
+                darkMode ? { color: "#fff" } : { color: "#000" },
               ]}
-            />
-            <Text style={styles.errorText}>{backendError}</Text>
+            >
+              Let's Sign you in.
+            </Text>
+            <Text style={styles.header2_text}>Good to see you again!</Text>
+
+            <View style={{ paddingTop: 50 }}>
+              <BaseForm
+                inputs={[
+                  {
+                    lable: "Username",
+                    placeholder: "Enter username",
+                    state: setUsername,
+                    error: errors.username,
+                  },
+                  {
+                    lable: "Password",
+                    placeholder: "Enter password",
+                    state: setPassword,
+                    error: errors.password,
+                  },
+                ]}
+              />
+              <Text style={styles.errorText}>{backendError}</Text>
+            </View>
           </View>
-        </View>
 
-        <View>
-          <TouchableWithoutFeedback
-            onPress={() => navigation.navigate("SignUp")}
-          >
-            <Text style={styles.link}>Don't have an account?</Text>
-          </TouchableWithoutFeedback>
+          <View>
+            <TouchableWithoutFeedback
+              onPress={() => navigation.navigate("SignUp")}
+            >
+              <Text style={styles.link}>Don't have an account?</Text>
+            </TouchableWithoutFeedback>
 
-          <Button
-            title={"Login"}
-            radius={10}
-            color={"#012E4A"}
-            buttonStyle={{
-              padding: 15,
-              marginBottom: 15,
-              borderColor: "#012E4A",
-              borderStyle: "solid",
-              borderWidth: 1,
-            }}
-            titleStyle={{ fontSize: 14 }}
-            onPress={auth}
-          />
-        </View>
-      </SafeAreaView>
+            <Button
+              title={"Login"}
+              radius={10}
+              color={darkMode ? "#912F40" : "#012E4A"}
+              buttonStyle={{
+                padding: 15,
+                marginBottom: 15,
+                borderColor: darkMode ? "#912F40" : "#012E4A",
+                borderStyle: "solid",
+                borderWidth: 1,
+              }}
+              titleStyle={{ fontSize: 14 }}
+              onPress={auth}
+            />
+          </View>
+        </SafeAreaView>
+      </View>
     </TouchableWithoutFeedback>
   );
 }
@@ -166,7 +177,7 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   link: {
-    color: "blue",
+    color: "grey",
     textDecorationLine: "underline",
     paddingTop: 10,
     textAlign: "center",
