@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Plus from "../components/svg/Plus";
 import Minus from "../components/svg/Minus";
 import ShoppingCart from "../components/svg/ShoppingCart";
@@ -21,6 +21,7 @@ import OtherIcon from "../components/svg/OtherIcon";
 import Coffee from "../components/svg/Coffee";
 import useUserStore from "../store/store";
 import { useEffect } from "react";
+import * as Haptics from "expo-haptics";
 import {
   BarChart,
   LineChart,
@@ -32,7 +33,7 @@ import Info from "../components/svg/Info";
 
 const MainPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
-  const insets = useSafeAreaInsets();
+  // const insets = useSafeAreaInsets();
   const [incomeMoney, setIncomeMoney] = useState(1500);
   const [expenseMoney, setExponseMoney] = useState(0);
   const [percentExpenses, setPercentExpenses] = useState(15);
@@ -198,7 +199,7 @@ const MainPage = ({ navigation }) => {
         style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
       >
         {grafLoading ? (
-          <ActivityIndicator size="small" />
+          <ActivityIndicator size="small" style={{ height: 210 }} />
         ) : (
           <View
             accessible={true}
@@ -352,12 +353,12 @@ const MainPage = ({ navigation }) => {
               }}
               onEndReachedThreshold={1}
               refreshing={loading}
-              // onRefresh={() => {
-              //   fetchPoolys();
-              //   Haptics.notificationAsync(
-              //     Haptics.NotificationFeedbackType.Succes
-              //   );
-              // }}
+              onRefresh={() => {
+                fetchTransactions();
+                Haptics.notificationAsync(
+                  Haptics.NotificationFeedbackType.Succes
+                );
+              }}
               style={{ paddingTop: 10 }}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             />
@@ -444,7 +445,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
     marginHorizontal: 20,

@@ -207,6 +207,10 @@ const MainPageTablet = ({ navigation }) => {
                   color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
                   strokeWidth: 2,
                   barPercentage: 1,
+                  propsForLabels: {
+                    fontSize: 20, // 🔥 Увеличь это значение как нужно
+                    fill: darkMode ? "#fff" : "#000", // Цвет текста
+                  },
                 }}
                 yAxisSuffix="$"
                 yAxisInterval={1}
@@ -236,6 +240,10 @@ const MainPageTablet = ({ navigation }) => {
                   color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
                   strokeWidth: 2,
                   barPercentage: 1,
+                  propsForLabels: {
+                    fontSize: 20, // 🔥 Увеличь это значение как нужно
+                    fill: darkMode ? "#fff" : "#000", // Цвет текста
+                  },
                 }}
                 // verticalLabelRotation={30}
               />
@@ -309,14 +317,14 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 24,
     paddingTop: 0,
     fontWeight: "bold",
     color: "white",
   },
   subTitle: {
     textAlign: "center",
-    fontSize: 45,
+    fontSize: 55,
     fontWeight: "bold",
     paddingTop: 16,
     color: "white",
@@ -324,7 +332,7 @@ const styles = StyleSheet.create({
   },
   subTitle2: {
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 20,
     paddingTop: 15,
     paddingBottom: 15,
     color: "white",
@@ -358,7 +366,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
     marginHorizontal: 20,

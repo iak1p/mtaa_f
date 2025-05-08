@@ -16,6 +16,7 @@ import Coffee from "./svg/Coffee";
 import Phone from "./svg/Phone";
 import EntertaimentSmile from "./svg/EntertaimentSmile";
 import OtherIcon from "./svg/OtherIcon";
+import { Audio } from "expo-av";
 
 export default function Map({
   route: {
@@ -35,30 +36,58 @@ export default function Map({
   }, [colorScheme]);
   console.log(transaction);
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      playSound();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   // const transaction = params?.transaction;
   const latitude = transaction.latitude;
   const longitude = transaction.longitude;
 
-  if (!transaction || !latitude || !longitude) {
-    return (
-      <View
-        style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
-      >
-        <SafeAreaView style={styles.container}>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-            <View>
-              <Arrow stroke={darkMode ? "#fff" : "#000"} />
-            </View>
-          </TouchableWithoutFeedback>
-          <View style={[darkMode ? "#fff" : "#000", styles.center]}>
-            <Text style={[darkMode ? { color: "#fff" } : { color: "black" }]}>
-              No location data for this transaction.
-            </Text>
-          </View>
-        </SafeAreaView>
-      </View>
+  // if (!transaction || !latitude || !longitude) {
+  //   return (
+  //     <View
+  //       style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
+  //     >
+  //       <SafeAreaView style={styles.container}>
+  //         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+  //           <View>
+  //             <Arrow stroke={darkMode ? "#fff" : "#000"} />
+  //           </View>
+  //         </TouchableWithoutFeedback>
+  //         <View style={[darkMode ? "#fff" : "#000", styles.center]}>
+  //           <Text style={[darkMode ? { color: "#fff" } : { color: "black" }]}>
+  //             No location data for this transaction.
+  //           </Text>
+  //         </View>
+  //       </SafeAreaView>
+  //     </View>
+  //   );
+  // }
+
+  const [sound, setSound] = useState();
+
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/Kinobe - Heartstring.mp3")
     );
+    console.log(sound);
+
+    setSound(sound);
+    await sound.playAsync();
   }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   return (
     <View
@@ -119,8 +148,8 @@ export default function Map({
               </Text>
             </View>
 
-            <View style={{ alignItems: "flex-start" }}>
-              <Text style={{ color: "grey", fontSize: 14, width: "50%" }}>
+            <View>
+              <Text style={{ color: "grey", fontSize: 14 }}>
                 DATE / TIME
               </Text>
               <Text style={{ fontSize: 14, color: "grey", marginTop: 6 }}>
@@ -210,32 +239,42 @@ export default function Map({
           </View>
         </View>
 
-        <Text
-          style={[
-            darkMode ? { color: "#fff" } : { color: "black" },
-            styles.header,
-          ]}
-        >
-          Transaction Location
-        </Text>
+        {!latitude || !longitude ? (
+          <View style={[darkMode ? "#fff" : "#000", styles.center]}>
+            <Text style={[darkMode ? { color: "#fff" } : { color: "black" }]}>
+              No location data for this transaction.
+            </Text>
+          </View>
+        ) : (
+          <View>
+            <Text
+              style={[
+                darkMode ? { color: "#fff" } : { color: "black" },
+                styles.header,
+              ]}
+            >
+              Transaction Location
+            </Text>
 
-        <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude,
-            longitude,
-            latitudeDelta: 0.01,
-            longitudeDelta: 0.01,
-          }}
-        >
-          <Marker
-            coordinate={{ latitude, longitude }}
-            title={`${transaction.category.toUpperCase()}, ${
-              transaction?.amount
-            } $`}
-            description={transaction?.type || "No description"}
-          />
-        </MapView>
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude,
+                longitude,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+            >
+              <Marker
+                coordinate={{ latitude, longitude }}
+                title={`${transaction.category.toUpperCase()}, ${
+                  transaction?.amount
+                } $`}
+                description={transaction?.type || "No description"}
+              />
+            </MapView>
+          </View>
+        )}
       </SafeAreaView>
     </View>
   );
@@ -250,13 +289,13 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   header: {
-    marginTop: "10%",
+    marginTop: 15,
     fontWeight: "bold",
     fontSize: 16,
   },
   map: {
     marginTop: "5%",
-    height: "50%",
+    height: "60%",
     borderRadius: 10,
   },
   center: {
@@ -282,7 +321,7 @@ const styles = StyleSheet.create({
   image: {
     width: 60,
     height: 60,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
   },

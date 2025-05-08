@@ -32,46 +32,42 @@ const BudgetPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
 
-  const { width, height } = Dimensions.get("window");
-  const isTabletFallback = Math.min(width, height) >= 600;
-  console.log(isTabletFallback);
-
   const fetchPoolys = () => {
-    console.log("fewettt");
+    console.log("fewettt123");
 
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
-      // if (state.isConnected && state.isInternetReachable) {
-      fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: token,
-        },
-      })
-        .then((res) => res.json())
-        .then(({ pooly }) => {
-          setPooly(pooly);
-          setBudgetIds(pooly.map((p) => p.budget_id));
+      if (state.isConnected && state.isInternetReachable) {
+        fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        })
+          .then((res) => res.json())
+          .then(({ pooly }) => {
+            setPooly(pooly);
+            setBudgetIds(pooly.map((p) => p.budget_id));
 
-          let new_money = 0;
-          pooly.forEach((item) => {
-            new_money += item.current_money;
+            let new_money = 0;
+            pooly.forEach((item) => {
+              new_money += item.current_money;
+            });
+
+            setMoneyRemain(new_money);
+          })
+          .catch((err) => {
+            console.log("Request error:", err);
+          })
+          .finally(() => {
+            setLoading(false);
           });
-
-          setMoneyRemain(new_money);
-        })
-        .catch((err) => {
-          console.log("Request error:", err);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-      // } else {
-      //   console.log("No wifi connection");
-      //   setLoading(false);
-      // }
+      } else {
+        console.log("No wifi connection");
+        setLoading(false);
+      }
     });
   };
 
@@ -278,7 +274,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
     marginHorizontal: 20,
@@ -289,7 +285,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#13293D",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100,
   },
   iconStyleBlack: {
     width: 50,
@@ -297,6 +293,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#912F40",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100,
   },
 });

@@ -41,12 +41,8 @@ const PoolyInfoPage = ({
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  const [data, setData] = useState({});
   const [lastShakeTime, setLastShakeTime] = useState(0);
-
   const [filters, setFilters] = useState({ type: "all", category: "all" });
-
-  const route = useRoute();
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -93,8 +89,6 @@ const PoolyInfoPage = ({
     Accelerometer.setUpdateInterval(300);
 
     const subscription = Accelerometer.addListener((accelerometerData) => {
-      setData(accelerometerData);
-
       const totalForce =
         Math.abs(accelerometerData.x) +
         Math.abs(accelerometerData.y) +
@@ -112,10 +106,14 @@ const PoolyInfoPage = ({
   }, [lastShakeTime]);
 
   const onShake = async () => {
-    navigation.navigate("NewTransaction", {
-      budget_id,
-      current_money,
-    });
+    const nav = navigation.getState();
+
+    if (nav.routes.at(-1).name == "PoolyInfo") {
+      navigation.navigate("NewTransaction", {
+        budget_id,
+        current_money,
+      });
+    }
   };
 
   const onSelect = (data) => {
@@ -125,7 +123,6 @@ const PoolyInfoPage = ({
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchTransactions();
-      console.log(filters);
     });
 
     return unsubscribe;
@@ -313,7 +310,7 @@ const PoolyInfoPage = ({
               })
             }
           >
-            <Text style={{ color: "grey" }}>Filter</Text>
+            <Text style={{ color: "grey" }}>Filters</Text>
           </TouchableWithoutFeedback>
         </View>
 
@@ -345,6 +342,7 @@ const PoolyInfoPage = ({
                       source={{ uri: item.img_uri }}
                       style={styles.image}
                     />
+
                     <View
                       style={{ flex: 1, paddingLeft: 10, paddingVertical: 5 }}
                     >
@@ -436,7 +434,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#13293D",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100
   },
   iconStyleBlack: {
     width: 50,
@@ -444,7 +442,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#912F40",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100,
   },
   titleStyle: {
     textDecorationLine: "underline",
@@ -464,7 +462,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
   },

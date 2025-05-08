@@ -10,9 +10,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": ["expo-location"],
     "ios": {
       "supportsTablet": true,
-      "backgroundColor": "#FFFFFF"
+      "backgroundColor": "#FFFFFF",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Нужен доступ к геопозиции"
+      }
     },
     "android": {
       "adaptiveIcon": {
