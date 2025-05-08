@@ -134,7 +134,7 @@ const BudgetPage = ({ navigation }) => {
         <Text style={[styles.classTitle, darkMode ? { color: "#fff" } : null]}>
           Pooly's
         </Text>
-        <Text style={[darkMode ? { color: "#fff" } : null]}>
+        <Text style={[{ fontSize: 20 }, darkMode ? { color: "#fff" } : null]}>
           {new Intl.NumberFormat("de-US", {
             style: "currency",
             currency: "USD",
@@ -180,14 +180,14 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 20,
     paddingTop: 0,
     fontWeight: "bold",
     color: "white",
   },
   subTitle: {
     textAlign: "center",
-    fontSize: 45,
+    fontSize: 50,
     fontWeight: "bold",
     paddingTop: 16,
     paddingBottom: 30,
@@ -196,12 +196,7 @@ const styles = StyleSheet.create({
   },
   classTitle: {
     fontWeight: "bold",
-    fontSize: 16,
-  },
-  classSubtitle: {
-    paddingTop: 8,
-    fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 25,
   },
   btnStyle: {
     flexDirection: "row",
@@ -228,7 +223,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
     marginHorizontal: 20,
@@ -239,7 +234,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#13293D",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100,
   },
   iconStyleBlack: {
     width: 50,
@@ -247,6 +242,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#912F40",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100,
   },
 });

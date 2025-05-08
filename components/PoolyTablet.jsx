@@ -34,7 +34,7 @@ const PoolyTablet = ({
           },
         ]}
       >
-        <BankaIcon stroke={darkMode ? "#fff" : "#000"} />
+        <BankaIcon stroke={darkMode ? "#fff" : "#000"} width={30} height={42} />
         <View style={{ paddingHorizontal: 20, width: "100%" }}>
           <View
             style={{
@@ -46,7 +46,9 @@ const PoolyTablet = ({
             <Text style={[style.title, darkMode ? { color: "#fff" } : null]}>
               {name}
             </Text>
-            <Text style={darkMode ? { color: "#fff" } : null}>
+            <Text
+              style={[{ fontSize: 20 }, darkMode ? { color: "#fff" } : null]}
+            >
               {new Intl.NumberFormat("de-US", {
                 style: "currency",
                 currency: "USD",
@@ -56,11 +58,12 @@ const PoolyTablet = ({
           <Progress.Bar
             progress={current_money / max_money}
             color="#A1869E"
-            height={4}
+            height={8}
             width={null}
           />
           <Text
             style={{
+              fontSize: 20,
               paddingTop: 4,
               color: "#A1869E",
             }}
@@ -89,7 +92,7 @@ const style = StyleSheet.create({
     borderRadius: 5,
   },
   title: {
-    fontSize: 16,
+    fontSize: 22,
     fontWeight: "bold",
   },
 });

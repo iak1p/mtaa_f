@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#13293D",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100
   },
   iconStyleBlack: {
     width: 50,
@@ -418,7 +418,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#912F40",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: "100%",
+    borderRadius: 100,
   },
   titleStyle: {
     textDecorationLine: "underline",
@@ -438,7 +438,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
   },

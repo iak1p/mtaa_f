@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   image: {
     width: 50,
     height: 50,
-    borderRadius: "100%",
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
     marginHorizontal: 20,
@@ -181,5 +181,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     flex: 1,
+    marginTop: 25,
   },
 });

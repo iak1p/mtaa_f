@@ -1,11 +1,11 @@
 import * as React from "react";
 import Svg, { Path, Rect } from "react-native-svg";
 
-const BankaIcon = ({ props, stroke = "#000" }) => {
+const BankaIcon = ({ props, stroke = "#000", width = 20, height = 28 }) => {
   return (
     <Svg
-      width={20}
-      height={28}
+      width={width}
+      height={height}
       viewBox="0 0 40 56"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
