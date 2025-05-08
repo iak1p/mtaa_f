@@ -16,6 +16,7 @@ import Coffee from "./svg/Coffee";
 import Phone from "./svg/Phone";
 import EntertaimentSmile from "./svg/EntertaimentSmile";
 import OtherIcon from "./svg/OtherIcon";
+import { Audio } from "expo-av";
 
 export default function Map({
   route: {
@@ -34,6 +35,14 @@ export default function Map({
     }
   }, [colorScheme]);
   console.log(transaction);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      playSound();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   // const transaction = params?.transaction;
   const latitude = transaction.latitude;
@@ -59,6 +68,26 @@ export default function Map({
   //     </View>
   //   );
   // }
+
+  const [sound, setSound] = useState();
+
+  async function playSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("../assets/Kinobe - Heartstring.mp3")
+    );
+    console.log(sound);
+
+    setSound(sound);
+    await sound.playAsync();
+  }
+
+  React.useEffect(() => {
+    return sound
+      ? () => {
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
   return (
     <View
@@ -119,8 +148,8 @@ export default function Map({
               </Text>
             </View>
 
-            <View style={{ alignItems: "flex-start" }}>
-              <Text style={{ color: "grey", fontSize: 14, width: "50%" }}>
+            <View>
+              <Text style={{ color: "grey", fontSize: 14 }}>
                 DATE / TIME
               </Text>
               <Text style={{ fontSize: 14, color: "grey", marginTop: 6 }}>
@@ -260,13 +289,13 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   header: {
-    marginTop: "10%",
+    marginTop: 15,
     fontWeight: "bold",
     fontSize: 16,
   },
   map: {
     marginTop: "5%",
-    height: "50%",
+    height: "60%",
     borderRadius: 10,
   },
   center: {

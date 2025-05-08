@@ -19,6 +19,7 @@
     "@rneui/themed": "^4.0.0-rc.8",
     "@supabase/supabase-js": "^2.49.4",
     "expo": "~53.0.7",
+    "expo-av": "~15.1.4",
     "expo-device": "~7.1.4",
     "expo-file-system": "~18.1.8",
     "expo-haptics": "~14.1.4",
@@ -39,6 +40,7 @@
     "react-native-pager-view": "6.7.1",
     "react-native-progress": "^5.0.1",
     "react-native-reanimated": "~3.17.4",
+    "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
     "react-native-svg": "^15.11.2",
     "react-native-toast-message": "^2.3.0",
@@ -46,8 +48,7 @@
     "react-native-web": "^0.20.0",
     "react-native-websocket": "^1.0.2",
     "react-router-native": "^6.29.0",
-    "zustand": "^5.0.4",
-    "react-native-safe-area-context": "5.4.0"
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

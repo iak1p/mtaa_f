@@ -41,12 +41,8 @@ const PoolyInfoPage = ({
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  const [data, setData] = useState({});
   const [lastShakeTime, setLastShakeTime] = useState(0);
-
   const [filters, setFilters] = useState({ type: "all", category: "all" });
-
-  const route = useRoute();
 
   useEffect(() => {
     if (colorScheme === "dark") {
@@ -93,8 +89,6 @@ const PoolyInfoPage = ({
     Accelerometer.setUpdateInterval(300);
 
     const subscription = Accelerometer.addListener((accelerometerData) => {
-      setData(accelerometerData);
-
       const totalForce =
         Math.abs(accelerometerData.x) +
         Math.abs(accelerometerData.y) +
@@ -112,10 +106,14 @@ const PoolyInfoPage = ({
   }, [lastShakeTime]);
 
   const onShake = async () => {
-    navigation.navigate("NewTransaction", {
-      budget_id,
-      current_money,
-    });
+    const nav = navigation.getState();
+
+    if (nav.routes.at(-1).name == "PoolyInfo") {
+      navigation.navigate("NewTransaction", {
+        budget_id,
+        current_money,
+      });
+    }
   };
 
   const onSelect = (data) => {
@@ -125,7 +123,6 @@ const PoolyInfoPage = ({
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchTransactions();
-      console.log(filters);
     });
 
     return unsubscribe;
@@ -296,7 +293,7 @@ const PoolyInfoPage = ({
               })
             }
           >
-            <Text style={{ color: "grey" }}>Filter</Text>
+            <Text style={{ color: "grey" }}>Filters</Text>
           </TouchableWithoutFeedback>
         </View>
 
@@ -325,23 +322,6 @@ const PoolyInfoPage = ({
                     <View
                       style={{ flex: 1, paddingLeft: 10, paddingVertical: 5 }}
                     >
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-                      >
-                        {item.category.charAt(0).toUpperCase() +
-                          item.category.slice(1)}
-                      </Text>
-
-                      <Text
-                        style={[
-                          { fontWeight: "bold" },
-                          darkMode ? { color: "#fff" } : "null",
-                        ]}
-                      ></Text>
-
                       <View
                         style={{
                           flexDirection: "row",

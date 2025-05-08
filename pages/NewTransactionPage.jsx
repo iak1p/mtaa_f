@@ -93,7 +93,7 @@ function NewTransactionPage({
         const amount = transactionAmount.replace(",", ".");
 
         const { status } = await Location.requestForegroundPermissionsAsync();
-        
+
         if (status !== "granted") {
           setError("Permission to access location was denied");
           return;
@@ -203,18 +203,27 @@ function NewTransactionPage({
               currency: "USD",
             }).format(current_money)}
           </Text>
-          <BaseForm
-            inputs={[
-              {
-                lable: null,
-                placeholder: "Enter amount",
-                state: setTransactionAmount,
-                error: amountError,
-                type: "numeric",
-              },
-            ]}
-          />
+          <View>
+            <Text style={{ color: "grey", marginBottom: 5 }}>
+              Select amount
+            </Text>
+            <BaseForm
+              inputs={[
+                {
+                  lable: null,
+                  placeholder: "Enter amount",
+                  state: setTransactionAmount,
+                  error: amountError,
+                  type: "numeric",
+                },
+              ]}
+            />
+          </View>
+
           <View style={{ zIndex: 1000 }}>
+            <Text style={{ color: "grey", marginBottom: 5 }}>
+              Select payment category
+            </Text>
             <DropDownPicker
               open={open}
               value={value}
@@ -246,6 +255,9 @@ function NewTransactionPage({
           </View>
 
           <View style={{ zIndex: 500, marginTop: 15 }}>
+            <Text style={{ color: "grey", marginBottom: 5 }}>
+              Select payment type
+            </Text>
             <DropDownPicker
               open={openType}
               value={valueType}

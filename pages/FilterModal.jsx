@@ -120,9 +120,14 @@ const FilterModal = ({ navigation, route: { params } }) => {
             navigation.goBack();
           }}
         >
-          <Text style={{ color: "grey" }}>Undo filters</Text>
+          <View>
+            <Text style={{ color: "#912F40", marginTop: 15 }}>
+              {" "}
+              X Undo filters
+            </Text>
+          </View>
         </TouchableWithoutFeedback>
-        
+
         <TouchableWithoutFeedback
           onPress={() => {
             params.onSelect({ type: valueType, category: value });

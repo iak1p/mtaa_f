@@ -21,6 +21,7 @@ import OtherIcon from "../components/svg/OtherIcon";
 import Coffee from "../components/svg/Coffee";
 import useUserStore from "../store/store";
 import { useEffect } from "react";
+import * as Haptics from "expo-haptics";
 import {
   BarChart,
   LineChart,
@@ -180,7 +181,7 @@ const MainPage = ({ navigation }) => {
         style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
       >
         {grafLoading ? (
-          <ActivityIndicator size="small" />
+          <ActivityIndicator size="small" style={{ height: 210 }} />
         ) : (
           <View
             style={[
@@ -319,12 +320,12 @@ const MainPage = ({ navigation }) => {
               }}
               onEndReachedThreshold={1}
               refreshing={loading}
-              // onRefresh={() => {
-              //   fetchPoolys();
-              //   Haptics.notificationAsync(
-              //     Haptics.NotificationFeedbackType.Succes
-              //   );
-              // }}
+              onRefresh={() => {
+                fetchTransactions();
+                Haptics.notificationAsync(
+                  Haptics.NotificationFeedbackType.Succes
+                );
+              }}
               style={{ paddingTop: 10 }}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             />
