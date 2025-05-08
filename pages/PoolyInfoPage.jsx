@@ -286,7 +286,15 @@ const PoolyInfoPage = ({
             </View>
           </ScrollView>
         </View>
-        <View>
+
+        <View
+          style={{
+            marginTop: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Text
             accessible={true}
             accessibilityLabel="Transactions list"
@@ -434,7 +442,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#13293D",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 100
+    borderRadius: 100,
   },
   iconStyleBlack: {
     width: 50,

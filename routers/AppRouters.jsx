@@ -130,15 +130,15 @@ const AppRoutes = () => {
     <NavigationContainer>
       <View style={styles.container}>
         <Stack.Navigator
-          initialRouteName="Main"
+          initialRouteName="Welcome"
           screenOptions={{
             // ...TransitionPresets.SlideFromRightIOS,
             headerShown: false,
           }}
         >
-          {/* <Stack.Screen name="Welcome" component={WelcomePage} />
+          <Stack.Screen name="Welcome" component={WelcomePage} />
           <Stack.Screen name="SignIn" component={SignInPage} />
-          <Stack.Screen name="SignUp" component={SignUpPage} /> */}
+          <Stack.Screen name="SignUp" component={SignUpPage} />
 
           <Stack.Screen name="Main" component={BottomTabs} />
           <Stack.Screen name="NewTransaction" component={NewTransactionPage} />

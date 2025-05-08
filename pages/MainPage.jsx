@@ -77,51 +77,120 @@ const MainPage = ({ navigation }) => {
     })
       .then((res) => res.json())
       .then(({ transaction }) => {
+        // const expensesByMonth = {};
+        // const chartData = {
+        //   labels: [],
+        //   datasets: [
+        //     {
+        //       data: [],
+        //     },
+        //   ],
+        // };
+
+        // const monthTransaction = {};
+
+        // transaction.forEach((item) => {
+        //   const dateNow = new Date().toISOString().slice(0, 7);
+        //   const month = new Date(item.date).toISOString().slice(0, 7);
+
+        //   if (dateNow == month) {
+        //     if (!monthTransaction[item.category]) {
+        //       monthTransaction[item.category] = 0;
+        //     }
+
+        //     monthTransaction[item.category] += item.amount;
+        //   }
+
+        //   if (!expensesByMonth[month]) {
+        //     expensesByMonth[month] = 0;
+        //   }
+        //   expensesByMonth[month] += item.amount;
+        // });
+
+        // console.log(monthTransaction);
+
+        // const dateNow = new Date().toISOString().slice(0, 7);
+
+        // const previousMonthDate = new Date();
+        // previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+
+        // const previousMonth = previousMonthDate.toISOString().slice(0, 7);
+
+        // const percentChange =
+        //   previousMonth === 0
+        //     ? previousMonth === 0
+        //       ? 0 // ничего не тратилось оба месяца
+        //       : 100 // было 0, стало >0 — рост на 100%
+        //     : ((currentMonthTotal - previousMonth) / previousMonth) * 100;
+
+        // setPercentExpenses(percentChange);
+
+        // setMoneyRemain(expensesByMonth[dateNow]);
+
+        // Object.keys(expensesByMonth)
+        //   .sort()
+        //   .forEach((monthKey) => {
+        //     const label = new Date(monthKey).toLocaleDateString("en", {
+        //       month: "long",
+        //     });
+        //     chartData.labels.push(label);
+        //     chartData.datasets[0].data.push(expensesByMonth[monthKey]);
+        //   });
+
+        // const monthtData = {
+        //   labels: Object.keys(monthTransaction),
+        //   datasets: [{ data: Object.values(monthTransaction) }],
+        // };
+
+        // // setDataChart(monthtData);
+        // // setData(chartData);
+        // // setTransactions(transaction);
+
         const expensesByMonth = {};
         const chartData = {
           labels: [],
-          datasets: [
-            {
-              data: [],
-            },
-          ],
+          datasets: [{ data: [] }],
         };
-
         const monthTransaction = {};
 
-        transaction.forEach((item) => {
-          const dateNow = new Date().toISOString().slice(0, 7);
-          const month = new Date(item.date).toISOString().slice(0, 7);
-
-          if (dateNow == month) {
-            if (!monthTransaction[item.category]) {
-              monthTransaction[item.category] = 0;
-            }
-
-            monthTransaction[item.category] += item.amount;
-          }
-
-          if (!expensesByMonth[month]) {
-            expensesByMonth[month] = 0;
-          }
-          expensesByMonth[month] += item.amount;
-        });
-
-        console.log(monthTransaction);
-
-        const dateNow = new Date().toISOString().slice(0, 7);
+        const now = new Date();
+        const dateNowKey = now.toISOString().slice(0, 7);
 
         const previousMonthDate = new Date();
         previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+        const previousMonthKey = previousMonthDate.toISOString().slice(0, 7);
 
-        const previousMonth = previousMonthDate.toISOString().slice(0, 7);
+        transaction.forEach((item) => {
+          const itemMonth = new Date(item.date).toISOString().slice(0, 7);
 
-        setPercentExpenses(
-          ((expensesByMonth[dateNow] - expensesByMonth[previousMonth]) /
-            expensesByMonth[previousMonth]) *
-            100
-        );
-        setMoneyRemain(expensesByMonth[dateNow]);
+          if (itemMonth === dateNowKey) {
+            if (!monthTransaction[item.category]) {
+              monthTransaction[item.category] = 0;
+            }
+            monthTransaction[item.category] += item.amount;
+          }
+
+          if (!expensesByMonth[itemMonth]) {
+            expensesByMonth[itemMonth] = 0;
+          }
+          expensesByMonth[itemMonth] += item.amount;
+        });
+
+        const currentMonthTotal = expensesByMonth[dateNowKey] || 0;
+        const previousMonthTotal = expensesByMonth[previousMonthKey] || 0;
+
+        console.log(expensesByMonth);
+
+        const percentChange =
+          previousMonthTotal === 0
+            ? currentMonthTotal === 0
+              ? 0
+              : 100
+            : ((currentMonthTotal - previousMonthTotal) / previousMonthTotal) *
+              100;
+
+        setPercentExpenses(percentChange);
+        setMoneyRemain(currentMonthTotal);
 
         Object.keys(expensesByMonth)
           .sort()
@@ -133,13 +202,40 @@ const MainPage = ({ navigation }) => {
             chartData.datasets[0].data.push(expensesByMonth[monthKey]);
           });
 
-        const monthtData = {
+        const monthData = {
           labels: Object.keys(monthTransaction),
           datasets: [{ data: Object.values(monthTransaction) }],
         };
 
-        setDataChart(monthtData);
-        setData(chartData);
+        if ((monthData.labels.length == 0)) {
+          setDataChart({
+            labels: ["January", "February", "March"],
+            datasets: [
+              {
+                data: [0, 0, 0],
+              },
+            ],
+          });
+        } else {
+          setDataChart(monthData);
+        }
+
+        console.log(monthData);
+
+        if (chartData.labels.length == 0) {
+          setData({
+            labels: ["January", "February", "March"],
+            datasets: [
+              {
+                data: [0, 0, 0],
+              },
+            ],
+          });
+        } else {
+          setData(chartData);
+        }
+
+        // setData(chartData);
         setTransactions(transaction);
       })
       .catch((err) => console.log(err))
@@ -219,9 +315,11 @@ const MainPage = ({ navigation }) => {
                 width={screenWidth}
                 height={200}
                 chartConfig={{
-                  backgroundGradientFrom: "#ffffff",
-                  backgroundGradientFromOpacity: "#ffffff",
-                  backgroundGradientTo: "#ffffff",
+                  backgroundGradientFrom: darkMode ? "#1C1C1C" : "#ffffff",
+                  backgroundGradientFromOpacity: darkMode
+                    ? "#1C1C1C"
+                    : "#ffffff",
+                  backgroundGradientTo: darkMode ? "#1C1C1C" : "#ffffff",
                   color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
                   strokeWidth: 2,
                   barPercentage: 1,
