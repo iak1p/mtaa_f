@@ -42,7 +42,6 @@ const BudgetPage = ({ navigation }) => {
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
-
       // if (state.isConnected && state.isInternetReachable) {
       fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
         method: "GET",
@@ -105,10 +104,26 @@ const BudgetPage = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("UserPage")}
           >
-            <Image source={{ uri: img }} style={styles.image} />
+            <View
+              accessebity={true}
+              accessibilityLabel="Go to user page"
+              accessibilityRole="imagebutton"
+            >
+              <Image source={{ uri: img }} style={styles.image} />
+            </View>
           </TouchableWithoutFeedback>
         </View>
-        <View>
+        <View
+          accessible={true}
+          accessibilityRole="header"
+          accessibilityLabel={`Pooly Fund balance: ${new Intl.NumberFormat(
+            "en-US",
+            {
+              style: "currency",
+              currency: "USD",
+            }
+          ).format(moneyRemain)}.`}
+        >
           <Text style={styles.title}>Pooly Fund</Text>
           <Text style={styles.subTitle}>
             {new Intl.NumberFormat("de-US", {
@@ -116,30 +131,51 @@ const BudgetPage = ({ navigation }) => {
               currency: "USD",
             }).format(moneyRemain)}
           </Text>
+          <Text style={styles.subTitle2}>😎</Text>
         </View>
       </SafeAreaView>
 
       <View style={styles.container}>
-        <PoolyInfoComponent
-          btnFunc={() => navigation.navigate("CreatePolly")}
-          style={[
-            darkMode ? styles.iconStyleBlack : styles.iconStyle,
-            { marginTop: 10 },
-          ]}
-          text={`Start a Pooly`}
-          icon={<BankaIcon stroke="#fff" />}
-          darkMode={darkMode}
-        />
+        <View
+          accessible={true}
+          accessibilityLabel="Start a new Pooly fund"
+          accessibilityRole="button"
+        >
+          <PoolyInfoComponent
+            btnFunc={() => navigation.navigate("CreatePolly")}
+            style={[
+              darkMode ? styles.iconStyleBlack : styles.iconStyle,
+              { marginTop: 10 },
+            ]}
+            text={`Start a Pooly`}
+            icon={<BankaIcon stroke="#fff" />}
+            darkMode={darkMode}
+          />
+        </View>
 
-        <Text style={[styles.classTitle, darkMode ? { color: "#fff" } : null]}>
-          Pooly's
-        </Text>
-        <Text style={[darkMode ? { color: "#fff" } : null]}>
-          {new Intl.NumberFormat("de-US", {
-            style: "currency",
-            currency: "USD",
-          }).format(moneyRemain)}
-        </Text>
+        <View
+          accessible={true}
+          accessibilityRole="header"
+          accessibilityLabel={`Pooly Fund balance: ${new Intl.NumberFormat(
+            "en-US",
+            {
+              style: "currency",
+              currency: "USD",
+            }
+          ).format(moneyRemain)}.`}
+        >
+          <Text
+            style={[styles.classTitle, darkMode ? { color: "#fff" } : null]}
+          >
+            Pooly's
+          </Text>
+          <Text style={[darkMode ? { color: "#fff" } : null]}>
+            {new Intl.NumberFormat("de-US", {
+              style: "currency",
+              currency: "USD",
+            }).format(moneyRemain)}
+          </Text>
+        </View>
 
         {loading ? (
           <ActivityIndicator size="small" />
@@ -148,7 +184,15 @@ const BudgetPage = ({ navigation }) => {
             data={pooly}
             keyExtractor={(item) => item.budget_id.toString()}
             renderItem={({ item }) => {
-              return <Pooly item={item} darkMode={darkMode} />;
+              return (
+                <View
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Pooly ${item.name}, remaining budget ${item.current_money} dollars`}
+                >
+                  <Pooly item={item} darkMode={darkMode} />
+                </View>
+              );
             }}
             showsVerticalScrollIndicator={false}
             onEndReachedThreshold={1}
@@ -189,7 +233,6 @@ const styles = StyleSheet.create({
     fontSize: 45,
     fontWeight: "bold",
     paddingTop: 16,
-    paddingBottom: 30,
     color: "white",
     fontFamily: "Montserat",
   },
@@ -211,6 +254,14 @@ const styles = StyleSheet.create({
     width: 200,
     justifyContent: "flex-start",
     alignItems: "center",
+  },
+  subTitle2: {
+    textAlign: "center",
+    fontSize: 14,
+    paddingTop: 15,
+    paddingBottom: 15,
+    color: "white",
+    fontFamily: "Montserat",
   },
   shadowBox: {
     backgroundColor: "white",

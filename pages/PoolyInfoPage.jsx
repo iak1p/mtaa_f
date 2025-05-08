@@ -158,7 +158,12 @@ const PoolyInfoPage = ({
   return (
     <View style={darkMode ? styles.backBack : styles.back}>
       <SafeAreaView style={styles.container}>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <TouchableWithoutFeedback
+          accessible={true}
+          accessibilityRole="button"
+          accessibilityLabel="Go back"
+          onPress={() => navigation.goBack()}
+        >
           <Arrow stroke={darkMode ? "#fff" : "#000"} />
         </TouchableWithoutFeedback>
         <View style={{ alignItems: "center" }}>
@@ -167,6 +172,8 @@ const PoolyInfoPage = ({
           </View>
 
           <Text
+            accessible={true}
+            accessibilityLabel={`Pool name ${name}`}
             numberOfLines={1}
             style={darkMode ? styles.titleStyleDark : styles.titleStyle}
           >
@@ -174,6 +181,8 @@ const PoolyInfoPage = ({
           </Text>
 
           <Text
+            accessible={true}
+            accessibilityLabel={`Maximum amount is ${max_money} dollars`}
             style={
               darkMode
                 ? {
@@ -191,7 +200,13 @@ const PoolyInfoPage = ({
             }).format(max_money)}
           </Text>
 
-          <Text style={{ marginTop: 5, fontSize: 16, color: "grey" }}>
+          <Text
+            accessible={true}
+            accessibilityLabel={`Withdrawn: ${
+              max_money - current_money
+            } dollars`}
+            style={{ marginTop: 5, fontSize: 16, color: "grey" }}
+          >
             {"Withdrawn "}
             {new Intl.NumberFormat("de-US", {
               style: "currency",
@@ -216,6 +231,8 @@ const PoolyInfoPage = ({
                 text={`Withdraw transaction`}
                 icon={<BankaIcon stroke="#fff" />}
                 darkMode={darkMode}
+                accessibilityLabel="Withdraw money from this pool"
+                accessibilityRole="button"
               />
               <PoolyInfoComponent
                 btnFunc={() =>
@@ -229,6 +246,8 @@ const PoolyInfoPage = ({
                 text={`Show \n User list`}
                 icon={<UsersIcon stroke="#fff" />}
                 darkMode={darkMode}
+                accessibilityLabel="Show list of users in this pool"
+                accessibilityRole="button"
               />
               <PoolyInfoComponent
                 btnFunc={() => navigation.navigate("ChatPage", { budget_id })}
@@ -236,6 +255,8 @@ const PoolyInfoPage = ({
                 text={`Open \n Pooly chat`}
                 icon={<Phone stroke="#fff" />}
                 darkMode={darkMode}
+                accessibilityLabel="Open chat for this pool"
+                accessibilityRole="button"
               />
               <PoolyInfoComponent
                 btnFunc={() => dropPooly()}
@@ -243,12 +264,16 @@ const PoolyInfoPage = ({
                 text={`Drop this Pooly`}
                 icon={<List stroke="#fff" />}
                 darkMode={darkMode}
+                accessibilityLabel="Drop or delete this pool"
+                accessibilityRole="button"
               />
             </View>
           </ScrollView>
         </View>
 
         <Text
+          accessible={true}
+          accessibilityLabel="Transactions list"
           style={[
             { fontWeight: "bold", marginTop: 20, fontSize: 16 },
             darkMode
@@ -276,8 +301,14 @@ const PoolyInfoPage = ({
                       transaction: item,
                     })
                   }
+                  accessible={true}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Transaction by ${
+                    item.username
+                  }, amount ${item.amount} dollars, date ${new Date(
+                    item.date
+                  ).toLocaleDateString("sk-SK")}`}
                 >
-                  
                   <View style={{ flexDirection: "row" }}>
                     <Image
                       source={{ uri: item.img_uri }}

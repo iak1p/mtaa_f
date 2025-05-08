@@ -24,6 +24,7 @@ const SettingsPage = ({ navigation }) => {
       setDarkMode(false);
     }
   }, [colorScheme]);
+
   return (
     <View
       style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
@@ -46,7 +47,13 @@ const SettingsPage = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("UserPage")}
           >
-            <Image source={{ uri: img }} style={styles.image} />
+            <View
+              accessible={true}
+              accessibilityRole="imagebutton"
+              accessibilityLabel="Open user profile"
+            >
+              <Image source={{ uri: img }} style={styles.image} />
+            </View>
           </TouchableWithoutFeedback>
         </View>
       </SafeAreaView>
@@ -62,6 +69,9 @@ const SettingsPage = ({ navigation }) => {
             ]}
           >
             <TouchableWithoutFeedback
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="Change your username"
               onPress={() => navigation.navigate("ChangeUsername")}
             >
               <View
@@ -104,6 +114,9 @@ const SettingsPage = ({ navigation }) => {
             ]}
           >
             <TouchableWithoutFeedback
+              accessible={true}
+              accessibilityRole="button"
+              accessibilityLabel="Change your password"
               onPress={() => navigation.navigate("ChangeUserPassword")}
             >
               <View

@@ -169,15 +169,22 @@ function NewTransactionPage({
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View
         style={darkMode ? { backgroundColor: "#1C1C1C", flex: 1 } : { flex: 1 }}
       >
         <SafeAreaView style={styles.container}>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <TouchableWithoutFeedback
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Go back"
+            onPress={() => navigation.goBack()}
+          >
             <Arrow stroke={darkMode ? "#fff" : "#000"} />
           </TouchableWithoutFeedback>
           <Text
+            accessible={true}
+            accessibilityLabel="You are in a Pooly"
             style={[
               { textAlign: "center", fontSize: 16, marginTop: 15 },
               darkMode ? { color: "#fff" } : null,
@@ -186,6 +193,14 @@ function NewTransactionPage({
             In Pooly
           </Text>
           <Text
+            accessible={true}
+            accessibilityLabel={`Current money: ${new Intl.NumberFormat(
+              "en-US",
+              {
+                style: "currency",
+                currency: "USD",
+              }
+            ).format(current_money)}`}
             style={[
               {
                 textAlign: "center",
@@ -202,7 +217,7 @@ function NewTransactionPage({
               currency: "USD",
             }).format(current_money)}
           </Text>
-          <BaseForm
+          <BaseForm //я не знаю як тут зроюить
             inputs={[
               {
                 lable: null,
@@ -210,10 +225,16 @@ function NewTransactionPage({
                 state: setTransactionAmount,
                 error: amountError,
                 type: "numeric",
+                accessibilityLabel: "Enter transaction amount",
               },
             ]}
           />
-          <View style={{ zIndex: 1000 }}>
+          <View
+            accessible={true}
+            accessibilityLabel="Select category for what you are paying"
+            accessibilityRole="menu"
+            style={{ zIndex: 1000 }}
+          >
             <DropDownPicker
               open={open}
               value={value}
@@ -244,7 +265,12 @@ function NewTransactionPage({
             />
           </View>
 
-          <View style={{ zIndex: 500, marginTop: 15 }}>
+          <View
+            accessible={true}
+            accessibilityLabel="Select your payment type"
+            accessibilityRole="menu"
+            style={{ zIndex: 500, marginTop: 15 }}
+          >
             <DropDownPicker
               open={openType}
               value={valueType}
@@ -278,6 +304,8 @@ function NewTransactionPage({
           </View>
           <TouchableWithoutFeedback onPress={addNewTransaction}>
             <View
+              accessibilityRole="button"
+              accessibilityLabel="Submit withdrawal"
               style={[
                 { marginTop: 15, borderRadius: 5 },
                 darkMode
