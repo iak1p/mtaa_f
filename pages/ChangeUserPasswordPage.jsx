@@ -15,11 +15,13 @@ import Arrow from "../components/svg/Arrow";
 
 export default function ChangeUserPasswordPage() {
   const { username, token } = useUserStore();
+  const [oldUserPassword, setOldUserPassword] = useState("");
   const [newUserPassword, setNewUserPassword] = useState("");
   const [backendError, setBackendError] = useState("");
   const navigation = useNavigation();
 
   const [errors, setErrors] = useState({
+    oldUserPassword: { hasError: false, message: "" },
     newUserPassword: { hasError: false, message: "" },
   });
   const colorScheme = useColorScheme();
@@ -35,8 +37,15 @@ export default function ChangeUserPasswordPage() {
 
   const validate = () => {
     const newErrors = {
+      oldUserPassword: { hasError: false, message: "" },
       newUserPassword: { hasError: false, message: "" },
     };
+
+    if (oldUserPassword.trim().length < 3) {
+      newErrors.oldUserPassword.hasError = true;
+      newErrors.oldUserPassword.message =
+        "Old password must be at least 3 characters.";
+    }
 
     if (newUserPassword.trim().length < 3) {
       newErrors.newUserPassword.hasError = true;
@@ -45,7 +54,9 @@ export default function ChangeUserPasswordPage() {
     }
 
     setErrors(newErrors);
-    return !newErrors.newUserPassword.hasError;
+    return (
+      !newErrors.newUserPassword.hasError && !newErrors.oldUserPassword.hasError
+    );
   };
 
   const submit = async () => {
@@ -60,7 +71,10 @@ export default function ChangeUserPasswordPage() {
             "Content-Type": "application/json",
             Authorization: token,
           },
-          body: JSON.stringify({ password: newUserPassword }),
+          body: JSON.stringify({
+            oldPassword: oldUserPassword,
+            newPassword: newUserPassword,
+          }),
         }
       );
 
@@ -92,24 +106,38 @@ export default function ChangeUserPasswordPage() {
                 textAlign: "center",
                 fontSize: 16,
                 marginTop: 5,
-                marginBottom: 15,
+                marginBottom:55,
                 fontWeight: "bold",
               },
               darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
           >
             {username}
-            {"\n"}Please, write your new password
           </Text>
+          <Text style={{ color: "grey", marginBottom: 5 }}>
+            Your current password
+          </Text>
+          <BaseForm
+            inputs={[
+              {
+                placeholder: "Enter old password",
+                state: setOldUserPassword,
+                error: errors.oldUserPassword,
+                secureTextEntry: true,
+              },
+            ]}
+          />
+          <Text style={{ color: "grey", marginBottom: 5 }}>New password</Text>
           <BaseForm
             inputs={[
               {
                 placeholder: "Enter new password",
                 state: setNewUserPassword,
                 error: errors.newUserPassword,
+                secureTextEntry: true,
               },
             ]}
-          />
+          ></BaseForm>
           {backendError ? (
             <Text style={styles.errorText}>{backendError}</Text>
           ) : null}

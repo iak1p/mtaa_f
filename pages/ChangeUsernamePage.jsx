@@ -97,7 +97,7 @@ export default function ChangeUsernamePage() {
                 textAlign: "center",
                 fontSize: 16,
                 marginTop: 5,
-                marginBottom: 15,
+                marginBottom: 55,
                 fontWeight: "bold",
               },
               darkMode ? { color: "#fff" } : { color: "#000" },
@@ -105,6 +105,7 @@ export default function ChangeUsernamePage() {
           >
             Your actual username: {username}
           </Text>
+          <Text style={{ color: "grey", marginBottom: 5 }}>New username</Text>
           <BaseForm
             inputs={[
               {
