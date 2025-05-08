@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Plus from "../components/svg/Plus";
 import Minus from "../components/svg/Minus";
 import ShoppingCart from "../components/svg/ShoppingCart";
@@ -32,7 +32,7 @@ import Info from "../components/svg/Info";
 
 const MainPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
-  const insets = useSafeAreaInsets();
+  // const insets = useSafeAreaInsets();
   const [incomeMoney, setIncomeMoney] = useState(1500);
   const [expenseMoney, setExponseMoney] = useState(0);
   const [percentExpenses, setPercentExpenses] = useState(15);

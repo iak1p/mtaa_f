@@ -9,7 +9,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Sms from "../components/svg/Sms";
 import Phone from "../components/svg/Phone";
 import Email from "../components/svg/Email";
@@ -28,7 +28,7 @@ import {
 // import * as ImageManipulator from "expo-image-manipulator";
 
 const UserPage = ({ navigation }) => {
-  const insets = useSafeAreaInsets();
+  // const insets = useSafeAreaInsets();
   const { token, img, setImg, username } = useUserStore();
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);

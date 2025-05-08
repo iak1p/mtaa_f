@@ -14,7 +14,7 @@ import {
   TransitionPresets,
 } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import UserPage from "../pages/UserPage";
 import CreatePoolyPage from "../pages/CreatePoolyPage";
@@ -114,7 +114,7 @@ const BottomWelcomeTabs = () => {
 };
 
 const AppRoutes = () => {
-  const insets = useSafeAreaInsets();
+  // const insets = useSafeAreaInsets();
   const { username, token } = useUserStore();
 
   const { width, height } = Dimensions.get("window");

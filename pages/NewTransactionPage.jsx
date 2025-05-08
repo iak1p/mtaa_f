@@ -93,6 +93,7 @@ function NewTransactionPage({
         const amount = transactionAmount.replace(",", ".");
 
         const { status } = await Location.requestForegroundPermissionsAsync();
+        
         if (status !== "granted") {
           setError("Permission to access location was denied");
           return;
