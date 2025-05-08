@@ -30,12 +30,13 @@ import UsersIcon from "../components/svg/UsersIcon";
 import FilterModal from "../pages/FilterModal";
 import { Dimensions } from "react-native";
 import BudgetsPageTablet from "../pages/BudgetsPageTablet";
-import BudgetsPageMobile from "../pages/BudgetsPageMobile";
+// import BudgetsPageMobile from "../pages/BudgetsPageMobile";
 import PoolyInfoPageTablet from "../pages/PoolyInfoPageTablet";
-import PoolyInfoPageMobile from "../pages/PoolyInfoPageMobile";
+// import PoolyInfoPageMobile from "../pages/PoolyInfoPageMobile";
 import ChangeUsernamePage from "../pages/ChangeUsernamePage";
 import ChangeUserPasswordPage from "../pages/ChangeUserPasswordPage";
 import MapScreen from "../components/MapScreen";
+import MainPageTablet from "../pages/MainPageTablet";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -79,11 +80,15 @@ const BottomTabs = () => {
       })}
     >
       <Tab.Screen name="Settings" component={SettingsPage} />
-      <Tab.Screen name="Home" component={MainPage} />
+      {isTabletFallback ? (
+        <Stack.Screen name="Home" component={MainPageTablet} />
+      ) : (
+        <Tab.Screen name="Home" component={MainPage} />
+      )}
       {isTabletFallback ? (
         <Tab.Screen name="Budget" component={BudgetsPageTablet} />
       ) : (
-        <Tab.Screen name="Budget" component={BudgetsPageMobile} />
+        <Tab.Screen name="Budget" component={BudgetPage} />
       )}
     </Tab.Navigator>
   );
@@ -148,7 +153,7 @@ const AppRoutes = () => {
             name="FilterModal"
             component={FilterModal}
             options={{
-              presentation: "modal", // 👈 или "transparentModal"
+              presentation: "modal",
               headerShown: false,
             }}
           />
@@ -158,15 +163,15 @@ const AppRoutes = () => {
             component={ChangeUserPasswordPage}
           />
           <Stack.Screen name="Map" component={MapScreen} />
-          <Stack.Screen name="Budget" component={BudgetPage} />
-          <Stack.Screen name="Home" component={MainPage} />
+          {/* <Stack.Screen name="Budget" component={BudgetPage} /> */}
+          {/* <Stack.Screen name="Home" component={MainPage} /> */}
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
 
           {/* <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} /> */}
           {isTabletFallback ? (
             <Stack.Screen name="PoolyInfo" component={PoolyInfoPageTablet} />
           ) : (
-            <Stack.Screen name="PoolyInfo" component={PoolyInfoPageMobile} />
+            <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} />
           )}
 
           <Stack.Screen name="UserPage" component={UserPage} />

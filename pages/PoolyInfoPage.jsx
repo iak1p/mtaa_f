@@ -354,7 +354,8 @@ const PoolyInfoPage = ({
                             darkMode ? { color: "#fff" } : "null",
                           ]}
                         >
-                          Cashed Out
+                          {item.category.charAt(0).toUpperCase() +
+                            item.category.slice(1)}
                         </Text>
                         <Text
                           style={[

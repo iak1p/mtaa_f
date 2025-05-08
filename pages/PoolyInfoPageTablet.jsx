@@ -39,6 +39,8 @@ const PoolyInfoPageTablet = ({
   const [data, setData] = useState({});
   const [lastShakeTime, setLastShakeTime] = useState(0);
 
+  const [filters, setFilters] = useState({ type: "all", category: "all" });
+
   useEffect(() => {
     if (colorScheme === "dark") {
       setDarkMode(true);
@@ -109,13 +111,36 @@ const PoolyInfoPageTablet = ({
     });
   };
 
+  const onSelect = (data) => {
+    setFilters(data);
+  };
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       fetchTransactions();
+      console.log(filters);
     });
 
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, filters]);
+
+  // useEffect(() => {
+  //   if (colorScheme === "dark") setDarkMode(true);
+  //   setLoading(true);
+  //   fetch(`http://${LOCAL_HOST}:${PORT}/budgets/${budget_id}/transactions`, {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: token,
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then(({transaction}) => {
+  //       setTransactions(transaction);
+  //     })
+  //     .catch((err) => console.log(err))
+  //     .finally(() => setLoading(false));
+  // }, []);
 
   const fetchTransactions = () => {
     setLoading(true);
@@ -131,6 +156,11 @@ const PoolyInfoPageTablet = ({
     )
       .then((res) => res.json())
       .then(({ transaction }) => {
+        transaction = transaction.filter(
+          (item) =>
+            filters.category === "all" || item.category === filters.category
+        );
+
         setTransactions(transaction);
       })
       .catch((err) => console.log(err))
@@ -233,18 +263,38 @@ const PoolyInfoPageTablet = ({
           </ScrollView>
         </View>
 
-        <Text
-          style={[
-            { fontWeight: "bold", marginTop: 20, fontSize: 24 },
-            darkMode
-              ? {
-                  color: "#fff",
-                }
-              : "null",
-          ]}
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: 20,
+          }}
         >
-          Transactions
-        </Text>
+          <Text
+            style={[
+              { fontWeight: "bold", fontSize: 24 },
+              darkMode
+                ? {
+                    color: "#fff",
+                  }
+                : "null",
+            ]}
+          >
+            Transactions
+          </Text>
+
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate("FilterModal", {
+                onSelect: onSelect,
+                filters: filters,
+              })
+            }
+          >
+            <Text style={{ color: "grey", fontSize: 20 }}>Filter</Text>
+          </TouchableWithoutFeedback>
+        </View>
 
         {loading ? (
           <ActivityIndicator size="small" />
@@ -282,7 +332,8 @@ const PoolyInfoPageTablet = ({
                             darkMode ? { color: "#fff" } : "null",
                           ]}
                         >
-                          Cashed Out
+                          {item.category.charAt(0).toUpperCase() +
+                            item.category.slice(1)}
                         </Text>
                         <Text
                           style={[
