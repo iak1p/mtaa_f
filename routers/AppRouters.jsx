@@ -79,9 +79,8 @@ const BottomTabs = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Settings" component={SettingsPage} />
       {isTabletFallback ? (
-        <Stack.Screen name="Home" component={MainPageTablet} />
+        <Tab.Screen name="Home" component={MainPageTablet} />
       ) : (
         <Tab.Screen name="Home" component={MainPage} />
       )}
@@ -90,6 +89,7 @@ const BottomTabs = () => {
       ) : (
         <Tab.Screen name="Budget" component={BudgetPage} />
       )}
+      <Tab.Screen name="Settings" component={SettingsPage} />
     </Tab.Navigator>
   );
 };

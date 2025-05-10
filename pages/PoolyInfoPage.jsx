@@ -10,6 +10,7 @@ import {
   Image,
   Appearance,
   useColorScheme,
+  RefreshControl,
 } from "react-native";
 import Arrow from "../components/svg/Arrow";
 import {
@@ -28,6 +29,7 @@ import UsersIcon from "../components/svg/UsersIcon";
 import Phone from "../components/svg/Phone";
 import { Accelerometer } from "expo-sensors";
 import DropDownPicker from "react-native-dropdown-picker";
+import * as Haptics from "expo-haptics";
 
 const PoolyInfoPage = ({
   route: {
@@ -37,7 +39,7 @@ const PoolyInfoPage = ({
   const { token } = useUserStore();
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
-  const [transactions, setTransactions] = useState();
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -324,7 +326,7 @@ const PoolyInfoPage = ({
 
         {loading ? (
           <ActivityIndicator size="small" />
-        ) : (
+        ) : transactions.length != 0 ? (
           <FlatList
             data={transactions}
             keyExtractor={(item) => item.id.toString()}
@@ -413,6 +415,30 @@ const PoolyInfoPage = ({
             style={{ paddingTop: 10 }}
             ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
           ></FlatList>
+        ) : (
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => {
+                  fetchTransactions();
+                  Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Success
+                  );
+                }}
+                // tintColor={darkMode ? "#fff" : "#000"}
+              />
+            }
+          >
+            <Text
+              style={[
+                { textAlign: "center", marginTop: 20 },
+                darkMode ? { color: "#fff" } : { color: "#000" },
+              ]}
+            >
+              No transactions yet
+            </Text>
+          </ScrollView>
         )}
       </SafeAreaView>
     </View>

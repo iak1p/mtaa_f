@@ -9,6 +9,8 @@ import {
   Image,
   useColorScheme,
   SafeAreaView,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 // import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Pooly from "../components/Pooly";
@@ -27,43 +29,45 @@ const BudgetPage = ({ navigation }) => {
   const colorScheme = useColorScheme();
 
   const [budgetIds, setBudgetIds] = useState([]);
-  const [pooly, setPooly] = useState();
+  const [pooly, setPooly] = useState([]);
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
 
   const fetchPoolys = () => {
+    console.log(pooly);
+
     console.log("fewettt123");
 
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
       // if (state.isConnected && state.isInternetReachable) {
-        fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-        })
-          .then((res) => res.json())
-          .then(({ pooly }) => {
-            setPooly(pooly);
-            setBudgetIds(pooly.map((p) => p.budget_id));
+      fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token,
+        },
+      })
+        .then((res) => res.json())
+        .then(({ pooly }) => {
+          setPooly(pooly);
+          setBudgetIds(pooly.map((p) => p.budget_id));
 
-            let new_money = 0;
-            pooly.forEach((item) => {
-              new_money += item.current_money;
-            });
-
-            setMoneyRemain(new_money);
-          })
-          .catch((err) => {
-            console.log("Request error:", err);
-          })
-          .finally(() => {
-            setLoading(false);
+          let new_money = 0;
+          pooly.forEach((item) => {
+            new_money += item.current_money;
           });
+
+          setMoneyRemain(new_money);
+        })
+        .catch((err) => {
+          console.log("Request error:", err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
       // } else {
       //   console.log("No wifi connection");
       //   setLoading(false);
@@ -175,7 +179,7 @@ const BudgetPage = ({ navigation }) => {
 
         {loading ? (
           <ActivityIndicator size="small" />
-        ) : (
+        ) : pooly.length != 0 ? (
           <FlatList
             data={pooly}
             keyExtractor={(item) => item.budget_id.toString()}
@@ -201,6 +205,30 @@ const BudgetPage = ({ navigation }) => {
             }}
             style={{ paddingTop: 10 }}
           />
+        ) : (
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={loading}
+                onRefresh={() => {
+                  fetchPoolys();
+                  Haptics.notificationAsync(
+                    Haptics.NotificationFeedbackType.Success
+                  );
+                }}
+                // tintColor={darkMode ? "#fff" : "#000"}
+              />
+            }
+          >
+            <Text
+              style={[
+                { textAlign: "center", marginTop: 20 },
+                darkMode ? { color: "#fff" } : { color: "#000" },
+              ]}
+            >
+              No poolys yet
+            </Text>
+          </ScrollView>
         )}
       </View>
     </View>
