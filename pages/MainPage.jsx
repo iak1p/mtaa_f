@@ -18,19 +18,20 @@ import Plus from "../components/svg/Plus";
 import Minus from "../components/svg/Minus";
 import ShoppingCart from "../components/svg/ShoppingCart";
 import EntertaimentSmile from "../components/svg/EntertaimentSmile";
-import OtherIcon from "../components/svg/OtherIcon";
+import OtherIcon from "../components/svg/Education";
 import Coffee from "../components/svg/Coffee";
 import useUserStore from "../store/store";
 import { useEffect } from "react";
 import * as Haptics from "expo-haptics";
+import Clothing from "../components/svg/ClothingIcon";
 import {
   BarChart,
   LineChart,
   PieChart,
   ProgressChart,
 } from "react-native-chart-kit";
-import Phone from "../components/svg/Phone";
 import Info from "../components/svg/Info";
+import Travel from "../components/svg/TravelIcon";
 
 const MainPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
@@ -356,11 +357,13 @@ const MainPage = ({ navigation }) => {
                         {item.category === "food" ? (
                           <Coffee stroke={darkMode ? "#fff" : "#000"} />
                         ) : item.category === "clothing" ? (
-                          <Phone stroke={darkMode ? "#fff" : "#000"} />
+                          <Clothing stroke={darkMode ? "#fff" : "#000"} />
                         ) : item.category === "kids" ? (
                           <EntertaimentSmile
                             stroke={darkMode ? "#fff" : "#000"}
                           />
+                        ) : item.category === "travel" ? (
+                          <Travel stroke={darkMode ? "#fff" : "#000"} />
                         ) : (
                           <OtherIcon stroke={darkMode ? "#fff" : "#000"} />
                         )}

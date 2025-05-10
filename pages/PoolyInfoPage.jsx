@@ -26,10 +26,11 @@ import List from "../components/svg/List";
 import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import AddUserIcon from "../components/svg/AddUserIcon";
 import UsersIcon from "../components/svg/UsersIcon";
-import Phone from "../components/svg/Phone";
 import { Accelerometer } from "expo-sensors";
 import DropDownPicker from "react-native-dropdown-picker";
 import * as Haptics from "expo-haptics";
+import Chat from "../components/svg/Chat";
+import Delete from "../components/svg/DeleteIcon";
 
 const PoolyInfoPage = ({
   route: {
@@ -271,7 +272,7 @@ const PoolyInfoPage = ({
                 btnFunc={() => navigation.navigate("ChatPage", { budget_id })}
                 style={darkMode ? styles.iconStyleBlack : styles.iconStyle}
                 text={`Open \n Pooly chat`}
-                icon={<Phone stroke="#fff" />}
+                icon={<Chat stroke="#fff" />}
                 darkMode={darkMode}
                 accessibilityLabel="Open chat for this pool"
                 accessibilityRole="button"
@@ -280,7 +281,7 @@ const PoolyInfoPage = ({
                 btnFunc={() => dropPooly()}
                 style={darkMode ? styles.iconStyleBlack : styles.iconStyle}
                 text={`Drop this Pooly`}
-                icon={<List stroke="#fff" />}
+                icon={<Delete stroke="#fff" />}
                 darkMode={darkMode}
                 accessibilityLabel="Drop or delete this pool"
                 accessibilityRole="button"
