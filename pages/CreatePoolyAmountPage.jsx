@@ -171,6 +171,7 @@ const CreatePoolyAmountPage = ({
                 accessibilityRole="keyboardkey"
               />
             </View>
+            
             <ButtonComponent
               title={"Create Pooly"}
               btnStyle={[

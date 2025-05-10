@@ -121,29 +121,6 @@ function NewTransactionPage({
           }
         );
 
-        // const response = await fetch(
-        //   `${EXPO_PUBLIC_SUPABASE_URL1}/rest/v1/transactions`,
-        //   {
-        //     method: "POST",
-        //     headers: {
-        //       apikey: EXPO_PUBLIC_SUPABASE_ANON_KEY1,
-        //       Authorization: `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY1}`,
-        //       "Content-Type": "application/json",
-        //       Prefer: "return=representation",
-        //     },
-        //     body: JSON.stringify([
-        //       {
-        //         budget_id,
-        //         user_name: username || "Unknown",
-        //         amount: parseFloat(amount),
-        //         created_at: new Date().toISOString(),
-        //       },
-        //     ]),
-        //   }
-        // );
-
-        // console.log(response);
-
         const data = await res.json();
 
         if (!res.ok) {
@@ -302,7 +279,6 @@ function NewTransactionPage({
                   backgroundColor: "transparent",
                   borderColor: "#86939e",
                 },
-                {},
               ]}
               textStyle={{
                 color: darkMode ? "#fff" : "#000",
