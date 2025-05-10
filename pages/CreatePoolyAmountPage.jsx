@@ -39,8 +39,21 @@ const CreatePoolyAmountPage = ({
     }
   }, [colorScheme]);
 
+  const validate = () => {
+    console.log(poolyAmount.lengh);
+  };
+
   const addNewPooly = async () => {
-    // if (validate()) {
+    if (poolyAmount == 0) {
+      setError("Amount can't be 0");
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      return false;
+    } else if (poolyAmount == undefined) {
+      setError("Please enter amount");
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+      return false;
+    }
+
     console.log(poolyName + poolyAmount);
     try {
       const res = await fetch(
@@ -69,12 +82,11 @@ const CreatePoolyAmountPage = ({
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       navigation.reset({
         index: 0,
-        routes: [{ name: "Budget" }],
+        routes: [{ name: "Main" }],
       });
     } catch (error) {
       console.error("Error:", error);
     }
-    // }
   };
 
   return (
@@ -108,6 +120,20 @@ const CreatePoolyAmountPage = ({
               <WelcomeScreenSVG />
               <Text
                 style={[
+                  {
+                    fontSize: 15,
+                    textAlign: "center",
+                    color: "red",
+                  },
+                ]}
+                accessible={true}
+                accessibilityLabel={`Creating Pooly named ${poolyName}`}
+              >
+                {error}
+              </Text>
+
+              <Text
+                style={[
                   darkMode ? { color: "#fff" } : { color: "#000" },
                   {
                     fontSize: 15,
@@ -122,6 +148,7 @@ const CreatePoolyAmountPage = ({
               >
                 Enter amount for Pooly: {poolyName}
               </Text>
+
               <TextInput
                 style={[
                   darkMode ? { color: "#fff" } : { color: "#000" },

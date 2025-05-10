@@ -62,6 +62,19 @@ const CreatePoolyPage = ({ navigation }) => {
                 accessible={true}
                 accessibilityLabel="Welcome to the Pooly creation screen"
               />
+              <Text
+                style={[
+                  {
+                    fontSize: 15,
+                    textAlign: "center",
+                    color: "red",
+                  },
+                ]}
+                accessible={true}
+                accessibilityLabel={`Creating Pooly named ${poolyName}`}
+              >
+                {error}
+              </Text>
               <TextInput
                 style={[
                   darkMode ? { color: "#fff" } : { color: "#000" },
@@ -96,6 +109,7 @@ const CreatePoolyPage = ({ navigation }) => {
               accessibilityRole="button"
               func={() => {
                 if (poolyName.trim().length === 0) {
+                  setError("Enter name");
                   return;
                 }
                 navigation.navigate("CreatePoolyAmount", { poolyName });
