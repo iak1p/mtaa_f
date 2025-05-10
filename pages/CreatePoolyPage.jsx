@@ -83,6 +83,7 @@ const CreatePoolyPage = ({ navigation }) => {
                 accessibilityRole="keyboardkey"
               />
             </View>
+            
             <ButtonComponent
               title={"Set name"}
               btnStyle={[
@@ -96,6 +97,7 @@ const CreatePoolyPage = ({ navigation }) => {
               accessibilityRole="button"
               func={() => {
                 if (poolyName.trim().length === 0) {
+                  setError("Enter name");
                   return;
                 }
                 navigation.navigate("CreatePoolyAmount", { poolyName });
