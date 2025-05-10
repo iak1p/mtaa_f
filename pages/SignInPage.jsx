@@ -14,7 +14,7 @@ import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
 
 export default function SignInPage({ navigation }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [backendError, setbackendError] = useState("");
   const { fetchUserData } = useUserStore();
@@ -31,19 +31,19 @@ export default function SignInPage({ navigation }) {
   }, [colorScheme]);
 
   const [errors, setErrors] = useState({
-    username: { hasError: false, message: "" },
+    email: { hasError: false, message: "" },
     password: { hasError: false, message: "" },
   });
 
   const validate = () => {
     let newErrors = {
-      username: { hasError: false, message: "" },
+      email: { hasError: false, message: "" },
       password: { hasError: false, message: "" },
     };
 
-    if (username.trim().length < 3) {
-      newErrors.username.message = "Username is to short";
-      newErrors.username.hasError = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email.message = "Invalid email format";
+      newErrors.email.hasError = true;
     }
     if (password.length < 3) {
       newErrors.password.message = "Password is to short. Min. 3 letters";
@@ -56,7 +56,7 @@ export default function SignInPage({ navigation }) {
   };
 
   const auth = async () => {
-    console.log(username, password);
+    console.log(email, password);
     if (validate()) {
       try {
         const res = await fetch(
@@ -64,7 +64,7 @@ export default function SignInPage({ navigation }) {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ email, password }),
           }
         );
 
@@ -120,10 +120,10 @@ export default function SignInPage({ navigation }) {
               <BaseForm
                 inputs={[
                   {
-                    lable: "Username",
-                    placeholder: "Enter username",
-                    state: setUsername,
-                    error: errors.username,
+                    lable: "Email",
+                    placeholder: "Enter email",
+                    state: setEmail,
+                    error: errors.email,
                   },
                   {
                     lable: "Password",

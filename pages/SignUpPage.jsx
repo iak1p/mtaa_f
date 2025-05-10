@@ -18,6 +18,7 @@ export default function SignInPage({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password_repeat, setPasswordRepeat] = useState("");
+  const [email, setEmail] = useState("");
   const [backendError, setbackendError] = useState("");
   // const navigate = useNavigate();
   const { fetchUserData } = useUserStore();
@@ -34,6 +35,7 @@ export default function SignInPage({ navigation }) {
   }, [colorScheme]);
 
   const [errors, setErrors] = useState({
+    email: { hasError: false, message: "" },
     username: { hasError: false, message: "" },
     password: { hasError: false, message: "" },
     password_repeat: { hasError: false, message: "" },
@@ -41,12 +43,18 @@ export default function SignInPage({ navigation }) {
 
   const validate = () => {
     let newErrors = {
+      email: { hasError: false, message: "" },
       username: { hasError: false, message: "" },
       password: { hasError: false, message: "" },
       password_repeat: { hasError: false, message: "" },
     };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (username.trim().length < 3) {
+    if (!emailRegex.test(email)) {
+      newErrors.email.message = "Invalid email format";
+      newErrors.email.hasError = true;
+    }
+    if (username.trim().length < 1) {
       newErrors.username.message = "Username is to short";
       newErrors.username.hasError = true;
     }
@@ -74,7 +82,7 @@ export default function SignInPage({ navigation }) {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password, email }),
           }
         );
 
@@ -86,7 +94,7 @@ export default function SignInPage({ navigation }) {
         }
 
         console.log("Response:", data);
-        
+
         fetchUserData(data.token);
 
         navigation.reset({
@@ -127,6 +135,12 @@ export default function SignInPage({ navigation }) {
             <View style={{ paddingTop: 50 }}>
               <BaseForm
                 inputs={[
+                  {
+                    lable: "Email (use for log in)",
+                    placeholder: "Enter email",
+                    state: setEmail,
+                    error: errors.email,
+                  },
                   {
                     lable: "Username",
                     placeholder: "Enter username",
