@@ -14,11 +14,6 @@ const useUserStore = create(
     setUsername: (newUsername) =>
       set((state) => ({ ...state, username: newUsername })),
     setToken: (token) => set((state) => ({ ...state, token: token })),
-    // setEmail: (email) => set((state) => ({ ...state, email: email })), // це нада?????
-    addTransaction: (transaction) =>
-      set((state) => ({
-        transactions: [...state.transactions, transaction],
-      })),
     resetUser: () =>
       set(() => ({
         username: null,

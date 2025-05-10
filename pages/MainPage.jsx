@@ -38,7 +38,7 @@ const MainPage = ({ navigation }) => {
   const [incomeMoney, setIncomeMoney] = useState(1500);
   const [expenseMoney, setExponseMoney] = useState(0);
   const [percentExpenses, setPercentExpenses] = useState(15);
-  const { token, img } = useUserStore();
+  const { token, img, fetchUserData } = useUserStore();
 
   const colorScheme = useColorScheme();
   const [loading, setLoading] = useState(true);
@@ -84,6 +84,12 @@ const MainPage = ({ navigation }) => {
     if (!token) return;
     fetchTransactions();
   }, [token]);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   if (!fetchUserData) return;
+  //   fetchUserData();
+  // }, [fetchUserData]);
 
   const fetchTransactions = () => {
     setLoading(true);
@@ -416,7 +422,7 @@ const MainPage = ({ navigation }) => {
                 <RefreshControl
                   refreshing={loading}
                   onRefresh={() => {
-                    fetchPoolys();
+                    fetchTransactions();
                     Haptics.notificationAsync(
                       Haptics.NotificationFeedbackType.Success
                     );

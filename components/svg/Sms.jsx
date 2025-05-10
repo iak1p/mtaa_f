@@ -1,11 +1,11 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 
-function Sms({ props, stroke = "#1E1E1E" }) {
+function Sms({ props, stroke = "#1E1E1E", width = 27, height = 27 }) {
   return (
     <Svg
-      width={25}
-      height={36}
+      width={width}
+      height={height}
       viewBox="0 0 36 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

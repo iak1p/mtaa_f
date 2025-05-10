@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,40 +10,27 @@ import {
   useColorScheme,
   SafeAreaView,
 } from "react-native";
-// import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Pooly from "../components/Pooly";
 import * as Haptics from "expo-haptics";
 import useUserStore from "../store/store";
 import useBudgetNotifications from "../utils/useBudgetNotifications";
 import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import BankaIcon from "../components/svg/BankaIcon";
 import NetInfo from "@react-native-community/netinfo";
-import * as Device from "expo-device";
-import { Dimensions } from "react-native";
 import PoolyTablet from "../components/PoolyTablet";
 
 const BudgetPage = ({ navigation }) => {
   const { token, img } = useUserStore();
-  // const insets = useSafeAreaInsets();
   const colorScheme = useColorScheme();
-
   const [budgetIds, setBudgetIds] = useState([]);
   const [pooly, setPooly] = useState();
   const [loading, setLoading] = useState(false);
   const [moneyRemain, setMoneyRemain] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
 
-  const { width, height } = Dimensions.get("window");
-  const isTabletFallback = Math.min(width, height) >= 600;
-  console.log(isTabletFallback);
-
   const fetchPoolys = () => {
-    console.log("fewettt");
-
     setLoading(true);
 
     NetInfo.fetch().then((state) => {
-      // if (state.isConnected && state.isInternetReachable) {
       fetch(`http://${process.env.EXPO_PUBLIC_ADDRESS}/users/budgets/all`, {
         method: "GET",
         headers: {
@@ -69,10 +56,6 @@ const BudgetPage = ({ navigation }) => {
         .finally(() => {
           setLoading(false);
         });
-      // } else {
-      //   console.log("No wifi connection");
-      //   setLoading(false);
-      // }
     });
   };
 
@@ -116,7 +99,7 @@ const BudgetPage = ({ navigation }) => {
               currency: "USD",
             }).format(moneyRemain)}
           </Text>
-          <Text style={styles.subTitle2}>😎</Text>
+          <Text style={styles.subTitle2}>Good to see you!</Text>
         </View>
       </SafeAreaView>
 
@@ -188,10 +171,9 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     textAlign: "center",
-    fontSize: 50,
+    fontSize: 45,
     fontWeight: "bold",
     paddingTop: 16,
-    paddingBottom: 30,
     color: "white",
     fontFamily: "Montserat",
   },
@@ -216,18 +198,6 @@ const styles = StyleSheet.create({
     width: 200,
     justifyContent: "flex-start",
     alignItems: "center",
-  },
-  shadowBox: {
-    backgroundColor: "white",
-    marginBottom: 20,
-    borderRadius: 10,
-
-    shadowColor: "#000",
-    shadowOffset: { width: 5, height: 5 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-
-    elevation: 5,
   },
   image: {
     width: 50,

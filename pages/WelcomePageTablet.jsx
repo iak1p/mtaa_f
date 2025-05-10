@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import WelcomeScreenSVG from "../components/svg/WelcomeScreenSVG";
 
-const WelcomePage = ({ navigation }) => {
+const WelcomePageTablet = ({ navigation }) => {
   const colorScheme = useColorScheme();
   const [darkMode, setDarkMode] = useState(false);
 
@@ -28,14 +28,14 @@ const WelcomePage = ({ navigation }) => {
         <View style={{ alignItems: "center", paddingTop: 100 }}>
           <WelcomeScreenSVG />
         </View>
-        <View>
+        <View style={{ alignItems: "center" }}>
           <Text
             style={[
               {
                 textAlign: "center",
                 fontWeight: "bold",
-                fontSize: 25,
-                paddingBottom: 10,
+                fontSize: 40,
+                paddingBottom: 20,
               },
               darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
@@ -54,8 +54,10 @@ const WelcomePage = ({ navigation }) => {
           <Text
             style={[
               {
+                fontSize: 16,
                 textAlign: "center",
                 paddingBottom: 30,
+                width: 500,
               },
               darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
@@ -63,6 +65,7 @@ const WelcomePage = ({ navigation }) => {
             Manage your budgets easily and conveniently. Create, track and
             control your expenses - all in one place.
           </Text>
+
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("SignIn")}
           >
@@ -70,11 +73,12 @@ const WelcomePage = ({ navigation }) => {
               style={[
                 {
                   textAlign: "center",
-                  padding: 15,
+                  padding: 20,
                   borderRadius: 10,
                   borderColor: darkMode ? "grey" : "black",
                   borderStyle: "solid",
                   borderWidth: 2,
+                  width: "100%",
                 },
                 darkMode ? { color: "#fff" } : { color: "#000" },
               ]}
@@ -91,7 +95,7 @@ const WelcomePage = ({ navigation }) => {
                 marginTop: 5,
                 marginBottom: 15,
                 textAlign: "center",
-                padding: 15,
+                padding: 20,
                 borderRadius: 10,
                 backgroundColor: darkMode ? "#912F40" : "#012E4A",
                 color: "white",
@@ -124,4 +128,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomePage;
+export default WelcomePageTablet;

@@ -26,7 +26,7 @@ function NewTransactionPage({
     params: { budget_id, current_money },
   },
 }) {
-  const { token, username, addTransaction } = useUserStore();
+  const { token, username } = useUserStore();
   const navigation = useNavigation();
   const [transactionAmount, setTransactionAmount] = useState("");
   const [error, setError] = useState("");
