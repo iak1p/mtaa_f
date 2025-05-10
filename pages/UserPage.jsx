@@ -11,7 +11,7 @@ import {
 } from "react-native";
 // import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Sms from "../components/svg/Sms";
-import Phone from "../components/svg/Phone";
+import Phone from "../components/svg/ClothingIcon";
 import Email from "../components/svg/Email";
 import Info from "../components/svg/Info";
 import Arrow from "../components/svg/Arrow";
