@@ -29,7 +29,7 @@ import {
 
 const UserPage = ({ navigation }) => {
   // const insets = useSafeAreaInsets();
-  const { token, img, setImg, username, resetUser } = useUserStore();
+  const { token, img, setImg, username, resetUser, email } = useUserStore();
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -192,6 +192,48 @@ const UserPage = ({ navigation }) => {
               </Text>
             </View>
           </View>
+
+          <View style={styles.textContainer}>
+            <Sms stroke={darkMode ? "#fff" : "#000"} />
+
+            <View
+              accessible={true}
+              accessibilityLabel={`Your email is ${email}`}
+              style={{}}
+            >
+              <Text style={styles.header}>Email</Text>
+              <Text
+                style={[
+                  styles.text,
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                {email}
+              </Text>
+            </View>
+          </View>
+          
+
+          <View style={styles.textContainer}>
+            <Sms stroke={darkMode ? "#fff" : "#000"} />
+
+            <View
+              accessible={true}
+              accessibilityLabel={`Your email is ${email}`}
+              style={{}}
+            >
+              <Text style={styles.header}>Email</Text>
+              <Text
+                style={[
+                  styles.text,
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                {email}
+              </Text>
+            </View>
+          </View>
+          
 
           <View style={styles.textContainer}>
             <TouchableWithoutFeedback

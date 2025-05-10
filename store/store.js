@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 const useUserStore = create(
   persist((set) => ({
     username: null,
+    email: null,
     token: null,
     img: null,
     id: null,
@@ -13,6 +14,7 @@ const useUserStore = create(
     setUsername: (newUsername) =>
       set((state) => ({ ...state, username: newUsername })),
     setToken: (token) => set((state) => ({ ...state, token: token })),
+    // setEmail: (email) => set((state) => ({ ...state, email: email })), // це нада?????
     addTransaction: (transaction) =>
       set((state) => ({
         transactions: [...state.transactions, transaction],
@@ -21,6 +23,7 @@ const useUserStore = create(
       set(() => ({
         username: null,
         token: null,
+        email: null,
         img: null,
         id: null,
         transactions: [],
@@ -47,6 +50,7 @@ const useUserStore = create(
             token: data.token,
             username: data.username,
             id: data.id,
+            email: data.email
           }));
         }
       } catch (err) {
