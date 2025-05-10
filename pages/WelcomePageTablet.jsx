@@ -28,33 +28,44 @@ const WelcomePageTablet = ({ navigation }) => {
         <View style={{ alignItems: "center", paddingTop: 100 }}>
           <WelcomeScreenSVG />
         </View>
-        <View>
+        <View style={{ alignItems: "center" }}>
           <Text
             style={[
               {
                 textAlign: "center",
                 fontWeight: "bold",
-                fontSize: 50,
+                fontSize: 40,
                 paddingBottom: 20,
               },
               darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
           >
-            Welcome To OurApp
+            Welcome To{" "}
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: darkMode ? "#912F40" : "#012E4A",
+                textTransform: "uppercase",
+              }}
+            >
+              Pooly's
+            </Text>
           </Text>
           <Text
             style={[
               {
-                fontSize: 20,
+                fontSize: 16,
                 textAlign: "center",
                 paddingBottom: 30,
+                width: 500,
               },
               darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
           >
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos quod
-            amet voluptatum, odio error doloremque.
+            Manage your budgets easily and conveniently. Create, track and
+            control your expenses - all in one place.
           </Text>
+
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("SignIn")}
           >
@@ -67,6 +78,7 @@ const WelcomePageTablet = ({ navigation }) => {
                   borderColor: darkMode ? "grey" : "black",
                   borderStyle: "solid",
                   borderWidth: 2,
+                  width: "100%",
                 },
                 darkMode ? { color: "#fff" } : { color: "#000" },
               ]}

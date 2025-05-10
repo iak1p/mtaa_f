@@ -136,7 +136,7 @@ export default function SignUpPage({ navigation }) {
               <BaseForm
                 inputs={[
                   {
-                    lable: "Email (use for log in)",
+                    lable: "Email",
                     placeholder: "Enter email",
                     state: setEmail,
                     error: errors.email,

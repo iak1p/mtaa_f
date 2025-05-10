@@ -194,12 +194,12 @@ const UserPage = ({ navigation }) => {
           </View>
 
           <View style={styles.textContainer}>
-            <Sms stroke={darkMode ? "#fff" : "#000"} />
+            <Email stroke={darkMode ? "#fff" : "#000"} />
 
             <View
               accessible={true}
               accessibilityLabel={`Your email is ${email}`}
-              style={{}}
+              style={{ marginLeft: 20 }}
             >
               <Text style={styles.header}>Email</Text>
               <Text
@@ -212,28 +212,6 @@ const UserPage = ({ navigation }) => {
               </Text>
             </View>
           </View>
-          
-
-          <View style={styles.textContainer}>
-            <Sms stroke={darkMode ? "#fff" : "#000"} />
-
-            <View
-              accessible={true}
-              accessibilityLabel={`Your email is ${email}`}
-              style={{}}
-            >
-              <Text style={styles.header}>Email</Text>
-              <Text
-                style={[
-                  styles.text,
-                  darkMode ? { color: "#fff" } : { color: "#000" },
-                ]}
-              >
-                {email}
-              </Text>
-            </View>
-          </View>
-          
 
           <View style={styles.textContainer}>
             <TouchableWithoutFeedback

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Keyboard,
   SafeAreaView,
@@ -8,7 +8,6 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Link, useNavigate } from "react-router-native";
 import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
@@ -18,8 +17,8 @@ export default function SignUpPageTablet({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password_repeat, setPasswordRepeat] = useState("");
+  const [email, setEmail] = useState("");
   const [backendError, setbackendError] = useState("");
-  // const navigate = useNavigate();
   const { fetchUserData } = useUserStore();
 
   const colorScheme = useColorScheme();
@@ -34,6 +33,7 @@ export default function SignUpPageTablet({ navigation }) {
   }, [colorScheme]);
 
   const [errors, setErrors] = useState({
+    email: { hasError: false, message: "" },
     username: { hasError: false, message: "" },
     password: { hasError: false, message: "" },
     password_repeat: { hasError: false, message: "" },
@@ -41,12 +41,18 @@ export default function SignUpPageTablet({ navigation }) {
 
   const validate = () => {
     let newErrors = {
+      email: { hasError: false, message: "" },
       username: { hasError: false, message: "" },
       password: { hasError: false, message: "" },
       password_repeat: { hasError: false, message: "" },
     };
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (username.trim().length < 3) {
+    if (!emailRegex.test(email)) {
+      newErrors.email.message = "Invalid email format";
+      newErrors.email.hasError = true;
+    }
+    if (username.trim().length < 1) {
       newErrors.username.message = "Username is to short";
       newErrors.username.hasError = true;
     }
@@ -74,7 +80,7 @@ export default function SignUpPageTablet({ navigation }) {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password, email }),
           }
         );
 
@@ -112,7 +118,10 @@ export default function SignUpPageTablet({ navigation }) {
         >
           <View>
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-              <Arrow stroke={darkMode ? "#fff" : "#000"} />
+              <Arrow
+                stroke={darkMode ? "#fff" : "#000"}
+                style={{ marginTop: 10 }}
+              ></Arrow>
             </TouchableWithoutFeedback>
             <Text
               style={[
@@ -127,6 +136,12 @@ export default function SignUpPageTablet({ navigation }) {
             <View style={{ paddingTop: 50 }}>
               <BaseForm
                 inputs={[
+                  {
+                    lable: "Email",
+                    placeholder: "Enter email",
+                    state: setEmail,
+                    error: errors.email,
+                  },
                   {
                     lable: "Username",
                     placeholder: "Enter username",
@@ -165,7 +180,7 @@ export default function SignUpPageTablet({ navigation }) {
               radius={10}
               color={darkMode ? "#912F40" : "#012E4A"}
               buttonStyle={{
-                padding: 15,
+                padding: 20,
                 marginBottom: 15,
                 borderColor: darkMode ? "#912F40" : "#012E4A",
                 borderStyle: "solid",
@@ -183,22 +198,22 @@ export default function SignUpPageTablet({ navigation }) {
 
 const styles = StyleSheet.create({
   header_text: {
-    fontSize: 30,
+    fontSize: 35,
     fontWeight: "bold",
     paddingTop: 70,
   },
   header2_text: {
-    fontSize: 25,
+    fontSize: 30,
     color: "gray",
     paddingTop: 20,
   },
   link: {
     color: "grey",
     textDecorationLine: "underline",
-    paddingTop: 10,
-    paddingLeft: 0,
+    paddingTop: 15,
+    fontSize: 16,
     textAlign: "center",
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   errorText: {
     color: "red",

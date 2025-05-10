@@ -1,11 +1,11 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 
-function Email({ props, stroke = "#1E1E1E" }) {
+function Email({ props, stroke = "#1E1E1E", width = 27, height = 27 }) {
   return (
     <Svg
-      width={27}
-      height={32}
+      width={width}
+      height={height}
       viewBox="0 0 40 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

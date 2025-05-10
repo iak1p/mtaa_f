@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Keyboard,
   SafeAreaView,
@@ -14,7 +14,7 @@ import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
 
 export default function SignInPageTablet({ navigation }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [backendError, setbackendError] = useState("");
   const { fetchUserData } = useUserStore();
@@ -31,19 +31,19 @@ export default function SignInPageTablet({ navigation }) {
   }, [colorScheme]);
 
   const [errors, setErrors] = useState({
-    username: { hasError: false, message: "" },
+    email: { hasError: false, message: "" },
     password: { hasError: false, message: "" },
   });
 
   const validate = () => {
     let newErrors = {
-      username: { hasError: false, message: "" },
+      email: { hasError: false, message: "" },
       password: { hasError: false, message: "" },
     };
 
-    if (username.trim().length < 3) {
-      newErrors.username.message = "Username is to short";
-      newErrors.username.hasError = true;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email.message = "Invalid email format";
+      newErrors.email.hasError = true;
     }
     if (password.length < 3) {
       newErrors.password.message = "Password is to short. Min. 3 letters";
@@ -56,7 +56,6 @@ export default function SignInPageTablet({ navigation }) {
   };
 
   const auth = async () => {
-    console.log(username, password);
     if (validate()) {
       try {
         const res = await fetch(
@@ -64,7 +63,7 @@ export default function SignInPageTablet({ navigation }) {
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ email, password }),
           }
         );
 
@@ -74,10 +73,6 @@ export default function SignInPageTablet({ navigation }) {
           setbackendError(data.message);
           return;
         }
-
-        console.log("Response:", data);
-
-        // setUser({ username: username, token: data.token });
 
         fetchUserData(data.token);
 
@@ -104,7 +99,10 @@ export default function SignInPageTablet({ navigation }) {
         >
           <View>
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-              <Arrow stroke={darkMode ? "#fff" : "#000"} />
+              <Arrow
+                stroke={darkMode ? "#fff" : "#000"}
+                style={{ marginTop: 10 }}
+              ></Arrow>
             </TouchableWithoutFeedback>
             <Text
               style={[
@@ -120,10 +118,10 @@ export default function SignInPageTablet({ navigation }) {
               <BaseForm
                 inputs={[
                   {
-                    lable: "Username",
-                    placeholder: "Enter username",
-                    state: setUsername,
-                    error: errors.username,
+                    lable: "Email",
+                    placeholder: "Enter email",
+                    state: setEmail,
+                    error: errors.email,
                   },
                   {
                     lable: "Password",
@@ -151,7 +149,7 @@ export default function SignInPageTablet({ navigation }) {
               radius={10}
               color={darkMode ? "#912F40" : "#012E4A"}
               buttonStyle={{
-                padding: 15,
+                padding: 20,
                 marginBottom: 15,
                 borderColor: darkMode ? "#912F40" : "#012E4A",
                 borderStyle: "solid",
@@ -169,21 +167,22 @@ export default function SignInPageTablet({ navigation }) {
 
 const styles = StyleSheet.create({
   header_text: {
-    fontSize: 30,
+    fontSize: 35,
     fontWeight: "bold",
     paddingTop: 70,
   },
   header2_text: {
-    fontSize: 25,
+    fontSize: 30,
     color: "gray",
     paddingTop: 20,
   },
   link: {
     color: "grey",
     textDecorationLine: "underline",
-    paddingTop: 10,
+    paddingTop: 15,
+    fontSize: 16,
     textAlign: "center",
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   errorText: {
     color: "red",

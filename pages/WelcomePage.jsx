@@ -40,7 +40,16 @@ const WelcomePage = ({ navigation }) => {
               darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
           >
-            Welcome To OurApp
+            Welcome To{" "}
+            <Text
+              style={{
+                fontWeight: "bold",
+                color: darkMode ? "#912F40" : "#012E4A",
+                textTransform: "uppercase",
+              }}
+            >
+              Pooly's
+            </Text>
           </Text>
           <Text
             style={[
@@ -51,8 +60,8 @@ const WelcomePage = ({ navigation }) => {
               darkMode ? { color: "#fff" } : { color: "#000" },
             ]}
           >
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Eos quod
-            amet voluptatum, odio error doloremque.
+            Manage your budgets easily and conveniently. Create, track and
+            control your expenses - all in one place.
           </Text>
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("SignIn")}

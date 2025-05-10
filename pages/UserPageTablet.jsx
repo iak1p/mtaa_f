@@ -17,9 +17,10 @@ import useUserStore from "../store/store";
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import Email from "../components/svg/Email";
 
 const UserPageTablet = ({ navigation }) => {
-  const { token, img, setImg, username, resetUser } = useUserStore();
+  const { token, img, setImg, username, resetUser, email } = useUserStore();
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -167,7 +168,7 @@ const UserPageTablet = ({ navigation }) => {
       <ScrollView vertical={true}>
         <View style={styles.container}>
           <View style={styles.textContainer}>
-            <Sms stroke={darkMode ? "#fff" : "#000"} />
+            <Sms stroke={darkMode ? "#fff" : "#000"} width={50} height={50} />
 
             <View
               accessible={true}
@@ -182,6 +183,26 @@ const UserPageTablet = ({ navigation }) => {
                 ]}
               >
                 {username}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.textContainer}>
+            <Email stroke={darkMode ? "#fff" : "#000"} width={50} height={50} />
+
+            <View
+              accessible={true}
+              accessibilityLabel={`Your email is ${email}`}
+              style={{ marginLeft: 20 }}
+            >
+              <Text style={styles.header}>Email</Text>
+              <Text
+                style={[
+                  styles.text,
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                {email}
               </Text>
             </View>
           </View>
