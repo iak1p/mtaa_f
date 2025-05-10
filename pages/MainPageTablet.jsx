@@ -18,7 +18,7 @@ import Plus from "../components/svg/Plus";
 import Minus from "../components/svg/Minus";
 import ShoppingCart from "../components/svg/ShoppingCart";
 import EntertaimentSmile from "../components/svg/EntertaimentSmile";
-import OtherIcon from "../components/svg/OtherIcon";
+import OtherIcon from "../components/svg/Education";
 import Coffee from "../components/svg/Coffee";
 import useUserStore from "../store/store";
 import { useEffect } from "react";
@@ -29,7 +29,7 @@ import {
   PieChart,
   ProgressChart,
 } from "react-native-chart-kit";
-import Phone from "../components/svg/Phone";
+import Phone from "../components/svg/ClothingIcon";
 import Info from "../components/svg/Info";
 import TransactionTablet from "../components/TransactionTablet";
 
@@ -322,7 +322,7 @@ const MainPage = ({ navigation }) => {
                   //   fill: darkMode ? "#fff" : "#000", // Цвет текста
                   // },
                   propsForVerticalLabels: {
-                    fontSize: 20, 
+                    fontSize: 20,
                     // fill: darkMode ? "#fff" : "#000", // Цвет текста
                   },
                 }}

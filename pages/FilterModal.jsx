@@ -66,13 +66,13 @@ const FilterModal = ({ navigation, route: { params } }) => {
               borderColor: "#86939e",
             }}
             textStyle={{
-              color: "#fff",
+              color: darkMode ? "#fff" : "#000",
             }}
             dropDownContainerStyle={{
-              backgroundColor: "#912F40",
+              backgroundColor: darkMode ? "#912F40" : "#fff",
             }}
             listItemLabelStyle={{
-              color: "#fff",
+              color: darkMode ? "#fff" : "#000",
             }}
           />
         </View>
@@ -103,13 +103,13 @@ const FilterModal = ({ navigation, route: { params } }) => {
               {},
             ]}
             textStyle={{
-              color: "#fff", // ← для текста выбранного элемента
+              color: darkMode ? "#fff" : "#000",
             }}
             dropDownContainerStyle={{
-              backgroundColor: "#912F40", // например, тёмный фон выпадающего списка
+              backgroundColor: darkMode ? "#912F40" : "#fff",
             }}
             listItemLabelStyle={{
-              color: "#fff", // ← для пунктов выпадающего списка
+              color: darkMode ? "#fff" : "#000",
             }}
           />
         </View>

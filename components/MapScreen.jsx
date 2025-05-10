@@ -13,9 +13,9 @@ import { TouchableWithoutFeedback } from "react-native";
 import Arrow from "./svg/Arrow";
 import { useNavigation } from "@react-navigation/native";
 import Coffee from "./svg/Coffee";
-import Phone from "./svg/Phone";
+import Phone from "./svg/ClothingIcon";
 import EntertaimentSmile from "./svg/EntertaimentSmile";
-import OtherIcon from "./svg/OtherIcon";
+import OtherIcon from "./svg/Education";
 import { Audio } from "expo-av";
 
 export default function Map({
@@ -149,9 +149,7 @@ export default function Map({
             </View>
 
             <View>
-              <Text style={{ color: "grey", fontSize: 14 }}>
-                DATE / TIME
-              </Text>
+              <Text style={{ color: "grey", fontSize: 14 }}>DATE / TIME</Text>
               <Text style={{ fontSize: 14, color: "grey", marginTop: 6 }}>
                 {new Date(transaction.date).toLocaleDateString("en", {
                   weekday: "long",
