@@ -10,9 +10,10 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
+  RefreshControl,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+// import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Plus from "../components/svg/Plus";
 import Minus from "../components/svg/Minus";
 import ShoppingCart from "../components/svg/ShoppingCart";
@@ -21,6 +22,7 @@ import OtherIcon from "../components/svg/OtherIcon";
 import Coffee from "../components/svg/Coffee";
 import useUserStore from "../store/store";
 import { useEffect } from "react";
+import * as Haptics from "expo-haptics";
 import {
   BarChart,
   LineChart,
@@ -31,21 +33,35 @@ import Phone from "../components/svg/Phone";
 import Info from "../components/svg/Info";
 import TransactionTablet from "../components/TransactionTablet";
 
-const MainPageTablet = ({ navigation }) => {
+const MainPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
-  const insets = useSafeAreaInsets();
+  // const insets = useSafeAreaInsets();
   const [incomeMoney, setIncomeMoney] = useState(1500);
   const [expenseMoney, setExponseMoney] = useState(0);
   const [percentExpenses, setPercentExpenses] = useState(15);
-  const { token, img } = useUserStore();
+  const { token, img, fetchUserData } = useUserStore();
 
   const colorScheme = useColorScheme();
   const [loading, setLoading] = useState(true);
   const [grafLoading, setGrafLoading] = useState(true);
-  const [transactions, setTransactions] = useState();
+  const [transactions, setTransactions] = useState([]);
   const screenWidth = Dimensions.get("window").width;
-  const [data, setData] = useState({});
-  const [dataChart, setDataChart] = useState({});
+  const [data, setData] = useState({
+    labels: ["January", "February", "March"],
+    datasets: [
+      {
+        data: [0, 0, 0],
+      },
+    ],
+  });
+  const [dataChart, setDataChart] = useState({
+    labels: ["January", "February", "March"],
+    datasets: [
+      {
+        data: [0, 0, 0],
+      },
+    ],
+  });
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -64,6 +80,18 @@ const MainPageTablet = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    setLoading(true);
+    if (!token) return;
+    fetchTransactions();
+  }, [token]);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   if (!fetchUserData) return;
+  //   fetchUserData();
+  // }, [fetchUserData]);
+
   const fetchTransactions = () => {
     setLoading(true);
     setGrafLoading(true);
@@ -80,48 +108,48 @@ const MainPageTablet = ({ navigation }) => {
         const expensesByMonth = {};
         const chartData = {
           labels: [],
-          datasets: [
-            {
-              data: [],
-            },
-          ],
+          datasets: [{ data: [] }],
         };
-
         const monthTransaction = {};
 
-        transaction.forEach((item) => {
-          const dateNow = new Date().toISOString().slice(0, 7);
-          const month = new Date(item.date).toISOString().slice(0, 7);
-
-          if (dateNow == month) {
-            if (!monthTransaction[item.category]) {
-              monthTransaction[item.category] = 0;
-            }
-
-            monthTransaction[item.category] += item.amount;
-          }
-
-          if (!expensesByMonth[month]) {
-            expensesByMonth[month] = 0;
-          }
-          expensesByMonth[month] += item.amount;
-        });
-
-        console.log(monthTransaction);
-
-        const dateNow = new Date().toISOString().slice(0, 7);
+        const now = new Date();
+        const dateNowKey = now.toISOString().slice(0, 7);
 
         const previousMonthDate = new Date();
         previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+        const previousMonthKey = previousMonthDate.toISOString().slice(0, 7);
 
-        const previousMonth = previousMonthDate.toISOString().slice(0, 7);
+        transaction.forEach((item) => {
+          const itemMonth = new Date(item.date).toISOString().slice(0, 7);
 
-        setPercentExpenses(
-          ((expensesByMonth[dateNow] - expensesByMonth[previousMonth]) /
-            expensesByMonth[previousMonth]) *
-            100
-        );
-        setMoneyRemain(expensesByMonth[dateNow]);
+          if (itemMonth === dateNowKey) {
+            if (!monthTransaction[item.category]) {
+              monthTransaction[item.category] = 0;
+            }
+            monthTransaction[item.category] += item.amount;
+          }
+
+          if (!expensesByMonth[itemMonth]) {
+            expensesByMonth[itemMonth] = 0;
+          }
+          expensesByMonth[itemMonth] += item.amount;
+        });
+
+        const currentMonthTotal = expensesByMonth[dateNowKey] || 0;
+        const previousMonthTotal = expensesByMonth[previousMonthKey] || 0;
+
+        console.log(expensesByMonth);
+
+        const percentChange =
+          previousMonthTotal === 0
+            ? currentMonthTotal === 0
+              ? 0
+              : 100
+            : ((currentMonthTotal - previousMonthTotal) / previousMonthTotal) *
+              100;
+
+        setPercentExpenses(percentChange);
+        setMoneyRemain(currentMonthTotal);
 
         Object.keys(expensesByMonth)
           .sort()
@@ -133,13 +161,38 @@ const MainPageTablet = ({ navigation }) => {
             chartData.datasets[0].data.push(expensesByMonth[monthKey]);
           });
 
-        const monthtData = {
+        const monthData = {
           labels: Object.keys(monthTransaction),
           datasets: [{ data: Object.values(monthTransaction) }],
         };
 
-        setDataChart(monthtData);
-        setData(chartData);
+        if (monthData.labels.length == 0) {
+          setDataChart({
+            labels: ["January", "February", "March"],
+            datasets: [
+              {
+                data: [0, 0, 0],
+              },
+            ],
+          });
+        } else {
+          setDataChart(monthData);
+        }
+
+        if (chartData.labels.length == 0) {
+          setData({
+            labels: ["January", "February", "March"],
+            datasets: [
+              {
+                data: [0, 0, 0],
+              },
+            ],
+          });
+        } else {
+          setData(chartData);
+        }
+
+        // setData(chartData);
         setTransactions(transaction);
       })
       .catch((err) => console.log(err))
@@ -160,18 +213,36 @@ const MainPageTablet = ({ navigation }) => {
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate("UserPage")}
           >
-            <Image source={{ uri: img }} style={styles.image} />
+            <View
+              accessebity={true}
+              accessibilityLabel="Go to user page"
+              accessibilityRole="imagebutton"
+            >
+              <Image source={{ uri: img }} style={styles.image} />
+            </View>
           </TouchableWithoutFeedback>
         </View>
         <View>
-          <Text style={styles.title}>Spend this month</Text>
-          <Text style={styles.subTitle}>
+          <Text accessibilityLabel="Spend this month" style={styles.title}>
+            Spend this month
+          </Text>
+          <Text
+            accessibilityLabel={`You have ${moneyRemain} dollars spent this month`}
+            style={styles.subTitle}
+          >
             {new Intl.NumberFormat("de-US", {
               style: "currency",
               currency: "USD",
             }).format(moneyRemain)}
           </Text>
-          <Text style={styles.subTitle2}>
+          <Text
+            accessibilityLabel={`You spend ${percentExpenses.toFixed(
+              2
+            )} percent ${
+              percentExpenses < 0 ? "less" : "more"
+            } than previous month`}
+            style={styles.subTitle2}
+          >
             You spend {percentExpenses.toFixed(2)}%{" "}
             {percentExpenses < 0 ? "less" : "more"} than previous month
           </Text>
@@ -181,9 +252,11 @@ const MainPageTablet = ({ navigation }) => {
         style={[{ flex: 1 }, darkMode ? { backgroundColor: "#1C1C1C" } : null]}
       >
         {grafLoading ? (
-          <ActivityIndicator size="small" />
+          <ActivityIndicator size="small" style={{ height: 410 }} />
         ) : (
           <View
+            accessible={true}
+            accessibilityLabel="Line chart showing monthly spending trend"
             style={[
               { marginTop: 10 },
               darkMode ? { backgroundColor: "#1C1C1C" } : null,
@@ -207,9 +280,13 @@ const MainPageTablet = ({ navigation }) => {
                   color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
                   strokeWidth: 2,
                   barPercentage: 1,
-                  propsForLabels: {
-                    fontSize: 20, // 🔥 Увеличь это значение как нужно
-                    fill: darkMode ? "#fff" : "#000", // Цвет текста
+                  // propsForLabels: {
+                  //   fontSize: 20, // 🔥 Увеличь это значение как нужно
+                  //   fill: darkMode ? "#fff" : "#000", // Цвет текста
+                  // },
+                  propsForVerticalLabels: {
+                    fontSize: 20,
+                    // fill: darkMode ? "#fff" : "#000", // Цвет текста
                   },
                 }}
                 yAxisSuffix="$"
@@ -240,11 +317,17 @@ const MainPageTablet = ({ navigation }) => {
                   color: (opacity = 1) => `rgba(161, 134, 158, ${opacity})`,
                   strokeWidth: 2,
                   barPercentage: 1,
-                  propsForLabels: {
-                    fontSize: 20, // 🔥 Увеличь это значение как нужно
-                    fill: darkMode ? "#fff" : "#000", // Цвет текста
+                  // propsForLabels: {
+                  //   fontSize: 20, // 🔥 Увеличь это значение как нужно
+                  //   fill: darkMode ? "#fff" : "#000", // Цвет текста
+                  // },
+                  propsForVerticalLabels: {
+                    fontSize: 20, 
+                    // fill: darkMode ? "#fff" : "#000", // Цвет текста
                   },
                 }}
+                accessible={true}
+                accessibilityLabel="Bar chart showing categorized spending"
                 // verticalLabelRotation={30}
               />
             </ScrollView>
@@ -253,6 +336,8 @@ const MainPageTablet = ({ navigation }) => {
 
         <View style={styles.container}>
           <Text
+            accessible={true}
+            accessibilityLabel="List of recent transactions"
             style={[
               styles.classTitle,
               darkMode ? { color: "#fff" } : { color: "#000" },
@@ -262,7 +347,7 @@ const MainPageTablet = ({ navigation }) => {
           </Text>
           {loading ? (
             <ActivityIndicator size="small" />
-          ) : (
+          ) : transactions.length != 0 ? (
             <FlatList
               data={transactions}
               numColumns={3}
@@ -273,15 +358,39 @@ const MainPageTablet = ({ navigation }) => {
               }}
               onEndReachedThreshold={1}
               refreshing={loading}
-              // onRefresh={() => {
-              //   fetchPoolys();
-              //   Haptics.notificationAsync(
-              //     Haptics.NotificationFeedbackType.Succes
-              //   );
-              // }}
+              onRefresh={() => {
+                fetchTransactions();
+                Haptics.notificationAsync(
+                  Haptics.NotificationFeedbackType.Succes
+                );
+              }}
               style={{ paddingTop: 10 }}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             />
+          ) : (
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={loading}
+                  onRefresh={() => {
+                    fetchTransactions();
+                    Haptics.notificationAsync(
+                      Haptics.NotificationFeedbackType.Success
+                    );
+                  }}
+                  // tintColor={darkMode ? "#fff" : "#000"}
+                />
+              }
+            >
+              <Text
+                style={[
+                  { textAlign: "center", marginTop: 20 },
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                No poolys yet
+              </Text>
+            </ScrollView>
           )}
         </View>
       </View>
@@ -289,7 +398,7 @@ const MainPageTablet = ({ navigation }) => {
   );
 };
 
-export default MainPageTablet;
+export default MainPage;
 
 const styles = StyleSheet.create({
   // div: {
@@ -317,14 +426,14 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 16,
     paddingTop: 0,
     fontWeight: "bold",
     color: "white",
   },
   subTitle: {
     textAlign: "center",
-    fontSize: 55,
+    fontSize: 45,
     fontWeight: "bold",
     paddingTop: 16,
     color: "white",
@@ -332,16 +441,15 @@ const styles = StyleSheet.create({
   },
   subTitle2: {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 14,
     paddingTop: 15,
     paddingBottom: 15,
     color: "white",
     fontFamily: "Montserat",
   },
   classTitle: {
-    marginTop: -40,
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 16,
   },
   btnStyle: {
     flexDirection: "row",

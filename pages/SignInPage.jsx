@@ -139,7 +139,9 @@ export default function SignInPage({ navigation }) {
 
           <View>
             <TouchableWithoutFeedback
-              onPress={() => navigation.navigate("SignUp")}
+              onPress={() => {
+                navigation.replace("SignUp");
+              }}
             >
               <Text style={styles.link}>Don't have an account?</Text>
             </TouchableWithoutFeedback>

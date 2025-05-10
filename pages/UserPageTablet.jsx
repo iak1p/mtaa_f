@@ -9,26 +9,16 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-// import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Sms from "../components/svg/Sms";
-import Phone from "../components/svg/Phone";
-import Email from "../components/svg/Email";
 import Info from "../components/svg/Info";
 import Arrow from "../components/svg/Arrow";
 import { ScrollView } from "react-native";
 import useUserStore from "../store/store";
 import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from "expo-file-system";
-import {
-  ImageManipulator,
-  manipulateAsync,
-  SaveFormat,
-} from "expo-image-manipulator";
-// import * as ImageManipulator from "expo-image-manipulator";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
-const UserPage = ({ navigation }) => {
-  // const insets = useSafeAreaInsets();
+const UserPageTablet = ({ navigation }) => {
   const { token, img, setImg, username, resetUser } = useUserStore();
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -135,7 +125,10 @@ const UserPage = ({ navigation }) => {
           accessibilityLabel="Go back"
           onPress={() => navigation.goBack()}
         >
-          <Arrow stroke="#FCF7F8" style={{ paddingLeft: "15%" }}></Arrow>
+          <Arrow
+            stroke="#FCF7F8"
+            style={{ paddingLeft: "15%", marginTop: 10 }}
+          ></Arrow>
         </TouchableWithoutFeedback>
 
         <View style={styles.circleContainer}>
@@ -160,7 +153,7 @@ const UserPage = ({ navigation }) => {
               paddingTop: 15,
             }}
             titleStyle={{
-              fontSize: 14,
+              fontSize: 16,
               color: "#FCF7F8",
               letterSpacing: 1.5,
             }}
@@ -231,7 +224,7 @@ const UserPage = ({ navigation }) => {
   );
 };
 
-export default UserPage;
+export default UserPageTablet;
 
 const styles = StyleSheet.create({
   container: {
@@ -242,9 +235,9 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
   },
   image: {
-    width: 100,
-    height: 100,
-    borderRadius: 75,
+    width: 150,
+    height: 150,
+    borderRadius: 100,
     overflow: "hidden",
     resizeMode: "cover",
     marginTop: 2,
@@ -254,11 +247,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   header: {
-    fontSize: 13,
+    fontSize: 26,
     color: "grey",
   },
   text: {
-    fontSize: 22,
+    fontSize: 44,
     fontWeight: "bold",
   },
   textContainer: {

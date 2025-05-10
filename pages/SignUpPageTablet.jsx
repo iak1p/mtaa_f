@@ -14,7 +14,7 @@ import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
 
-export default function SignUpPage({ navigation }) {
+export default function SignUpPageTablet({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password_repeat, setPasswordRepeat] = useState("");
@@ -154,12 +154,6 @@ export default function SignUpPage({ navigation }) {
           <View>
             <TouchableWithoutFeedback
               onPress={() => {
-                // navigation.navigate("SignIn");
-
-                // navigation.reset({
-                //   index: 0,
-                //   routes: [{ name: "Welcome" }],
-                // });
                 navigation.replace("SignIn");
               }}
             >

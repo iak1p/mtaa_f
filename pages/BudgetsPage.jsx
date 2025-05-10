@@ -131,7 +131,7 @@ const BudgetPage = ({ navigation }) => {
               currency: "USD",
             }).format(moneyRemain)}
           </Text>
-          <Text style={styles.subTitle2}>😎</Text>
+          <Text style={styles.subTitle2}>Good to see you!</Text>
         </View>
       </SafeAreaView>
 

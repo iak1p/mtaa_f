@@ -8,18 +8,15 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Link, useNavigate } from "react-router-native";
 import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
 
-export default function SignUpPage({ navigation }) {
+export default function SignInPageTablet({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [password_repeat, setPasswordRepeat] = useState("");
   const [backendError, setbackendError] = useState("");
-  // const navigate = useNavigate();
   const { fetchUserData } = useUserStore();
 
   const colorScheme = useColorScheme();
@@ -36,28 +33,21 @@ export default function SignUpPage({ navigation }) {
   const [errors, setErrors] = useState({
     username: { hasError: false, message: "" },
     password: { hasError: false, message: "" },
-    password_repeat: { hasError: false, message: "" },
   });
 
   const validate = () => {
     let newErrors = {
       username: { hasError: false, message: "" },
       password: { hasError: false, message: "" },
-      password_repeat: { hasError: false, message: "" },
     };
 
     if (username.trim().length < 3) {
       newErrors.username.message = "Username is to short";
       newErrors.username.hasError = true;
     }
-    if (password.length < 4) {
-      newErrors.password.message = "Password is to short. Min. 4 letters";
+    if (password.length < 3) {
+      newErrors.password.message = "Password is to short. Min. 3 letters";
       newErrors.password.hasError = true;
-    }
-
-    if (password !== password_repeat || password_repeat == "") {
-      newErrors.password_repeat.message = "Passwords is not equal";
-      newErrors.password_repeat.hasError = true;
     }
 
     setErrors(newErrors);
@@ -66,11 +56,11 @@ export default function SignUpPage({ navigation }) {
   };
 
   const auth = async () => {
-    console.log(username, password, password_repeat);
+    console.log(username, password);
     if (validate()) {
       try {
         const res = await fetch(
-          `http://${process.env.EXPO_PUBLIC_ADDRESS}/auth/register`,
+          `http://${process.env.EXPO_PUBLIC_ADDRESS}/auth/login`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -86,6 +76,8 @@ export default function SignUpPage({ navigation }) {
         }
 
         console.log("Response:", data);
+
+        // setUser({ username: username, token: data.token });
 
         fetchUserData(data.token);
 
@@ -120,9 +112,9 @@ export default function SignUpPage({ navigation }) {
                 darkMode ? { color: "#fff" } : { color: "#000" },
               ]}
             >
-              Create account
+              Let's Sign you in.
             </Text>
-            <Text style={styles.header2_text}>Let’s get you set up!</Text>
+            <Text style={styles.header2_text}>Good to see you again!</Text>
 
             <View style={{ paddingTop: 50 }}>
               <BaseForm
@@ -139,12 +131,6 @@ export default function SignUpPage({ navigation }) {
                     state: setPassword,
                     error: errors.password,
                   },
-                  {
-                    lable: "Repeat password",
-                    placeholder: "Confirm password",
-                    state: setPasswordRepeat,
-                    error: errors.password_repeat,
-                  },
                 ]}
               />
               <Text style={styles.errorText}>{backendError}</Text>
@@ -154,16 +140,10 @@ export default function SignUpPage({ navigation }) {
           <View>
             <TouchableWithoutFeedback
               onPress={() => {
-                // navigation.navigate("SignIn");
-
-                // navigation.reset({
-                //   index: 0,
-                //   routes: [{ name: "Welcome" }],
-                // });
-                navigation.replace("SignIn");
+                navigation.replace("SignUp");
               }}
             >
-              <Text style={styles.link}>Already have an account?</Text>
+              <Text style={styles.link}>Don't have an account?</Text>
             </TouchableWithoutFeedback>
 
             <Button
@@ -202,7 +182,6 @@ const styles = StyleSheet.create({
     color: "grey",
     textDecorationLine: "underline",
     paddingTop: 10,
-    paddingLeft: 0,
     textAlign: "center",
     paddingBottom: 10,
   },
