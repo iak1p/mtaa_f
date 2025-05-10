@@ -10,6 +10,7 @@ import {
   FlatList,
   ActivityIndicator,
   Dimensions,
+  RefreshControl,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 // import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -42,10 +43,24 @@ const MainPage = ({ navigation }) => {
   const colorScheme = useColorScheme();
   const [loading, setLoading] = useState(true);
   const [grafLoading, setGrafLoading] = useState(true);
-  const [transactions, setTransactions] = useState();
+  const [transactions, setTransactions] = useState([]);
   const screenWidth = Dimensions.get("window").width;
-  const [data, setData] = useState({});
-  const [dataChart, setDataChart] = useState({});
+  const [data, setData] = useState({
+    labels: ["January", "February", "March"],
+    datasets: [
+      {
+        data: [0, 0, 0],
+      },
+    ],
+  });
+  const [dataChart, setDataChart] = useState({
+    labels: ["January", "February", "March"],
+    datasets: [
+      {
+        data: [0, 0, 0],
+      },
+    ],
+  });
   const [darkMode, setDarkMode] = useState(false);
 
   useEffect(() => {
@@ -64,6 +79,12 @@ const MainPage = ({ navigation }) => {
     return unsubscribe;
   }, [navigation]);
 
+  useEffect(() => {
+    setLoading(true);
+    if (!token) return;
+    fetchTransactions();
+  }, [token]);
+
   const fetchTransactions = () => {
     setLoading(true);
     setGrafLoading(true);
@@ -77,75 +98,6 @@ const MainPage = ({ navigation }) => {
     })
       .then((res) => res.json())
       .then(({ transaction }) => {
-        // const expensesByMonth = {};
-        // const chartData = {
-        //   labels: [],
-        //   datasets: [
-        //     {
-        //       data: [],
-        //     },
-        //   ],
-        // };
-
-        // const monthTransaction = {};
-
-        // transaction.forEach((item) => {
-        //   const dateNow = new Date().toISOString().slice(0, 7);
-        //   const month = new Date(item.date).toISOString().slice(0, 7);
-
-        //   if (dateNow == month) {
-        //     if (!monthTransaction[item.category]) {
-        //       monthTransaction[item.category] = 0;
-        //     }
-
-        //     monthTransaction[item.category] += item.amount;
-        //   }
-
-        //   if (!expensesByMonth[month]) {
-        //     expensesByMonth[month] = 0;
-        //   }
-        //   expensesByMonth[month] += item.amount;
-        // });
-
-        // console.log(monthTransaction);
-
-        // const dateNow = new Date().toISOString().slice(0, 7);
-
-        // const previousMonthDate = new Date();
-        // previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
-
-        // const previousMonth = previousMonthDate.toISOString().slice(0, 7);
-
-        // const percentChange =
-        //   previousMonth === 0
-        //     ? previousMonth === 0
-        //       ? 0 // ничего не тратилось оба месяца
-        //       : 100 // было 0, стало >0 — рост на 100%
-        //     : ((currentMonthTotal - previousMonth) / previousMonth) * 100;
-
-        // setPercentExpenses(percentChange);
-
-        // setMoneyRemain(expensesByMonth[dateNow]);
-
-        // Object.keys(expensesByMonth)
-        //   .sort()
-        //   .forEach((monthKey) => {
-        //     const label = new Date(monthKey).toLocaleDateString("en", {
-        //       month: "long",
-        //     });
-        //     chartData.labels.push(label);
-        //     chartData.datasets[0].data.push(expensesByMonth[monthKey]);
-        //   });
-
-        // const monthtData = {
-        //   labels: Object.keys(monthTransaction),
-        //   datasets: [{ data: Object.values(monthTransaction) }],
-        // };
-
-        // // setDataChart(monthtData);
-        // // setData(chartData);
-        // // setTransactions(transaction);
-
         const expensesByMonth = {};
         const chartData = {
           labels: [],
@@ -207,7 +159,7 @@ const MainPage = ({ navigation }) => {
           datasets: [{ data: Object.values(monthTransaction) }],
         };
 
-        if ((monthData.labels.length == 0)) {
+        if (monthData.labels.length == 0) {
           setDataChart({
             labels: ["January", "February", "March"],
             datasets: [
@@ -219,8 +171,6 @@ const MainPage = ({ navigation }) => {
         } else {
           setDataChart(monthData);
         }
-
-        console.log(monthData);
 
         if (chartData.labels.length == 0) {
           setData({
@@ -374,7 +324,7 @@ const MainPage = ({ navigation }) => {
           </Text>
           {loading ? (
             <ActivityIndicator size="small" />
-          ) : (
+          ) : transactions.length != 0 ? (
             <FlatList
               data={transactions}
               keyExtractor={(item) => item.id.toString()}
@@ -460,6 +410,30 @@ const MainPage = ({ navigation }) => {
               style={{ paddingTop: 10 }}
               ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
             />
+          ) : (
+            <ScrollView
+              refreshControl={
+                <RefreshControl
+                  refreshing={loading}
+                  onRefresh={() => {
+                    fetchPoolys();
+                    Haptics.notificationAsync(
+                      Haptics.NotificationFeedbackType.Success
+                    );
+                  }}
+                  // tintColor={darkMode ? "#fff" : "#000"}
+                />
+              }
+            >
+              <Text
+                style={[
+                  { textAlign: "center", marginTop: 20 },
+                  darkMode ? { color: "#fff" } : { color: "#000" },
+                ]}
+              >
+                No poolys yet
+              </Text>
+            </ScrollView>
           )}
         </View>
       </View>

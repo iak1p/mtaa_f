@@ -34,6 +34,8 @@ const useUserStore = create(
             headers: {
               "Content-Type": "application/json",
               Authorization: token,
+              // Authorization:
+              //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkiLCJ1c2VybmFtZSI6Imt1a29sZCJ9.IMg80P2myqdPL5lCI4J-ufmQZTTVyOhwChVwzEvI1lk",
             },
           }
         );
