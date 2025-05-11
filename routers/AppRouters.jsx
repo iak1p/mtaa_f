@@ -33,6 +33,8 @@ import UserPageTablet from "../pages/UserPageTablet";
 import WelcomePageTablet from "../pages/WelcomePageTablet";
 import SignInPageTablet from "../pages/SignInPageTablet";
 import SignUpPageTablet from "../pages/SignUpPageTablet";
+import MainIcon from "../components/svg/MainIcon";
+import SettingsIcon from "../components/svg/SettingsIcon";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -58,13 +60,13 @@ const BottomTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           if (route.name === "Budget") {
-            return <List stroke={darkMode ? "#fff" : "#000"} />;
+            return <UsersIcon stroke={darkMode ? "#fff" : "#000"} />;
           }
           if (route.name === "Settings") {
-            return <List stroke={darkMode ? "#fff" : "#000"} />;
+            return <SettingsIcon stroke={darkMode ? "#fff" : "#000"} />;
           }
           if (route.name === "Home") {
-            return <UsersIcon stroke={darkMode ? "#fff" : "#000"} />;
+            return <MainIcon stroke={darkMode ? "#fff" : "#000"} />;
           }
         },
         tabBarStyle: {

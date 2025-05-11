@@ -56,8 +56,8 @@ export default function SignUpPageTablet({ navigation }) {
       newErrors.username.message = "Username is to short";
       newErrors.username.hasError = true;
     }
-    if (password.length < 4) {
-      newErrors.password.message = "Password is to short. Min. 4 letters";
+    if (password.length < 3) {
+      newErrors.password.message = "Password is to short. Min. 3 letters";
       newErrors.password.hasError = true;
     }
 
