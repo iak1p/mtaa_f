@@ -18,7 +18,6 @@ import Plus from "../components/svg/Plus";
 import Minus from "../components/svg/Minus";
 import ShoppingCart from "../components/svg/ShoppingCart";
 import EntertaimentSmile from "../components/svg/EntertaimentSmile";
-import OtherIcon from "../components/svg/Education";
 import Coffee from "../components/svg/Coffee";
 import useUserStore from "../store/store";
 import { useEffect } from "react";
@@ -32,6 +31,8 @@ import {
 } from "react-native-chart-kit";
 import Info from "../components/svg/Info";
 import Travel from "../components/svg/TravelIcon";
+import Education from "../components/svg/Education";
+import OtherIcon from "../components/svg/OtherIcon";
 
 const MainPage = ({ navigation }) => {
   const [moneyRemain, setMoneyRemain] = useState(0);
@@ -364,6 +365,8 @@ const MainPage = ({ navigation }) => {
                           />
                         ) : item.category === "travel" ? (
                           <Travel stroke={darkMode ? "#fff" : "#000"} />
+                        ) : item.category === "education" ? (
+                          <Education stroke={darkMode ? "#fff" : "#000"} />
                         ) : (
                           <OtherIcon stroke={darkMode ? "#fff" : "#000"} />
                         )}
@@ -375,7 +378,9 @@ const MainPage = ({ navigation }) => {
                               darkMode ? { color: "#fff" } : { color: "#000" },
                             ]}
                           >
-                            {item.category ? item.category : "No category"}
+                            {item.category
+                              ? item.category.charAt(0).toUpperCase() + item.category.slice(1)
+                              : "No category"}
                           </Text>
                           <Text style={{ fontSize: 14, color: "grey" }}>
                             {new Date(item.date).toLocaleDateString("en", {

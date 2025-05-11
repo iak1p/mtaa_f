@@ -51,15 +51,15 @@ export default function SignUpPage({ navigation }) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      newErrors.email.message = "Invalid email format";
+      newErrors.email.message = "Invalid email format. Example: sava@pussy.com";
       newErrors.email.hasError = true;
     }
     if (username.trim().length < 1) {
-      newErrors.username.message = "Username is to short";
+      newErrors.username.message = "Username is too short";
       newErrors.username.hasError = true;
     }
     if (password.length < 4) {
-      newErrors.password.message = "Password is to short. Min. 4 letters";
+      newErrors.password.message = "Password is too short. Min. 4 letters";
       newErrors.password.hasError = true;
     }
 
