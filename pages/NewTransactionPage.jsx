@@ -26,7 +26,7 @@ function NewTransactionPage({
     params: { budget_id, current_money },
   },
 }) {
-  const { token, username, addTransaction } = useUserStore();
+  const { token, username } = useUserStore();
   const navigation = useNavigation();
   const [transactionAmount, setTransactionAmount] = useState("");
   const [error, setError] = useState("");
@@ -120,29 +120,6 @@ function NewTransactionPage({
             }),
           }
         );
-
-        // const response = await fetch(
-        //   `${EXPO_PUBLIC_SUPABASE_URL1}/rest/v1/transactions`,
-        //   {
-        //     method: "POST",
-        //     headers: {
-        //       apikey: EXPO_PUBLIC_SUPABASE_ANON_KEY1,
-        //       Authorization: `Bearer ${EXPO_PUBLIC_SUPABASE_ANON_KEY1}`,
-        //       "Content-Type": "application/json",
-        //       Prefer: "return=representation",
-        //     },
-        //     body: JSON.stringify([
-        //       {
-        //         budget_id,
-        //         user_name: username || "Unknown",
-        //         amount: parseFloat(amount),
-        //         created_at: new Date().toISOString(),
-        //       },
-        //     ]),
-        //   }
-        // );
-
-        // console.log(response);
 
         const data = await res.json();
 
@@ -253,6 +230,7 @@ function NewTransactionPage({
                 { label: "Education", value: "education" },
                 { label: "Clothing", value: "clothing" },
                 { label: "Travel", value: "travel" },
+                { label: "Other", value: "other" },
               ]}
               setOpen={(callback) => {
                 setOpen(callback);
@@ -264,13 +242,13 @@ function NewTransactionPage({
                 borderColor: "#86939e",
               }}
               textStyle={{
-                color: "#fff",
+                color: darkMode ? "#fff" : "#000",
               }}
               dropDownContainerStyle={{
-                backgroundColor: "#912F40",
+                backgroundColor: darkMode ? "#912F40" : "#fff",
               }}
               listItemLabelStyle={{
-                color: "#fff",
+                color: darkMode ? "#fff" : "#000",
               }}
             />
           </View>
@@ -302,16 +280,15 @@ function NewTransactionPage({
                   backgroundColor: "transparent",
                   borderColor: "#86939e",
                 },
-                {},
               ]}
               textStyle={{
-                color: "#fff", // ← для текста выбранного элемента
+                color: darkMode ? "#fff" : "#000",
               }}
               dropDownContainerStyle={{
-                backgroundColor: "#912F40", // например, тёмный фон выпадающего списка
+                backgroundColor: darkMode ? "#912F40" : "#fff",
               }}
               listItemLabelStyle={{
-                color: "#fff", // ← для пунктов выпадающего списка
+                color: darkMode ? "#fff" : "#000",
               }}
             />
           </View>

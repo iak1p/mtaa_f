@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Keyboard,
   SafeAreaView,
@@ -8,19 +8,17 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Link, useNavigate } from "react-router-native";
 import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
 
-export default function SignUpPage({ navigation }) {
+export default function SignUpPageTablet({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [password_repeat, setPasswordRepeat] = useState("");
   const [email, setEmail] = useState("");
   const [backendError, setbackendError] = useState("");
-  // const navigate = useNavigate();
   const { fetchUserData } = useUserStore();
 
   const colorScheme = useColorScheme();
@@ -51,15 +49,15 @@ export default function SignUpPage({ navigation }) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!emailRegex.test(email)) {
-      newErrors.email.message = "Invalid email format. Example: sava@pussy.com";
+      newErrors.email.message = "Invalid email format";
       newErrors.email.hasError = true;
     }
     if (username.trim().length < 1) {
-      newErrors.username.message = "Username is too short";
+      newErrors.username.message = "Username is to short";
       newErrors.username.hasError = true;
     }
-    if (password.length < 4) {
-      newErrors.password.message = "Password is too short. Min. 4 letters";
+    if (password.length < 3) {
+      newErrors.password.message = "Password is to short. Min. 3 letters";
       newErrors.password.hasError = true;
     }
 
@@ -120,7 +118,10 @@ export default function SignUpPage({ navigation }) {
         >
           <View>
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-              <Arrow stroke={darkMode ? "#fff" : "#000"} />
+              <Arrow
+                stroke={darkMode ? "#fff" : "#000"}
+                style={{ marginTop: 10 }}
+              ></Arrow>
             </TouchableWithoutFeedback>
             <Text
               style={[
@@ -168,12 +169,6 @@ export default function SignUpPage({ navigation }) {
           <View>
             <TouchableWithoutFeedback
               onPress={() => {
-                // navigation.navigate("SignIn");
-
-                // navigation.reset({
-                //   index: 0,
-                //   routes: [{ name: "Welcome" }],
-                // });
                 navigation.replace("SignIn");
               }}
             >
@@ -185,7 +180,7 @@ export default function SignUpPage({ navigation }) {
               radius={10}
               color={darkMode ? "#912F40" : "#012E4A"}
               buttonStyle={{
-                padding: 15,
+                padding: 20,
                 marginBottom: 15,
                 borderColor: darkMode ? "#912F40" : "#012E4A",
                 borderStyle: "solid",
@@ -203,22 +198,22 @@ export default function SignUpPage({ navigation }) {
 
 const styles = StyleSheet.create({
   header_text: {
-    fontSize: 30,
+    fontSize: 35,
     fontWeight: "bold",
     paddingTop: 70,
   },
   header2_text: {
-    fontSize: 25,
+    fontSize: 30,
     color: "gray",
     paddingTop: 20,
   },
   link: {
     color: "grey",
     textDecorationLine: "underline",
-    paddingTop: 10,
-    paddingLeft: 0,
+    paddingTop: 15,
+    fontSize: 16,
     textAlign: "center",
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   errorText: {
     color: "red",

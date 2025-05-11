@@ -21,7 +21,7 @@ import List from "../components/svg/List";
 import PoolyInfoComponent from "../components/PoolyInfoComponent";
 import AddUserIcon from "../components/svg/AddUserIcon";
 import UsersIcon from "../components/svg/UsersIcon";
-import Phone from "../components/svg/Phone";
+import Phone from "../components/svg/ClothingIcon";
 import { Accelerometer } from "expo-sensors";
 
 const PoolyInfoPageTablet = ({

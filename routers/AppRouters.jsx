@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, useColorScheme, View } from "react-native";
-import { Route, Routes, Navigate, NativeRouter } from "react-router-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, useColorScheme, View } from "react-native";
 import SignUpPage from "../pages/SignUpPage";
 import SignInPage from "../pages/SignInPage";
 import WelcomePage from "../pages/WelcomePage";
 import MainPage from "../pages/MainPage";
-import Menu from "../components/Menu";
 import useUserStore from "../store/store";
 import BudgetPage from "../pages/BudgetsPage";
 import { NavigationContainer } from "@react-navigation/native";
-import {
-  createStackNavigator,
-  TransitionPresets,
-} from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import * as Device from "expo-device";
 import UserPage from "../pages/UserPage";
 import CreatePoolyPage from "../pages/CreatePoolyPage";
 import PoolyInfoPage from "../pages/PoolyInfoPage";
@@ -30,13 +24,17 @@ import UsersIcon from "../components/svg/UsersIcon";
 import FilterModal from "../pages/FilterModal";
 import { Dimensions } from "react-native";
 import BudgetsPageTablet from "../pages/BudgetsPageTablet";
-// import BudgetsPageMobile from "../pages/BudgetsPageMobile";
 import PoolyInfoPageTablet from "../pages/PoolyInfoPageTablet";
-// import PoolyInfoPageMobile from "../pages/PoolyInfoPageMobile";
 import ChangeUsernamePage from "../pages/ChangeUsernamePage";
 import ChangeUserPasswordPage from "../pages/ChangeUserPasswordPage";
 import MapScreen from "../components/MapScreen";
 import MainPageTablet from "../pages/MainPageTablet";
+import UserPageTablet from "../pages/UserPageTablet";
+import WelcomePageTablet from "../pages/WelcomePageTablet";
+import SignInPageTablet from "../pages/SignInPageTablet";
+import SignUpPageTablet from "../pages/SignUpPageTablet";
+import MainIcon from "../components/svg/MainIcon";
+import SettingsIcon from "../components/svg/SettingsIcon";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,13 +60,13 @@ const BottomTabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
           if (route.name === "Budget") {
-            return <List stroke={darkMode ? "#fff" : "#000"} />;
+            return <UsersIcon stroke={darkMode ? "#fff" : "#000"} />;
           }
           if (route.name === "Settings") {
-            return <List stroke={darkMode ? "#fff" : "#000"} />;
+            return <SettingsIcon stroke={darkMode ? "#fff" : "#000"} />;
           }
           if (route.name === "Home") {
-            return <UsersIcon stroke={darkMode ? "#fff" : "#000"} />;
+            return <MainIcon stroke={darkMode ? "#fff" : "#000"} />;
           }
         },
         tabBarStyle: {
@@ -79,52 +77,24 @@ const BottomTabs = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Settings" component={SettingsPage} />
-      {isTabletFallback ? (
-        <Stack.Screen name="Home" component={MainPageTablet} />
+      {isTabletFallback || Device.deviceType == 2 ? (
+        <Tab.Screen name="Home" component={MainPageTablet} />
       ) : (
         <Tab.Screen name="Home" component={MainPage} />
       )}
-      {isTabletFallback ? (
+      {isTabletFallback || Device.deviceType == 2 ? (
         <Tab.Screen name="Budget" component={BudgetsPageTablet} />
       ) : (
         <Tab.Screen name="Budget" component={BudgetPage} />
       )}
-    </Tab.Navigator>
-  );
-};
-
-const BottomWelcomeTabs = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-          if (route.name === "Budget") iconName = "wallet";
-          else if (route.name === "Home") iconName = "home";
-          else if (route.name === "CreatePooly") iconName = "add-circle";
-
-          return <List />;
-        },
-        tabBarActiveTintColor: "#007AFF",
-        tabBarInactiveTintColor: "gray",
-        tabBarStyle: { height: 70, paddingBottom: 0 },
-        headerShown: false,
-        // ...TransitionPresets.SlideFromRightIOS,
-      })}
-    >
-      <Tab.Screen name="Welcome" component={WelcomePage} />
+      <Tab.Screen name="Settings" component={SettingsPage} />
     </Tab.Navigator>
   );
 };
 
 const AppRoutes = () => {
-  // const insets = useSafeAreaInsets();
-  const { username, token } = useUserStore();
-
   const { width, height } = Dimensions.get("window");
   const isTabletFallback = Math.min(width, height) >= 600;
-  console.log(isTabletFallback);
 
   return (
     <NavigationContainer>
@@ -132,13 +102,26 @@ const AppRoutes = () => {
         <Stack.Navigator
           initialRouteName="Welcome"
           screenOptions={{
-            // ...TransitionPresets.SlideFromRightIOS,
             headerShown: false,
           }}
         >
-          <Stack.Screen name="Welcome" component={WelcomePage} />
-          <Stack.Screen name="SignIn" component={SignInPage} />
-          <Stack.Screen name="SignUp" component={SignUpPage} />
+          {isTabletFallback || Device.deviceType == 2 ? (
+            <Stack.Screen name="Welcome" component={WelcomePageTablet} />
+          ) : (
+            <Stack.Screen name="Welcome" component={WelcomePage} />
+          )}
+
+          {isTabletFallback || Device.deviceType == 2 ? (
+            <Stack.Screen name="SignUp" component={SignUpPageTablet} />
+          ) : (
+            <Stack.Screen name="SignUp" component={SignUpPage} />
+          )}
+
+          {isTabletFallback || Device.deviceType == 2 ? (
+            <Stack.Screen name="SignIn" component={SignInPageTablet} />
+          ) : (
+            <Stack.Screen name="SignIn" component={SignInPage} />
+          )}
 
           <Stack.Screen name="Main" component={BottomTabs} />
           <Stack.Screen name="NewTransaction" component={NewTransactionPage} />
@@ -163,18 +146,19 @@ const AppRoutes = () => {
             component={ChangeUserPasswordPage}
           />
           <Stack.Screen name="Map" component={MapScreen} />
-          {/* <Stack.Screen name="Budget" component={BudgetPage} /> */}
-          {/* <Stack.Screen name="Home" component={MainPage} /> */}
           <Stack.Screen name="CreatePolly" component={CreatePoolyPage} />
 
-          {/* <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} /> */}
-          {isTabletFallback ? (
+          {isTabletFallback || Device.deviceType == 2 ? (
             <Stack.Screen name="PoolyInfo" component={PoolyInfoPageTablet} />
           ) : (
             <Stack.Screen name="PoolyInfo" component={PoolyInfoPage} />
           )}
 
-          <Stack.Screen name="UserPage" component={UserPage} />
+          {isTabletFallback || Device.deviceType == 2 ? (
+            <Stack.Screen name="UserPage" component={UserPageTablet} />
+          ) : (
+            <Stack.Screen name="UserPage" component={UserPage} />
+          )}
         </Stack.Navigator>
       </View>
     </NavigationContainer>

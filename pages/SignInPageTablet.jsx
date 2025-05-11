@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Keyboard,
   SafeAreaView,
@@ -8,19 +8,15 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Link, useNavigate } from "react-router-native";
 import Arrow from "../components/svg/Arrow";
 import BaseForm from "../components/BaseForm";
 import { Button } from "@rneui/base";
 import useUserStore from "../store/store";
 
-export default function SignUpPage({ navigation }) {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [password_repeat, setPasswordRepeat] = useState("");
+export default function SignInPageTablet({ navigation }) {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [backendError, setbackendError] = useState("");
-  // const navigate = useNavigate();
   const { fetchUserData } = useUserStore();
 
   const colorScheme = useColorScheme();
@@ -36,36 +32,22 @@ export default function SignUpPage({ navigation }) {
 
   const [errors, setErrors] = useState({
     email: { hasError: false, message: "" },
-    username: { hasError: false, message: "" },
     password: { hasError: false, message: "" },
-    password_repeat: { hasError: false, message: "" },
   });
 
   const validate = () => {
     let newErrors = {
       email: { hasError: false, message: "" },
-      username: { hasError: false, message: "" },
       password: { hasError: false, message: "" },
-      password_repeat: { hasError: false, message: "" },
     };
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!emailRegex.test(email)) {
-      newErrors.email.message = "Invalid email format. Example: sava@pussy.com";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email.message = "Invalid email format";
       newErrors.email.hasError = true;
     }
-    if (username.trim().length < 1) {
-      newErrors.username.message = "Username is too short";
-      newErrors.username.hasError = true;
-    }
-    if (password.length < 4) {
-      newErrors.password.message = "Password is too short. Min. 4 letters";
+    if (password.length < 3) {
+      newErrors.password.message = "Password is to short. Min. 3 letters";
       newErrors.password.hasError = true;
-    }
-
-    if (password !== password_repeat || password_repeat == "") {
-      newErrors.password_repeat.message = "Passwords is not equal";
-      newErrors.password_repeat.hasError = true;
     }
 
     setErrors(newErrors);
@@ -74,15 +56,14 @@ export default function SignUpPage({ navigation }) {
   };
 
   const auth = async () => {
-    console.log(username, password, password_repeat);
     if (validate()) {
       try {
         const res = await fetch(
-          `http://${process.env.EXPO_PUBLIC_ADDRESS}/auth/register`,
+          `http://${process.env.EXPO_PUBLIC_ADDRESS}/auth/login`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ username, password, email }),
+            body: JSON.stringify({ email, password }),
           }
         );
 
@@ -92,8 +73,6 @@ export default function SignUpPage({ navigation }) {
           setbackendError(data.message);
           return;
         }
-
-        console.log("Response:", data);
 
         fetchUserData(data.token);
 
@@ -120,7 +99,10 @@ export default function SignUpPage({ navigation }) {
         >
           <View>
             <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-              <Arrow stroke={darkMode ? "#fff" : "#000"} />
+              <Arrow
+                stroke={darkMode ? "#fff" : "#000"}
+                style={{ marginTop: 10 }}
+              ></Arrow>
             </TouchableWithoutFeedback>
             <Text
               style={[
@@ -128,9 +110,9 @@ export default function SignUpPage({ navigation }) {
                 darkMode ? { color: "#fff" } : { color: "#000" },
               ]}
             >
-              Create account
+              Let's Sign you in.
             </Text>
-            <Text style={styles.header2_text}>Let’s get you set up!</Text>
+            <Text style={styles.header2_text}>Good to see you again!</Text>
 
             <View style={{ paddingTop: 50 }}>
               <BaseForm
@@ -142,22 +124,10 @@ export default function SignUpPage({ navigation }) {
                     error: errors.email,
                   },
                   {
-                    lable: "Username",
-                    placeholder: "Enter username",
-                    state: setUsername,
-                    error: errors.username,
-                  },
-                  {
                     lable: "Password",
                     placeholder: "Enter password",
                     state: setPassword,
                     error: errors.password,
-                  },
-                  {
-                    lable: "Repeat password",
-                    placeholder: "Confirm password",
-                    state: setPasswordRepeat,
-                    error: errors.password_repeat,
                   },
                 ]}
               />
@@ -168,16 +138,10 @@ export default function SignUpPage({ navigation }) {
           <View>
             <TouchableWithoutFeedback
               onPress={() => {
-                // navigation.navigate("SignIn");
-
-                // navigation.reset({
-                //   index: 0,
-                //   routes: [{ name: "Welcome" }],
-                // });
-                navigation.replace("SignIn");
+                navigation.replace("SignUp");
               }}
             >
-              <Text style={styles.link}>Already have an account?</Text>
+              <Text style={styles.link}>Don't have an account?</Text>
             </TouchableWithoutFeedback>
 
             <Button
@@ -185,7 +149,7 @@ export default function SignUpPage({ navigation }) {
               radius={10}
               color={darkMode ? "#912F40" : "#012E4A"}
               buttonStyle={{
-                padding: 15,
+                padding: 20,
                 marginBottom: 15,
                 borderColor: darkMode ? "#912F40" : "#012E4A",
                 borderStyle: "solid",
@@ -203,22 +167,22 @@ export default function SignUpPage({ navigation }) {
 
 const styles = StyleSheet.create({
   header_text: {
-    fontSize: 30,
+    fontSize: 35,
     fontWeight: "bold",
     paddingTop: 70,
   },
   header2_text: {
-    fontSize: 25,
+    fontSize: 30,
     color: "gray",
     paddingTop: 20,
   },
   link: {
     color: "grey",
     textDecorationLine: "underline",
-    paddingTop: 10,
-    paddingLeft: 0,
+    paddingTop: 15,
+    fontSize: 16,
     textAlign: "center",
-    paddingBottom: 10,
+    paddingBottom: 15,
   },
   errorText: {
     color: "red",

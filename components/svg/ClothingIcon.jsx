@@ -1,19 +1,20 @@
+import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 
-function UsersIcon({ props, stroke = "#000" }) {
+function Clothing({ props, stroke = "#1E1E1E" }) {
   return (
     <Svg
       width={24}
-      height={20}
-      viewBox="0 0 48 40"
+      height={24}
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       <Path
-        d="M34 38v-4a8 8 0 00-8-8H10a8 8 0 00-8 8v4m44 0v-4a8 8 0 00-6-7.74m-8-24a8 8 0 010 15.5M26 10a8 8 0 11-16 0 8 8 0 0116 0z"
+        d="M3 6l3-4h12l3 4M3 6v14a2 2 0 002 2h14a2 2 0 002-2V6M3 6h18m-5 4a4 4 0 11-8 0"
         stroke={stroke}
-        strokeWidth={5}
+        strokeWidth={2.5}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
@@ -21,4 +22,4 @@ function UsersIcon({ props, stroke = "#000" }) {
   );
 }
 
-export default UsersIcon;
+export default Clothing;
