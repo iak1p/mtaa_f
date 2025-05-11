@@ -1,7 +1,7 @@
 import { color, Input } from "@rneui/base";
 import React, { useEffect, useState } from "react";
-import Arrow from "./svg/Arrow";
 import { useColorScheme } from "react-native";
+import Error from "./svg/Error";
 
 export default function BaseForm({ inputs }) {
   const colorScheme = useColorScheme();
@@ -90,7 +90,7 @@ export default function BaseForm({ inputs }) {
                     }
               }
               onChangeText={state}
-              rightIcon={hasError ? <Arrow stroke="#000" /> : undefined}
+              rightIcon={hasError ? <Error stroke="red" /> : undefined}
               errorMessage={hasError ? message : null}
             />
           );
