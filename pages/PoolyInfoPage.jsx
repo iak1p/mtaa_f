@@ -163,11 +163,13 @@ const PoolyInfoPage = ({
     )
       .then((res) => res.json())
       .then(({ transaction }) => {
-        transaction = transaction.filter(
-          (item) =>
-            filters.category === "all" || item.category === filters.category
-        );
-
+        transaction = transaction.filter((item) => {
+          const matchCategory =
+            filters.category === "all" || item.category === filters.category;
+          const matchType =
+            filters.type === "all" || item.type === filters.type;
+          return matchCategory && matchType;
+        });
         setTransactions(transaction);
       })
       .catch((err) => console.log(err))
