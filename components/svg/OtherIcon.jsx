@@ -1,7 +1,7 @@
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";
 
-function Education({ props, stroke = "#1E1E1E" }) {
+function OtherIcon(props) {
   return (
     <Svg
       width={24}
@@ -12,8 +12,8 @@ function Education({ props, stroke = "#1E1E1E" }) {
       {...props}
     >
       <Path
-        d="M12 7a4 4 0 00-4-4H2v15h7a3 3 0 013 3m0-14v14m0-14a4 4 0 014-4h6v15h-7a3 3 0 00-3 3"
-        stroke={stroke}
+        d="M21 10H3m18-4H3m18 8H3m18 4H3"
+        stroke="#1E1E1E"
         strokeWidth={2.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -22,4 +22,4 @@ function Education({ props, stroke = "#1E1E1E" }) {
   );
 }
 
-export default Education;
+export default OtherIcon;

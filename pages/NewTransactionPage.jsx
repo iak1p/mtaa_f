@@ -230,6 +230,7 @@ function NewTransactionPage({
                 { label: "Education", value: "education" },
                 { label: "Clothing", value: "clothing" },
                 { label: "Travel", value: "travel" },
+                { label: "Other", value: "other" },
               ]}
               setOpen={(callback) => {
                 setOpen(callback);
